@@ -55,7 +55,7 @@ function App() {
           <ProtectedRoute
             // logged in shows PropertyPage else shows LoginPage
             exact
-            path="/user"
+            path="/property-page"
           >
             <PropertyPage />
           </ProtectedRoute>
@@ -63,7 +63,7 @@ function App() {
           <ProtectedRoute
             // logged in shows DefaultSettings else shows LoginPage
             exact
-            path="/info"
+            path="/default-settings"
           >
             <DefaultSettings />
           </ProtectedRoute>
