@@ -9,7 +9,7 @@ const passport = require('./strategies/user.strategy');
 
 // Route Includes
 const userRouter = require('./routes/user.router');
-const propertiesRouter = require('./routes.properties.router');
+const propertiesRouter = require('./routes/properties.router');
 const defaultSettingsRouter = require('./routes/defaultSettings.router');
 
 // Express Middleware

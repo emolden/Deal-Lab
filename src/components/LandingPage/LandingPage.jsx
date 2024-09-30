@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import './Page.css';
+import './LandingPage.css';
 
 // CUSTOM COMPONENTS
 import RegisterForm from '../RegisterPage/RegisterForm/RegisterForm';
