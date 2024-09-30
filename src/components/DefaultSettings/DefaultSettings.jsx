@@ -1,14 +1,13 @@
 import React from 'react';
-
-// This is one of our simplest components
-// It doesn't have local state
-// It doesn't dispatch any redux actions or display any part of redux state
-// or even care what the redux state is
+import DefaultHoldingCost from './DefaultHoldingCost/DefaultHoldingCost';
+import DefaultRepairItems from './DefaultRepairItems/DefaultRepairItems';
 
 function DefaultSettings() {
   return (
     <div className="container">
-      <p>Info Page</p>
+      <h2>Default Settings</h2>
+      <DefaultHoldingCost />
+      <DefaultRepairItems />
     </div>
   );
 }
