@@ -3,6 +3,7 @@ import LogOutButton from '../App/LogOutButton/LogOutButton';
 import {useSelector} from 'react-redux';
 import PropertyList from './PropertyList/PropertyList';
 import PropertySearchForm from './PropertySeachForm/PropertySearchForm';
+import PropertyModal from './PropertyModal/PropertyModal';
 
 function PropertyPage() {
   // this component doesn't do much to start, just renders some user reducer info to the DOM
@@ -14,6 +15,7 @@ function PropertyPage() {
       <LogOutButton className="btn" />
       <PropertySearchForm />
       <PropertyList />
+      <PropertyModal />
     </div>
   );
 }
