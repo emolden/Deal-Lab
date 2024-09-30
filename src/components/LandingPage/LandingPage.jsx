@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import './Page.css';
 
 // CUSTOM COMPONENTS
-import RegisterForm from '../RegisterForm/RegisterForm';
+import RegisterForm from '../RegisterPage/RegisterForm/RegisterForm';
 
 function LandingPage() {
   const [heading, setHeading] = useState('Welcome');
