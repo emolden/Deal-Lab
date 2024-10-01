@@ -49,23 +49,11 @@ router.post('/', async (req, res) => {
       `
       const checkTimeStampResults = await pool.query(checkTimeStampSqlText, [address, userId]);
       const checkTimeStampData = checkTimeStampResults.rows;
+
+  
       
       if (checkTimeStampData.length === 0) {
-        //--------------------------------- API REQUEST SUCCESSFULLY WORKING----------------------------------
-        //----------------------------- HERE IS SOME FAKE API DATA TO USE WHILE BUILDING THE APP ----------------------
-        //-------------DELETE THIS WHEN APP IS FULLY BUILT AND UNCOMMENT THE API CALLS --------------------------------
-        const propertyApiData = [
-          userId,
-          '6817 Dutton Ave N, Brooklyn Park, MN 55428',
-          249000.00,
-          2300,
-          345000.00,
-          'single family',
-          3,
-          1,
-          1092.00
-      ]
-      //-----------------------DELETE TO HERE------------------------------------------------------------------------------
+
 
       //---------------UNCOMMENT BELOW THIS LINE----------------------------------------------------------------------------
 
@@ -129,6 +117,22 @@ router.post('/', async (req, res) => {
           //     listingResponse.data[0].bathrooms,
           //     listingResponse.data[0].squareFootage
           // ]
+
+                      //--------------------------------- API REQUEST SUCCESSFULLY WORKING----------------------------------
+        //----------------------------- HERE IS SOME FAKE API DATA TO USE WHILE BUILDING THE APP ----------------------
+        //-------------DELETE THIS WHEN APP IS FULLY BUILT AND UNCOMMENT THE API CALLS --------------------------------
+        const propertyApiData = [
+          userId,
+          '6817 Dutton Ave N, Brooklyn Park, MN 55428',
+          249000.00,
+          2300,
+          345000.00,
+          'single family',
+          3,
+          1,
+          1092.00
+      ]
+      //-----------------------DELETE TO HERE------------------------------------------------------------------------------
           const propertyApiDataSqlText = `
               INSERT INTO "property_api_data"
               ("user_id", "address", "purchase_price", "taxes_yearly", "after_repair_value", 
@@ -143,14 +147,35 @@ router.post('/', async (req, res) => {
 
 
           // ================ SQL insert into table: PROPERTIES
-          const propertiesData = [
-              userId,
-              propertyApiId,
-              listingResponse.data[0].formattedAddress,
-              listingResponse.data[0].price,
-              taxYear,
-              valueEstimateResponse.data.priceRangeHigh
-          ]
+          // const propertiesData = [
+          //     userId,
+          //     propertyApiId,
+          //     listingResponse.data[0].formattedAddress,
+          //     listingResponse.data[0].price,
+          //     taxYear,
+          //     valueEstimateResponse.data.priceRangeHigh
+          // ]
+
+        } else if (checkTimeStampData.length > 0) {
+
+          console.log('Property already exists in database!');
+          
+
+      }
+
+
+                      //--------------------------------- API REQUEST SUCCESSFULLY WORKING----------------------------------
+        //----------------------------- HERE IS SOME FAKE API DATA TO USE WHILE BUILDING THE APP ----------------------
+        //-------------DELETE THIS WHEN APP IS FULLY BUILT AND UNCOMMENT THE API CALLS --------------------------------
+        const propertiesData = [
+          userId,
+          1,
+          '6817 Dutton Ave N, Brooklyn Park, MN 55428',
+          249000.00,
+          2300,
+          345000.00,
+      ]
+      //-----------------------DELETE TO HERE------------------------------------------------------------------------------
           const propertiesSqlText = `
           INSERT INTO "properties"
           ("user_id", "property_api_id", "address", "purchase_price", "taxes_yearly", "after_repair_value")
@@ -162,12 +187,7 @@ router.post('/', async (req, res) => {
           console.log('Property posted/updated in database!');
           res.sendStatus(201);
 
-      } else if (checkTimeStampData.length > 0) {
-
-          console.log('Property already exists in database!');
-          res.sendStatus(201);
-
-      }
+     
   } catch (error) {
       console.log('Error in getting API data:', error);
       res.sendStatus(500);
