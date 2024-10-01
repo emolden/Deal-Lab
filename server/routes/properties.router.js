@@ -162,19 +162,18 @@ router.post('/', async (req, res) => {
  */
 router.delete('/:id', (req, res) => {
     // console.log('/api/properties/id delete route received a request! ', req.params.id)
-    const userId = req.params.id;
+    const propertyId = req.params.id;
 
     const sqlText = `
-        SELECT * FROM "properties"
-            WHERE "user_id" = $1
-            ORDER BY "inserted_at" DESC;
+      DELETE FROM "properties"
+	      WHERE "user_id" = $1;
     `
   
-      pool.query(sqlText, [userId])
+      pool.query(sqlText, [propertyId])
       .then((results) => {
           res.send(results.rows);
       }) .catch((error) => {
-          console.log('Error in getting properties:', error);
+          console.log('Error in deleting property:', error);
           res.sendStatus(500);
       })
   });
