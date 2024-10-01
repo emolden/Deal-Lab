@@ -21,6 +21,10 @@ function PropertyCard({property}) {
     });
   }
 
+  const deleteProperty = () => {
+    
+  }
+
   return (
     <div className="container">
       <p>Property Card:</p>
@@ -35,6 +39,7 @@ function PropertyCard({property}) {
                   <th className='rentCastHeadTitle'>Total Cost</th>
                   <th className='rentCastHeadTitle'>Profit</th>
                   <th className='rentCastHeadTitle'>Annualized Profit</th>
+                  <th></th>
               </tr>
           </thead>
 
@@ -47,6 +52,7 @@ function PropertyCard({property}) {
                 <td>${totalCost}</td>
                 <td>${profit}</td>
                 <td>${annualProfit}</td>
+                <td><button onClick={deleteProperty}>Delete</button></td>
             </tr>
           </tbody>
       </table>
