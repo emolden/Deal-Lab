@@ -91,19 +91,18 @@ router.get('/propertyOfInterest/:id', rejectUnauthenticated, async (req, res) =>
     `;
     const holdingItemValue = [propertyId]
     const holdingItemResult = await connection.query(holdingItemText, holdingItemValue);
-    console.log('database reponse to holdingItem: ', holdingItemResult.rows)
-
+    // console.log('database reponse to holdingItem: ', holdingItemResult.rows)
 
 
     await connection.query('COMMIT;')
 
-    // const propertyData = {
-    //   property : propertyResult.rows,
-    //   repairItems : ,
-    //   holdingItems : 
-    // }
+    const propertyData = {
+      property : propertyResult.rows,
+      repairItems : repairItemResult.rows,
+      holdingItems : holdingItemResult.rows
+    }
 
-    // res.send(response)
+    res.send(propertyData)
   } catch (error) {
     console.log('error in /api/properties/propertyOfInterest/id GET route: ', error)
     await connection.query('ROLLBACK;')
