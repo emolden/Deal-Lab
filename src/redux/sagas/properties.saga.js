@@ -16,11 +16,14 @@ function* updateProperty(action) {
 function* backToDefault(action) {
 }
 
+//getPropertyOfInterest sends an axios request to the properties.router.js and
+//sends the response data to the PropertyOfInterest reducer.
 function* getPropertyOfInterest(action) {
-  console.log('in getPropertyOfInterest saga and the playload is: ', action.payload);
+  // console.log('in getPropertyOfInterest saga and the playload is: ', action.payload);
 
   try {
-    // const response = yield axios.get(`/api/properties/${action.payload}`);
+    //to properties.router.js with the property id as a paramater
+    const response = yield axios.get(`/api/properties/propertyOfInterest/${action.payload}`);
 
     // yield put({ type: 'SET_USER', payload: response.data });
   } catch (error) {

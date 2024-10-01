@@ -36,8 +36,9 @@ router.put('/', (req, res) => {
  * GET property of interest
  */
 router.get('/propertyOfInterest/:id', (req, res) => {
+  console.log('in the /api/properties/propertyOfInterest/id route: ', req.params.id);  
     // GET route code here
-  });
+});
 
 
 
