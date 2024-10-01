@@ -2,9 +2,31 @@ import { put, takeLatest } from 'redux-saga/effects';
 import axios from 'axios';
 
 function* getProperties(action) {
+  const userId = action.payload;
+  try {
+    const response = yield axios.get(`/api/properties/${userId}`)
+    yield put({
+      type: 'SET_PROPERTIES',
+      payload: response.data
+    })
+  } catch (error) {
+    console.log('Error in getting properties:', error);
+    
+  }
+  
 }
 
 function* addProperty(action) {
+  // console.log('Payload data:', action.payload);
+  const address = action.payload.address;
+  try {
+    yield axios.post(`api/properties`, {address})
+    yield put({
+        type: 'GET_PROPERTIES'
+    })
+  } catch (error) {
+    console.log('Error in getting property details:', error);
+  }
 }
 
 function* deleteProperty(action) {
