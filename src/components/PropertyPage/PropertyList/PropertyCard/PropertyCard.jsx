@@ -1,7 +1,8 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import Swal from 'sweetalert2'
 
-function PropertyCard({property}) {
+function PropertyCard({property, userId}) {
   const dispatch = useDispatch();
   // 20000 is the repair number.
   const upfrontCost = Number(property.purchase_price) + 20000; 
@@ -21,6 +22,54 @@ function PropertyCard({property}) {
     });
   }
 
+  //deleteProperty function runs when the user clicks "delete". 
+
+  const deleteProperty = (propertyId) => {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: "btn btn-success",
+        cancelButton: "btn btn-danger"
+      },
+      buttonsStyling: false
+    });
+    //This is the pop-up that appears when the user clicks "delete"
+    swalWithBootstrapButtons.fire({
+      title: "Are you sure you want to delete this property?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it.",
+      cancelButtonText: "No, cancel.",
+      reverseButtons: true
+    }).then((result) => {
+      //If the user confirms they wish to delete the property
+      if (result.isConfirmed) {
+        //sends a a dispatch to the properties.saga.js
+        //with the property id as the payload.
+        dispatch({
+          type: 'DELETE_PROPERTY',
+          payload: {propertyId, userId}
+        });
+        swalWithBootstrapButtons.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success"
+        });
+      } 
+      //if the user cancels the delete
+      else if (
+        /* Read more about handling dismissals below */
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        swalWithBootstrapButtons.fire({
+          title: "Cancelled",
+          text: "Your property has NOT been deleted.",
+          icon: "error"
+        });
+      }
+    });
+  }
+
   return (
     <div className="container">
       <p>Property Card:</p>
@@ -35,6 +84,7 @@ function PropertyCard({property}) {
                   <th className='rentCastHeadTitle'>Total Cost</th>
                   <th className='rentCastHeadTitle'>Profit</th>
                   <th className='rentCastHeadTitle'>Annualized Profit</th>
+                  <th></th>
               </tr>
           </thead>
 
@@ -47,6 +97,7 @@ function PropertyCard({property}) {
                 <td>${totalCost}</td>
                 <td>${profit}</td>
                 <td>${annualProfit}</td>
+                <td><button onClick={() => {deleteProperty(property.id)}}>Delete</button></td>
             </tr>
           </tbody>
       </table>

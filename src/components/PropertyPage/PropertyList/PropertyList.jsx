@@ -24,7 +24,7 @@ function PropertyList({userId}) {
       {Object.keys(allProperties).length && allProperties.map((property) => {
         return (
           <div key={property.id}>
-            <PropertyCard property={property} />
+            <PropertyCard property={property} userId={userId} />
           </div>
         )
       })}

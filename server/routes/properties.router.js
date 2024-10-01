@@ -161,7 +161,21 @@ router.post('/', async (req, res) => {
  * ----- DELETE property: deleteProperty
  */
 router.delete('/:id', (req, res) => {
-    // DELETE route code here
+    // console.log('/api/properties/id delete route received a request! ', req.params.id)
+    const propertyId = req.params.id;
+
+    const sqlText = `
+      DELETE FROM "properties"
+	      WHERE "id" = $1;
+    `
+  
+      pool.query(sqlText, [propertyId])
+      .then((results) => {
+          res.send(results.rows);
+      }) .catch((error) => {
+          console.log('Error in deleting property:', error);
+          res.sendStatus(500);
+      })
   });
 
 
