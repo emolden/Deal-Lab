@@ -5,7 +5,7 @@ function PropertyCard() {
   const dispatch = useDispatch();
 
   const getPropertyOfInterest = (propId) => {
-    console.log("in getPropertyOfInterest function in PropertyCard component", propId)
+    // console.log("in getPropertyOfInterest function in PropertyCard component", propId)
     dispatch({
       type: 'GET_PROPERTY_OF_INTEREST',
       payload: propId

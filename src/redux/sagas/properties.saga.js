@@ -17,6 +17,15 @@ function* backToDefault(action) {
 }
 
 function* getPropertyOfInterest(action) {
+  console.log('in getPropertyOfInterest saga and the playload is: ', action.payload);
+
+  try {
+    // const response = yield axios.get(`/api/properties/${action.payload}`);
+
+    // yield put({ type: 'SET_USER', payload: response.data });
+  } catch (error) {
+    console.log('getPropertyOfInterest get request failed', error);
+  }
 }
 
 function* propertiesSaga() {
