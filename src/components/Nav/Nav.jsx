@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import LogOutButton from '../App/LogOutButton/LogOutButton';
 import './Nav.css';
 import { useSelector } from 'react-redux';
+import Hamburger from '../Hamburger/Hamburger';
 
 function Nav() {
   const user = useSelector((store) => store.user);
@@ -10,7 +11,12 @@ function Nav() {
   return (
     <div className="nav">
       <Link to="/home">
-        <h2 className="nav-title">Prime Solo Project</h2>
+        {/* <h2 className="nav-title">Deal Lab: Fix & Flipper</h2> */}
+        <img 
+        className="logo"
+        src="./deal-lab-logo.png" />
+        <h2 className="fix-flip">Fix & Flipper</h2>
+
       </Link>
       <div>
         {/* If no user is logged in, show these links */}
@@ -33,12 +39,13 @@ function Nav() {
             </Link>
 
             <LogOutButton className="navLink" />
+
+            <div className="hamburger">
+            <Hamburger />
+            </div>
           </>
         )}
 
-        <Link className="navLink" to="/about">
-          About
-        </Link>
       </div>
     </div>
   );

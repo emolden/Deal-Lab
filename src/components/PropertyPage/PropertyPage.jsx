@@ -11,8 +11,6 @@ function PropertyPage({userId}) {
   return (
     <div className="container">
       <h2>Welcome, {user.username}!</h2>
-      <p>Your ID is: {user.id}</p>
-      <LogOutButton className="btn" />
       <PropertySearchForm userId={userId}/>
       <PropertyList userId={userId}/>
       <PropertyModal />
