@@ -5,7 +5,7 @@ import PropertyList from './PropertyList/PropertyList';
 import PropertySearchForm from './PropertySeachForm/PropertySearchForm';
 import PropertyModal from './PropertyModal/PropertyModal';
 
-function PropertyPage() {
+function PropertyPage({userId}) {
   
   const user = useSelector((store) => store.user);
   return (
@@ -13,8 +13,8 @@ function PropertyPage() {
       <h2>Welcome, {user.username}!</h2>
       <p>Your ID is: {user.id}</p>
       <LogOutButton className="btn" />
-      <PropertySearchForm />
-      <PropertyList />
+      <PropertySearchForm userId={userId}/>
+      <PropertyList userId={userId}/>
       <PropertyModal />
     </div>
   );

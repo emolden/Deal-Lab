@@ -17,12 +17,14 @@ function* getProperties(action) {
 }
 
 function* addProperty(action) {
-  // console.log('Payload data:', action.payload);
+  console.log('Payload data:', action.payload);
   const address = action.payload.address;
+  const userId = action.payload.userId
   try {
     yield axios.post(`api/properties`, {address})
     yield put({
-        type: 'GET_PROPERTIES'
+        type: 'GET_PROPERTIES',
+        payload: userId
     })
   } catch (error) {
     console.log('Error in getting property details:', error);
