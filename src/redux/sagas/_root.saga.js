@@ -4,7 +4,7 @@ import registrationSaga from './registration.saga';
 import userSaga from './user.saga';
 import propertiesSaga from './properties.saga';
 import propertyHoldingItemsSaga from './propertyHoldingItems.saga';
-import propertyRepairItemsSaga from './PropertyRepairItems.saga';
+import propertyRepairItemsSaga from './propertyRepairItems.saga';
 import defaultSettingsSaga from './defaultSettings.saga';
 
 // rootSaga is the primary saga.
