@@ -1,4 +1,7 @@
 const express = require('express');
+const {
+  rejectUnauthenticated,
+} = require('../modules/authentication-middleware');
 const pool = require('../modules/pool');
 const router = express.Router();
 
@@ -35,9 +38,34 @@ router.put('/', (req, res) => {
   /**
  * GET property of interest
  */
-router.get('/propertyOfInterest/:id', (req, res) => {
-  console.log('in the /api/properties/propertyOfInterest/id route: ', req.params.id);  
-    // GET route code here
+router.get('/propertyOfInterest/:id', rejectUnauthenticated, async (req, res) => {
+  // console.log('in the /api/properties/propertyOfInterest/id route: ', req.params.id);  
+  
+  let connection;
+  try {
+
+    connection = await pool.connect()
+    await connection.query('BEGIN;')
+
+    const propertyId = req.params.id;
+
+    //requests specific property info from the properties table
+    const propertyText = `
+      SELECT * FROM "properties"
+	      WHERE "properties"."id" = $1;
+    `;
+    const propertyValue = [propertyId]
+    const propertyResult = await connection.query(propertyText, propertyValue);
+    console.log('database reponse to property: ', propertyResult.rows)
+
+  } catch (error) {
+    console.log('error in /api/properties/propertyOfInterest/id GET route: ', error)
+    await connection.query('ROLLBACK;')
+    res.sendStatus(500);
+  } finally {
+    await connection.release()
+  }
+
 });
 
 
