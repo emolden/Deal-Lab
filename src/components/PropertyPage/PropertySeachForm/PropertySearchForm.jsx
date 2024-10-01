@@ -2,7 +2,7 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-function PropertySearchForm() {
+function PropertySearchForm({userId}) {
   const dispatch = useDispatch();
   const [address, setAddress] = useState('');
 
@@ -10,7 +10,7 @@ function PropertySearchForm() {
     e.preventDefault();
     dispatch ({
         type: 'ADD_PROPERTY',
-        payload: {address}
+        payload: {address: address, userId: userId}
     })
   } 
 

@@ -3,15 +3,15 @@ import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import PropertyCard from './PropertyCard/PropertyCard';
 
-function PropertyList() {
+function PropertyList({userId}) {
   const dispatch = useDispatch();
-  const user = useSelector(store => store.user)
+  // const user = useSelector(store => store.user)
   const allProperties = useSelector(store => store.allProperties)
 
   useEffect(() => {
     dispatch({ 
       type: 'GET_PROPERTIES', 
-      payload: user.id 
+      payload: userId 
     })
   }, [])
 

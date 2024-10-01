@@ -37,7 +37,7 @@ router.post('/', async (req, res) => {
   const api_key = process.env.RENTCAST_API_KEY;
   const address = req.body.address;
   const userId = req.user.id;
-  console.log('ADDRESS:', address);
+  console.log('ADDRESS:', address, userId);
   
 
   try {
