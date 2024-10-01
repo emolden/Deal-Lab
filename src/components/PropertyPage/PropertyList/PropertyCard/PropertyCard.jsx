@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import Swal from 'sweetalert2'
 
-function PropertyCard({property}) {
+function PropertyCard({property, userId}) {
   const dispatch = useDispatch();
   // 20000 is the repair number.
   const upfrontCost = Number(property.purchase_price) + 20000; 
@@ -48,7 +48,7 @@ function PropertyCard({property}) {
         //with the property id as the payload.
         dispatch({
           type: 'DELETE_PROPERTY',
-          payload: propertyId
+          payload: {propertyId, userId}
         });
         swalWithBootstrapButtons.fire({
           title: "Deleted!",

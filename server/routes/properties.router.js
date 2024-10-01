@@ -166,7 +166,7 @@ router.delete('/:id', (req, res) => {
 
     const sqlText = `
       DELETE FROM "properties"
-	      WHERE "user_id" = $1;
+	      WHERE "id" = $1;
     `
   
       pool.query(sqlText, [propertyId])
