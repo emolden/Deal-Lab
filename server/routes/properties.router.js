@@ -51,66 +51,84 @@ router.post('/', async (req, res) => {
       const checkTimeStampData = checkTimeStampResults.rows;
       
       if (checkTimeStampData.length === 0) {
-          // ================ Axios for LISTING
-          const listingResponse = await axios({
-              method: 'GET',
-              url: `https://api.rentcast.io/v1/listings/sale?address=${address}&limit=1`,
-              headers: {
-                  'accept': 'application/json',
-                  'X-Api-Key': `${api_key}`
-              }
-          })
-          console.log("Data from listingResponse:", listingResponse.data);
+        //--------------------------------- API REQUEST SUCCESSFULLY WORKING----------------------------------
+        //----------------------------- HERE IS SOME FAKE API DATA TO USE WHILE BUILDING THE APP ----------------------
+        //-------------DELETE THIS WHEN APP IS FULLY BUILT AND UNCOMMENT THE API CALLS --------------------------------
+        const propertyApiData = [
+          userId,
+          '6817 Dutton Ave N, Brooklyn Park, MN 55428',
+          249000.00,
+          2300,
+          345000.00,
+          'single family',
+          3,
+          1,
+          1092.00
+      ]
+      //-----------------------DELETE TO HERE------------------------------------------------------------------------------
+
+      //---------------UNCOMMENT BELOW THIS LINE----------------------------------------------------------------------------
+
+          // // ================ Axios for LISTING
+          // const listingResponse = await axios({
+          //     method: 'GET',
+          //     url: `https://api.rentcast.io/v1/listings/sale?address=${address}&limit=1`,
+          //     headers: {
+          //         'accept': 'application/json',
+          //         'X-Api-Key': `${api_key}`
+          //     }
+          // })
+          // console.log("Data from listingResponse:", listingResponse.data);
           
 
 
-          // ================ Axios for RECORDS (taxesYearly)
-          const recordsResponse = await axios({
-              method: 'GET',
-              url: `https://api.rentcast.io/v1/properties?address=${address}&limit=1`,
-              headers: {
-                  'accept': 'application/json',
-                  'X-Api-Key': `${api_key}`
-              }
-          })
-          console.log("Data from recordsResponse:", recordsResponse.data);
+          // // ================ Axios for RECORDS (taxesYearly)
+          // const recordsResponse = await axios({
+          //     method: 'GET',
+          //     url: `https://api.rentcast.io/v1/properties?address=${address}&limit=1`,
+          //     headers: {
+          //         'accept': 'application/json',
+          //         'X-Api-Key': `${api_key}`
+          //     }
+          // })
+          // console.log("Data from recordsResponse:", recordsResponse.data);
 
 
 
-          // ================ Axios for VALUE ESTIMATE (afterRepairValue)
-          const valueEstimateResponse = await axios({
-              method: 'GET',
-              url: `https://api.rentcast.io/v1/avm/value?address=${address}&limit=1&compCount=5`,
-              headers: {
-                  'accept': 'application/json',
-                  'X-Api-Key': `${api_key}`
-              }
-          })
-          console.log("Data from valueEstimateResponse:", valueEstimateResponse.data);
+          // // ================ Axios for VALUE ESTIMATE (afterRepairValue)
+          // const valueEstimateResponse = await axios({
+          //     method: 'GET',
+          //     url: `https://api.rentcast.io/v1/avm/value?address=${address}&limit=1&compCount=5`,
+          //     headers: {
+          //         'accept': 'application/json',
+          //         'X-Api-Key': `${api_key}`
+          //     }
+          // })
+          // console.log("Data from valueEstimateResponse:", valueEstimateResponse.data);
 
 
 
-          // ================ SQL insert into table: PROPERTY_API_DATA
-          const lastYear = new Date().getFullYear() - 1;
-          let taxYear = recordsResponse.data[0].propertyTaxes;
+          // // ================ SQL insert into table: PROPERTY_API_DATA
+          // const lastYear = new Date().getFullYear() - 1;
+          // let taxYear = recordsResponse.data[0].propertyTaxes;
           
-          if (!taxYear) {
-              taxYear = null;
-          } else if (taxYear) {
-              taxYear = recordsResponse.data[0].propertyTaxes[`${lastYear}`].total;
-          }
+          // if (!taxYear) {
+          //     taxYear = null;
+          // } else if (taxYear) {
+          //     taxYear = recordsResponse.data[0].propertyTaxes[`${lastYear}`].total;
+          // }
               
-          const propertyApiData = [
-              userId,
-              listingResponse.data[0].formattedAddress,
-              listingResponse.data[0].price,
-              taxYear,
-              valueEstimateResponse.data.priceRangeHigh,
-              listingResponse.data[0].propertyType,
-              listingResponse.data[0].bedrooms,
-              listingResponse.data[0].bathrooms,
-              listingResponse.data[0].squareFootage
-          ]
+          // const propertyApiData = [
+          //     userId,
+          //     listingResponse.data[0].formattedAddress,
+          //     listingResponse.data[0].price,
+          //     taxYear,
+          //     valueEstimateResponse.data.priceRangeHigh,
+          //     listingResponse.data[0].propertyType,
+          //     listingResponse.data[0].bedrooms,
+          //     listingResponse.data[0].bathrooms,
+          //     listingResponse.data[0].squareFootage
+          // ]
           const propertyApiDataSqlText = `
               INSERT INTO "property_api_data"
               ("user_id", "address", "purchase_price", "taxes_yearly", "after_repair_value", 
