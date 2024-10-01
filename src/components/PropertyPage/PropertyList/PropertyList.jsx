@@ -21,9 +21,9 @@ function PropertyList() {
     <div className="container">
       <p>Property List:</p>
 
-      {!allProperties ? '' : allProperties.map((property) => {
+      {Object.keys(allProperties).length && allProperties.map((property) => {
         return (
-          <div>
+          <div key={property.id}>
             <PropertyCard property={property} />
           </div>
         )

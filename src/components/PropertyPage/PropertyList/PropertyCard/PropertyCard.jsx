@@ -1,6 +1,8 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 
 function PropertyCard({property}) {
+  const dispatch = useDispatch();
   // 20000 is the repair number.
   const upfrontCost = Number(property.purchase_price) + 20000; 
   const holdingCost = ((Number(property.taxes_yearly) / 12) + 100) * Number(property.holding_period);
@@ -8,6 +10,17 @@ function PropertyCard({property}) {
   const profit = Number(property.after_repair_value) - totalCost;
   const annualProfit = (profit / Number(property.holding_period)) * 12;
   
+  //getPropertyOfInterest function runs when the user clicks "edit" or
+  //on the address card. This function sends a a dispatch to the properties.saga.js
+  //with the property id as the payload.
+  const getPropertyOfInterest = (propId) => {
+    // console.log("in getPropertyOfInterest function in PropertyCard component", propId)
+    dispatch({
+      type: 'GET_PROPERTY_OF_INTEREST',
+      payload: propId
+    });
+  }
+
   return (
     <div className="container">
       <p>Property Card:</p>
@@ -27,7 +40,7 @@ function PropertyCard({property}) {
 
           <tbody className='rentCastBody'>
             <tr>
-                <td>{property.address}</td>
+                <td onClick={()=>{getPropertyOfInterest(property.id)}}>{property.address}</td>
                 <td>${property.purchase_price}</td>
                 <td>${upfrontCost}</td>
                 <td>${holdingCost}</td>
