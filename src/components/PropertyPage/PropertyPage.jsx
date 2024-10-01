@@ -5,14 +5,14 @@ import PropertyList from './PropertyList/PropertyList';
 import PropertySearchForm from './PropertySeachForm/PropertySearchForm';
 import PropertyModal from './PropertyModal/PropertyModal';
 
-function PropertyPage() {
-  // this component doesn't do much to start, just renders some user reducer info to the DOM
+function PropertyPage({userId}) {
+  
   const user = useSelector((store) => store.user);
   return (
     <div className="container">
       <h2>Welcome, {user.username}!</h2>
-      <PropertySearchForm />
-      <PropertyList />
+      <PropertySearchForm userId={userId}/>
+      <PropertyList userId={userId}/>
       <PropertyModal />
     </div>
   );

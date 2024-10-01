@@ -242,7 +242,7 @@ function App() {
             exact
             path="/property-page"
           >
-            <PropertyPage />
+            <PropertyPage userId = {user.id}/>
           </ProtectedRoute>
 
           <ProtectedRoute
