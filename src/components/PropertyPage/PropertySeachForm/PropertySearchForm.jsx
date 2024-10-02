@@ -1,21 +1,19 @@
 import React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
-// import { StandaloneSearchBox, LoadScript } from "@react-google-maps/api"
+import { geocodeByPlaceId } from "react-google-places-autocomplete";
 
-// import {
-//   GoogleMap,
-//   useJsApiLoader,
-//   MarkerF,
-//   InfoWindowF,
-// } from "@react-google-maps/api";
 
 function PropertySearchForm({userId}) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [searchBarAddress, setSearchBarAddress] = useState("");
+  const [formattedAddress, setFormattedAddress] = useState("");
+  // const [zipCode, setZipCode] = useState('');
   const dispatch = useDispatch();
+  // const myRef = useRef(null);
 
+  //forces GooglePlacesAutocomplete dom render to wait till Google script is loaded
   useEffect(() => {
     const loadScript = () => {
       const script = document.createElement('script');
@@ -30,98 +28,61 @@ function PropertySearchForm({userId}) {
   }, []);
   
   
-  //1. initial states are set to empty strings
-  // const [address, setAddress] = useState('');
-  
 
   const addAddress = (e) => {
     e.preventDefault();
     dispatch ({
         type: 'ADD_PROPERTY',
-        payload: {address: searchBarAddress, userId: userId}
+        payload: {address: formattedAddress, userId: userId}
     })
   } 
 
-    // sends address types into Autocomplete box to server to get addresses for autocomplete
-    // const sendLocation = () => {
-    //   // Ensures that sendLocation isn't triggered when search box is cleared
-    //   if (searchBarAddress === null) {
-    //     return;
-    //   }
-    //   // biome-ignore lint/style/noUselessElse: <explanation>
-    //   else if (searchBarAddress !== "") {
-    //     console.log("searchBarAddress: ", searchBarAddress);
-    //     // converts address to url-friendly string
-    //     const convertedAddress = searchBarAddress.value.description
-    //       .split(" ")
-    //       .join("%20");
-    //     // try {
-    //     //   console.log('Converted Address', convertedAddress)
-    //     setOrigin(convertedAddress);
-    //     dispatch({
-    //       type: "SAGA/SEND_LOCATION",
-    //       payload: convertedAddress,
-    //     });
-    //     // } catch (err) {
-    //     //   console.log("Error sending location: ", err);
-    //     // }
-    //   }
-    // }
-
-  // useEffect(() => {
-  //   //if (searchBarAddress !== '') {
-  //   menuClosed();
-  // }, [searchBarAddress]);
-
-  // Runs when search menu is closed, allowing whatever has been selected to be sent to sendLocation()
-  // const menuClosed = () => {
-  //   if (searchBarAddress === "") {
-  //     console.log("Search bar is empty");
-  //   } else {
-  //     sendLocation();
-  //   }
-  // };
-  // Runs when search menu is opened, emptying the menu of text
-  // const menuOpened = () => {
-  //   if (searchBarAddress !== "") {
-  //     setSearchBarAddress("");
-  //   }
-  // };
 
   const handleChange = (address) => {
-    setSearchBarAddress(address);
+    // setSearchBarAddress(address.label);
+    console.log('in handle change function: ',  address)
+    geocodeByPlaceId(address.value.place_id)
+      .then(results => setFormattedAddress(results[0].formatted_address))
+      .catch(error => console.error(error));
+      console.log(formattedAddress)
+
+    // const placeId = address.value.place_id;
+    // console.log("window.google", window.google.maps, myRef.current)
+
+    // if(window.google && window.google.maps) {
+    //   const serviceInstance = new window.google.maps.places.placesService(document.serviceInstance.getDetails({ placeId }, (place, status) => {
+    //     if (status === window.google.maps.places.PlacesServiceStatus.OK && place) {
+    //       const postalCode = place.address_components.find(component => component.types.includes('postal_code'));
+    //       if(postalCode) {
+    //         setZipCode(postalCode.long_name);
+    //       }
+    //     }
+    //   }))
+    // }
   }
 
-  //2. visuals are rendered on the dom
+
   return (
     <div className="container">
       <p>Property Search Form:</p>
 
-
-      {/* <LoadScript
-        googelMapsApiKey = {process.env.GOOGLE_API_KEY}
-        libraryies={["places"]}
-      >
-        <StandaloneSearchBox
-          onLoad= {searchBarAddress}
-          onPlacesChanged = {handleChange}
-        >
-          <input
-            type="text"
-            placeholder="Enter Address"
-          />
-        </StandaloneSearchBox>
-      </LoadScript> */}
-
       {isLoaded ? (  
       <GooglePlacesAutocomplete
-          // selectProps={{
+        apiKey="AIzaSyC9pViRyFvm5jpR2ezl9PISh66E3ChmqME"
+        apiOptions={{ language: 'en'}}
+        autocompletionRequests={{
+          componentRestrictions: {
+            country: ['us'],
+          }
+        }}
+          selectProps={{
             // className: "searchBar", // Provides the component with a class for styling
             // isClearable: true, // Allows the textbox to be emptied with X
             // onBlur: () => menuClosed(), // Triggers menuClosed() when clicking off of the textbox
             // onMenuOpen: () => menuOpened(), // Triggers textbox to clear when clicking on it
-            // value: searchBarAddress,
-            // onChange: handleChange,//updates the state of searchBarAddresss as the user types
+            searchBarAddress,
+            onChange: handleChange,//updates the state of searchBarAddresss as the user types
+            // onSelect: handleSelect,
             // placeholder: "Enter an address", // Sets the placeholder for textbox
             // styles: {
             //   input: (provided) => ({
@@ -167,7 +128,7 @@ function PropertySearchForm({userId}) {
             //     ...provided,
             //   }),
             // },
-          // }}
+          }}
           // 👇 biases autocomplete search results to locations near IP address
           // ipbias
         />
