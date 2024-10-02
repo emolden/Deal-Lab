@@ -12,20 +12,35 @@ import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 // } from "@react-google-maps/api";
 
 function PropertySearchForm({userId}) {
-  
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [searchBarAddress, setSearchBarAddress] = useState("");
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const loadScript = () => {
+      const script = document.createElement('script');
+      script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyC9pViRyFvm5jpR2ezl9PISh66E3ChmqME&libraries=places`;
+      script.async = true;
+      script.defer = true;
+      script.onload = () => setIsLoaded(true);
+      document.body.appendChild(script);
+    };
+
+    loadScript();
+  }, []);
+  
   
   //1. initial states are set to empty strings
   // const [address, setAddress] = useState('');
-  const [searchBarAddress, setSearchBarAddress] = useState("");
+  
 
-  // const addAddress = (e) => {
-  //   e.preventDefault();
-  //   dispatch ({
-  //       type: 'ADD_PROPERTY',
-  //       payload: {address: address, userId: userId}
-  //   })
-  // } 
+  const addAddress = (e) => {
+    e.preventDefault();
+    dispatch ({
+        type: 'ADD_PROPERTY',
+        payload: {address: searchBarAddress, userId: userId}
+    })
+  } 
 
     // sends address types into Autocomplete box to server to get addresses for autocomplete
     // const sendLocation = () => {
@@ -98,16 +113,16 @@ function PropertySearchForm({userId}) {
         </StandaloneSearchBox>
       </LoadScript> */}
 
-
+      {isLoaded ? (  
       <GooglePlacesAutocomplete
-          selectProps={{
+          // selectProps={{
             // className: "searchBar", // Provides the component with a class for styling
-            isClearable: true, // Allows the textbox to be emptied with X
+            // isClearable: true, // Allows the textbox to be emptied with X
             // onBlur: () => menuClosed(), // Triggers menuClosed() when clicking off of the textbox
             // onMenuOpen: () => menuOpened(), // Triggers textbox to clear when clicking on it
-            value: searchBarAddress,
-            onChange: handleChange,//updates the state of searchBarAddresss as the user types
-            placeholder: "Enter an address", // Sets the placeholder for textbox
+            // value: searchBarAddress,
+            // onChange: handleChange,//updates the state of searchBarAddresss as the user types
+            // placeholder: "Enter an address", // Sets the placeholder for textbox
             // styles: {
             //   input: (provided) => ({
             //     ...provided,
@@ -152,11 +167,14 @@ function PropertySearchForm({userId}) {
             //     ...provided,
             //   }),
             // },
-          }}
+          // }}
           // 👇 biases autocomplete search results to locations near IP address
           // ipbias
         />
-        <button onClick={() => console.log(searchBarAddress)}>Submit</button>
+      ) : (
+        <p>Loading...</p>
+      )}
+        {/* <button onClick={() => console.log(searchBarAddress)}>Submit</button> */}
       {/* <form>
           <label for='addressInput'>Property Address:</label>
           <input className='rentCastInput'
@@ -165,9 +183,9 @@ function PropertySearchForm({userId}) {
                   placeholder='1234 Penny Ln, Liverpool, BL 196700'
                   value={address}
                   onChange={e => setAddress(e.target.value)}
-                  />
+                  /> */}
           <button onClick={addAddress}>Add</button>
-      </form> */}
+      {/* </form> */}
 
     </div>
   );
