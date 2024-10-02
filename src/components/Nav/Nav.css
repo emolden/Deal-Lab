@@ -1,13 +1,14 @@
 .nav {
   /* flex box layout */
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  /* justify-content: space-between; */
   align-items: center;
-
-  margin: 0 0 30px;
+  justify-content: center;
+  margin: 60px auto;
   background-color: #eff3f3;
   overflow: hidden;
-  
+  position: relative;
 }
 
 .nav a {
@@ -20,11 +21,23 @@
   color: #f2f2f2;
   padding-left: 10px;
   margin: 0;
-  
+}
+
+/* .navMenuDiv{
+  display: flex;
+} */
+
+.navMenu {
+  position: absolute;
+  display: flex;
+  right: 0;
+  bottom: 0;
 }
 
 .navLink {
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: #f2f2f2;
   font-weight: bolder;
   background-color: #00b043;
@@ -33,7 +46,6 @@
   text-decoration: none;
   font-size: 15px;
   
-
   /* these last two make the logout button in
   the nav bar look like another link */
   border: none;
@@ -64,5 +76,8 @@
 }
 
 .fix-flip {
+  margin-top: -10px;
   text-align: center;
+  color: #50556a;
 }
+

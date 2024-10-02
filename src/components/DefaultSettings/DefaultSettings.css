@@ -1,0 +1,216 @@
+
+.defaultSettings {
+    margin: 0 60px;
+    margin-top: -60px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding: 50px 0px;
+}
+
+.defaultSettingsTitle {
+    margin: 10px 0px;
+    text-align: center;
+    font-size: 45px;
+    font-weight: bold;
+}
+
+.defaultSettingsText {
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+/* ======== Default Holding Period ======== */
+.holdingPeriodDefault {
+    margin-left: 60px;
+}
+
+.holdingPeriodInput {
+    width: 30px;
+    border: 1px solid rgb(207, 207, 207);
+    border-radius: 3px;
+    background-color: rgb(247, 247, 247);
+}
+
+.holdingPeriodInput[type='number'] {
+    text-align: center;
+}
+
+/* ======== Default Holding ======== */
+.defaultHolding {
+    margin-bottom: 20px;
+    border: 1.5px solid rgb(202, 202, 202);
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 1px 1px 1px rgba(116, 116, 116, 0.3),
+                1px 1px 1px rgba(116, 116, 116, 0.3);
+}
+
+.defaultHoldingForm {
+
+}
+
+.defaultHoldingNameInput, .defaultHoldingCostInput {
+    border: 1px solid rgb(207, 207, 207);
+    border-radius: 3px;
+    background-color: rgb(247, 247, 247);
+}
+
+.defaultHoldingNameInput::placeholder {
+    padding: 4px;
+    color: rgb(147, 147, 147);
+    font-size: 12px;
+}
+
+.defaultHoldingCostInput::placeholder {
+    padding: 4px;
+    color: rgb(147, 147, 147);
+    font-size: 12px;
+}
+
+.addDefaultHoldingBtn {
+    border: 1px solid rgb(19, 86, 255);
+    border-radius: 4.5px;
+    padding: 4px 8px;
+    background-color: rgb(14, 106, 255);
+    color: rgb(255, 255, 255);
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    box-shadow: 1px 1px 1px rgba(169, 169, 169, 0.8),
+                1px 1px 1px rgba(169, 169, 169, 0.8);
+}
+
+.addDefaultHoldingBtn:hover {
+    cursor: pointer;
+    border: 1px solid rgb(149, 178, 251);
+    color: rgb(42, 123, 255);
+    background-color: rgb(163, 196, 250);
+}
+
+.defaultHoldingItems {
+    margin: 20px auto;
+}
+
+.defaultHoldingItem {
+    margin-left: 60px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.defaultHoldingItemName, .defaultHoldingItemCost, .deleteDefaultHoldingBtn {
+
+}
+
+.deleteDefaultHoldingBtn {
+    font-size: 9px;
+}
+
+.deleteDefaultHoldingBtn:hover {
+    cursor: pointer;
+    font-size: 11px;
+}
+
+
+/* ======== Default Repair ======== */
+.defaultRepair {
+    margin-bottom: 20px;
+    border: 1.5px solid rgb(202, 202, 202);
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 1px 1px 1px rgba(116, 116, 116, 0.3),
+                1px 1px 1px rgba(116, 116, 116, 0.3);
+}
+
+.defaultRepairForm {
+
+}
+
+.defaultRepairNameInput, .defaultRepairCostInput {
+    border: 1px solid rgb(207, 207, 207);
+    border-radius: 3px;
+    background-color: rgb(247, 247, 247);
+}
+
+.defaultRepairNameInput::placeholder {
+    padding: 4px;
+    color: rgb(147, 147, 147);
+    font-size: 12px;
+}
+
+.defaultRepairCostInput::placeholder {
+    padding: 4px;
+    color: rgb(147, 147, 147);
+    font-size: 12px;
+}
+
+.addDefaultRepairBtn {
+    border: 1px solid rgb(19, 86, 255);
+    border-radius: 4.5px;
+    padding: 4px 8px;
+    background-color: rgb(14, 106, 255);
+    color: rgb(255, 255, 255);
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    box-shadow: 1px 1px 1px rgba(169, 169, 169, 0.8),
+                1px 1px 1px rgba(169, 169, 169, 0.8);
+}
+
+.addDefaultRepairBtn:hover {
+    cursor: pointer;
+    border: 1px solid rgb(149, 178, 251);
+    color: rgb(42, 123, 255);
+    background-color: rgb(163, 196, 250);
+}
+
+.defaultRepairItems {
+    margin: 20px auto;
+}
+
+.defaultRepairItem {
+    margin-left: 60px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.defaultRepairItemName, .defaultRepairItemCost, .deleteDefaultRepairBtn {
+
+}
+
+.deleteDefaultRepairBtn {
+    font-size: 9px;
+}
+
+.deleteDefaultRepairBtn:hover {
+    cursor: pointer;
+    font-size: 11px;
+}
+
+.defaultSaveBtn {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin-right: 10px;
+    border: 1px solid rgb(19, 86, 255);
+    border-radius: 4.5px;
+    padding: 4px 8px;
+    height: 30px;
+    width: 80px;
+    background-color: rgb(14, 106, 255);
+    color: rgb(255, 255, 255);
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    box-shadow: 1px 1px 1px rgba(169, 169, 169, 0.8),
+                1px 1px 1px rgba(169, 169, 169, 0.8);
+}
+
+.defaultSaveBtn:hover {
+    cursor: pointer;
+    border: 1px solid rgb(149, 178, 251);
+    color: rgb(42, 123, 255);
+    background-color: rgb(163, 196, 250);
+}
