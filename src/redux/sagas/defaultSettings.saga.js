@@ -33,7 +33,7 @@ function* addDefaultHoldingItem(action) {
   try {
     yield axios.post(`/api/defaultSettings/holdingItem`, {holdingName, holdingCost})
     yield put({
-      type: 'SET_DEFAULTS'
+      type: 'GET_DEFAULTS'
     })
   } catch (error) {
     console.log('Error adding default holding item:', error);
@@ -44,6 +44,9 @@ function* deleteDefaultHoldingItem(action) {
   const holdingId = action.payload;
   try {
     yield axios.delete(`/api/defaultSettings/holdingItem/${holdingId}`)
+    yield put({
+      type: 'GET_DEFAULTS'
+    })
   } catch (error) {
     console.log('Error deleting default holding item:', error);
   }
@@ -55,7 +58,7 @@ function* addDefaultRepairItem(action) {
   try {
     yield axios.post(`/api/defaultSettings/repairItem`, {repairName, repairCost})
     yield put({
-      type: 'SET_DEFAULTS'
+      type: 'GET_DEFAULTS'
     })
   } catch (error) {
     console.log('Error adding default repair item:', error);
@@ -66,6 +69,9 @@ function* deleteDefaultRepairItem(action) {
   const repairId = action.payload;
   try {
     yield axios.delete(`/api/defaultSettings/repairItem/${repairId}`)
+    yield put({
+      type: 'GET_DEFAULTS'
+    })
   } catch (error) {
     console.log('Error deleting default repair item:', error);
   }
