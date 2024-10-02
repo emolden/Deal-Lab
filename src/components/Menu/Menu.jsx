@@ -1,38 +1,43 @@
-import React from 'react';
-import styled from 'styled-components';
-import { StyledMenu } from './Menu.styled';
-import DefaultSettings from '../DefaultSettings/DefaultSettings';
-import PropertyPage from '../PropertyPage/PropertyPage';
+import React from "react";
+import styled from "styled-components";
+import { StyledMenu } from "./Menu.styled";
+import DefaultSettings from "../DefaultSettings/DefaultSettings";
+import PropertyPage from "../PropertyPage/PropertyPage";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
-import LogOutButton from '../App/LogOutButton/LogOutButton';
+import { StyledLogOutButton } from "../App/LogOutButton/LogOutButton.styled";
 
+// const StyledLogOutButton = styled(LogOutButton)`
+//   display: block; // Ensure it's block level like the links
+//   font-size: 2rem;
+//   text-transform: uppercase;
+//   padding: 2rem 0;
+//   color: ${({ theme }) => theme.primaryDark};
+//   text-decoration: none;
+// `;
 
-function Menu ({ open, setOpen }) {
-    const handleLinkClick = () => {
-        setOpen(false);
-    }
+function Menu({ open, setOpen }) {
+  const handleLinkClick = () => {
+    setOpen(false);
+  };
 
   return (
     <StyledMenu open={open}>
-
-      <a>
-        <Link to="/property-page" onClick={handleLinkClick}>
-              Properties
-            </Link>
-      </a>
-      <a>
-        <Link to="/default-settings" onClick={handleLinkClick}>
-              Default Settings
-            </Link>
-        </a>
-     <a>
-        <Link to="/" onClick={handleLinkClick}>
-        <LogOutButton className="navLink" />
-        </Link>
-        </a>
-
+      <Link to="/property-page" onClick={handleLinkClick}>
+        Properties
+      </Link>
+      <Link to="/default-settings" onClick={handleLinkClick}>
+        Default Settings
+      </Link>
+      <StyledLogOutButton
+        onClick={() => {
+          // Handle logout logic here
+          handleLinkClick();
+        }}
+      >
+        Logout
+      </StyledLogOutButton>
     </StyledMenu>
-  )
+  );
 }
 
 // Menu.propTypes = {
