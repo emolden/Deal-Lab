@@ -17,11 +17,13 @@ console.log('setOpen is:', typeof setOpen);
     // <button onClick={hamburgerClick}>
     //     helloooo
     // <div>
+    <nav>
     <StyledBurger onClick={hamburgerClick}>
       <div />
       <div />
       <div />
     </StyledBurger>
+    </nav>
     // </div>
     // </button>
   )

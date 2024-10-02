@@ -7,30 +7,28 @@ import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import LogOutButton from '../App/LogOutButton/LogOutButton';
 
 
-function Menu ({ open }) {
+function Menu ({ open, setOpen }) {
+    const handleLinkClick = () => {
+        setOpen(false);
+    }
+
   return (
     <StyledMenu open={open}>
 
-        {/* <>
-            <Link className="navLink" to="/property-page">
+      <a>
+        <Link to="/property-page" onClick={handleLinkClick}>
               Properties
             </Link>
-
-            <Link className="navLink" to="/default-settings">
+      </a>
+      <a>
+        <Link to="/default-settings" onClick={handleLinkClick}>
               Default Settings
             </Link>
-
-            <LogOutButton className="navLink" />
-
-        </> */}
-
-        <a href="/">
-        <span aria-label="properties">&#x1f481;&#x1f3fb;&#x200d;&#x2642;&#xfe0f;</span>
-        Properties
-      </a>
-      <a href="/">
-        <span aria-label="default settings">&#x1f4b8;</span>
-        Default Settings
+        </a>
+     <a>
+        <Link to="/" onClick={handleLinkClick}>
+        <LogOutButton className="navLink" />
+        </Link>
         </a>
 
     </StyledMenu>

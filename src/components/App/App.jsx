@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect } from 'react';
 import {
   HashRouter as Router, Redirect, Route, Switch,
 } from 'react-router-dom';
@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Nav from '../Nav/Nav';
 import Footer from '../Footer/Footer';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
-import AboutPage from '../AboutPage/AboutPage';
+// import AboutPage from '../AboutPage/AboutPage';
 import PropertyPage from '../PropertyPage/PropertyPage';
 import DefaultSettings from '../DefaultSettings/DefaultSettings';
 import LandingPage from '../LandingPage/LandingPage';
@@ -18,9 +18,9 @@ import './App.css';
 import { ThemeProvider } from 'styled-components';
 // import { GlobalStyles } from './global';
 import { theme } from './theme';
-import Menu from '../Menu/Menu';
-import Hamburger from '../Hamburger';
-import { useOnClickOutside } from '../../hooks/hooks';
+// import Menu from '../Menu/Menu';
+// import Hamburger from '../Hamburger';
+// import { useOnClickOutside } from '../../hooks/hooks';
 
 
 function App() {
@@ -29,9 +29,9 @@ function App() {
   const dispatch = useDispatch();
   const user = useSelector(store => store.user);
 
-  const [open, setOpen] = useState(false);
-  const node = useRef(); 
-  useOnClickOutside(node, () => setOpen(false));
+  // const [open, setOpen] = useState(false);
+  // const node = useRef(); 
+  // useOnClickOutside(node, () => setOpen(false));
 
   useEffect(() => {  
     dispatch({ type: 'FETCH_USER' });
@@ -44,10 +44,10 @@ function App() {
       <>
       {/* <GlobalStyles /> */}
 
-      <div ref={node}>
+      {/* <div ref={node}>
         <Hamburger open={open} setOpen={setOpen} />
         <Menu open={open} setOpen={setOpen} />
-      </div>
+      </div> */}
     <Router>
       <div>
         <Header />

@@ -1,13 +1,19 @@
 import LogOutButton from "../App/LogOutButton/LogOutButton";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import { useSelector } from "react-redux";
+import { useState, useRef } from "react";
+import { useOnClickOutside } from '../../hooks/hooks';
+
 import React from "react";
 import "./Header.css";
 import Hamburger from "../Hamburger/Hamburger";
+import Menu from "../Menu/Menu";
 
 function Header() {
     const user = useSelector((store) => store.user);
-  
+    const [open, setOpen] = useState(false);
+    const node = useRef(); 
+    useOnClickOutside(node, () => setOpen(false));
   
     return (
       <div>
@@ -23,6 +29,11 @@ function Header() {
         </container>
         
             
+        <div ref={node}>
+          <Hamburger open={open} setOpen={setOpen} />
+          <Menu open={open} setOpen={setOpen} />
+        </div>
+
         <div>
         {/* If no user is logged in, show these links */}
         {!user.id && (
@@ -31,25 +42,26 @@ function Header() {
             Login / Register
           </Link>
         )}
-
+        <nav>
         {/* If a user is logged in, show these links */}
         {user.id && (
           <>
-            <Link className="navLink" to="/property-page">
+            {/* <Link className="navLink" to="/property-page">
               Properties
-            </Link>
+            </Link> */}
 
-            <Link className="navLink" to="/default-settings">
+            {/* <Link className="navLink" to="/default-settings">
               Default Settings
-            </Link>
+            </Link> */}
 
-            <LogOutButton className="navLink" />
+            {/* <LogOutButton className="navLink" /> */}
 
             {/* <div className="hamburger"> */}
             {/* <Hamburger /> */}
             {/* </div> */}
           </>
         )}
+        </nav>
 
       </div>
           </header>

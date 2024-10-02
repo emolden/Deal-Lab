@@ -4,11 +4,15 @@ export const StyledMenu = styled.nav`
   display: flex;
   flex-direction: column;
   justify-content: center;
+
   background: ${({ theme }) => theme.primaryLight};
   height: 100vh;
+  width: 100%
+  max-width: 450px;
   text-align: left;
+  font-size: 3rem;
   padding: 2rem;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   transition: transform 0.3s ease-in-out;
