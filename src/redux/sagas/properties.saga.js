@@ -32,6 +32,20 @@ function* addProperty(action) {
 }
 
 function* deleteProperty(action) {
+  // console.log('deleteProperty saga received a dispatch: ', action.payload)
+  const propertyId = action.payload.propertyId;
+  const userId = action.payload.userId;
+  try {
+    const response = yield axios.delete(`/api/properties/${propertyId}`)
+    // console.log('response from server is delete property route: ', response.data)
+    yield put({
+      type: 'GET_PROPERTIES',
+      payload: userId
+    })
+  } catch (error) {
+    console.log('Error in getting properties:', error);
+    
+  }
 }
 
 function* updateProperty(action) {
