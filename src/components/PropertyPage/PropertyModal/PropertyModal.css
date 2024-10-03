@@ -1,0 +1,119 @@
+.modal-header {
+    background-color: #008000;
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 5px 5px 0 0;
+    margin: 0;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7); /* Dark background with some transparency */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure it sits above other content */
+}
+
+.modal-content {
+    background: rgb(238, 238, 224);
+    position: relative;
+    min-width: 400px;
+    max-width: 800px;
+    width: auto;
+    padding: 5px;
+    box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.75);
+    overflow: hidden;
+    border-radius: 8px;
+  }
+  
+  .modal-close {
+    background: transparent;
+    position: absolute;
+    top: 7px;
+    right: 6px;
+    border: none;
+    background: #343078;
+    color: white;
+    cursor: pointer;
+    border-width: 1px 1px 3px;
+    border-radius: 2px;
+    padding: 3px 7px;
+  }
+
+  .modal-close:hover {
+    background-color: #7974d7; 
+    transform: scale(1.05); 
+  }
+  
+  .modalRight {
+    width: 100%;
+  }
+  .bold-text {
+    font-weight: bold; /* Make text bold */
+  }
+
+  .modal-btn {
+    display: inline-block;
+    padding: 5px 10px;
+    border-width: 1px 1px 3px;
+    border-radius: 4px;
+    background-color: #343078;
+    color: #f8f8f8;
+    font-size: 1.1rem;
+    outline: 0;
+    cursor: pointer;
+    margin: .5rem;
+    position: relative;
+    right: -550px;
+  }
+
+  .modal-btn:hover {
+    background-color: #7974d7; 
+    transform: scale(1.05); 
+  }
+
+  .grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two columns */
+    grid-template-rows: repeat(2, auto); /* Two rows */
+    gap: 8px; /* Space between items */
+    margin-top: 20px; /* Space from address strip */
+    padding: 0 0 10px 0;
+  }
+  
+  .section {
+    border: 1px solid #ccc; /* Border color */
+    border-radius: 5px; /* Rounded corners for the sections */
+    padding: 15px; /* Padding inside sections */
+    background: white; /* Background for the sections */
+    box-sizing: border-box;
+  }
+
+  .upfront-costs {
+    grid-column: 1; /* First column */
+    grid-row: 1; /* First row */
+  }
+  
+  .holding-period-costs {
+    grid-column: 1; /* First column */
+    grid-row: 2; /* Second row */
+  }
+
+  .profit-estimation {
+    grid-column: 2; /* Second column */
+    grid-row: 1 / span 2; /* Span both rows */
+  }
+
+  .section-header {
+    font-weight: bold; /* Make text bold */
+    text-decoration: underline; /* Underline text */
+    margin-bottom: 10px; /* Space below the header */
+  }

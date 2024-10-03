@@ -26,12 +26,19 @@ function ModalUpfrontCosts() {
     })
 }
 
+  const totalUpfrontCost = propertyOfInterest.property[0].purchase_price + 20000;
+
+  const formattedCurrency = (value) => {
+    const number = parseFloat(value);
+    return `$${number.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  };
+
   return (
     <div className="container">
       {Object.keys(propertyOfInterest).length && 
       <>
-      <p>Upfront Costs:</p>
-      <p> Purchase Price: {propertyOfInterest.property[0].purchase_price}</p>
+      {/* <p>Upfront Costs:</p> */}
+      <p> Purchase Price: {formattedCurrency(propertyOfInterest.property[0].purchase_price)}</p>
       <p>Repair Items:</p>
       <input className='repiarItemInput'
         name='repairItemInput'
@@ -59,6 +66,9 @@ function ModalUpfrontCosts() {
         })}
       </ul>
       
+        <p>
+          <span className="bold-text">Total Upfront Cost: {formattedCurrency(totalUpfrontCost)}</span>
+        </p>
       </>
       }
 

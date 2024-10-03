@@ -27,11 +27,20 @@ const deleteHoldingItem = (itemId) => {
   })
 }
 
+  const monthlyTax = propertyOfInterest.property[0].taxes_yearly / 12;
+  const holdingCost = monthlyTax + 100; // Include other holding costs as needed
+  const totalHoldingCost = holdingCost * propertyOfInterest.property[0].holding_period;
+
+  const formattedCurrency = (value) => {
+    const number = parseFloat(value);
+    return `$${number.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  };
+
   return (
     <div className="container">
       {Object.keys(propertyOfInterest).length && 
         <>
-          <p>Holding Costs:</p>
+          {/* <p>Holding Costs:</p> */}
           <p>Holding Items:</p>
           <input className='holdingItemInput'
             name='holdingItemInput'
@@ -49,7 +58,7 @@ const deleteHoldingItem = (itemId) => {
           />
           <button onClick={addHoldingItem}>Add</button>
           <ul>
-            <li> Taxes: ${propertyOfInterest.property[0].taxes_yearly/12}</li>
+            <li> Taxes: {formattedCurrency(propertyOfInterest.property[0].taxes_yearly/12)}</li>
             {propertyOfInterest.holdingItems.map((item) => {
               return (
                 <>
@@ -60,7 +69,9 @@ const deleteHoldingItem = (itemId) => {
             })}
           </ul>
           <p>Holding Period: {propertyOfInterest.property[0].holding_period} Months</p>
-        
+        <p>
+          <span className="bold-text">Total Holding Cost: {formattedCurrency(totalHoldingCost)}</span>
+          </p>
         </>
       }
     </div>

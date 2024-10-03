@@ -1,8 +1,9 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import Swal from 'sweetalert2';
+import Swal from 'sweetalert2'
+import './PropertyCard.css';
 
-function PropertyCard({property, userId}) {
+function PropertyCard({ property, userId, onOpenModal }) {
   const dispatch = useDispatch();
   // 20000 is the repair number.
   const upfrontCost = Number(property.purchase_price) + 20000; 
@@ -15,7 +16,6 @@ function PropertyCard({property, userId}) {
   //on the address card. This function sends a a dispatch to the properties.saga.js
   //with the property id as the payload.
   const getPropertyOfInterest = (propId) => {
-    // console.log("in getPropertyOfInterest function in PropertyCard component", propId)
     dispatch({
       type: 'GET_PROPERTY_OF_INTEREST',
       payload: propId
@@ -28,7 +28,7 @@ function PropertyCard({property, userId}) {
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
         confirmButton: "btn btn-success",
-        cancelButton: "btn btn-danger"
+        cancelButton: "btn btn-danger mr-2"
       },
       buttonsStyling: false
     });
@@ -72,38 +72,55 @@ function PropertyCard({property, userId}) {
     });
   }
 
+  // ------------ NUMBERS RENDER AS DOLLARS ------------ //
+  const formattedCurrency = (value) => {
+    const number = parseFloat(value);
+    return `$${number.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  };
+
   return (
-    <div className="container">
-      <p>Property Card:</p>
+    <div className="property-card">
+      <h3 className='address' onClick={() => {getPropertyOfInterest(property.id); onOpenModal(property); }}>{property.address}</h3>
 
-      <table className='rentCastTable'>
-          <thead className='rentCastHeader'>
-              <tr className='rentCastHeaderRow'>
-                  <th className='rentCastHeadTitle'>Address</th>
-                  <th className='rentCastHeadTitle'>Purchase Price</th>
-                  <th className='rentCastHeadTitle'>Upfront Cost</th>
-                  <th className='rentCastHeadTitle'>Holding Period Cost</th>
-                  <th className='rentCastHeadTitle'>Total Cost</th>
-                  <th className='rentCastHeadTitle'>Profit</th>
-                  <th className='rentCastHeadTitle'>Annualized Profit</th>
-                  <th></th>
-              </tr>
-          </thead>
+      {/* <div className="more-details">More details</div> */}
 
-          <tbody className='rentCastBody'>
-            <tr>
-                <td onClick={()=>{getPropertyOfInterest(property.id)}}>{property.address}</td>
-                <td>${property.purchase_price}</td>
-                <td>${upfrontCost}</td>
-                <td>${holdingCost}</td>
-                <td>${totalCost}</td>
-                <td>${profit}</td>
-                <td>${annualProfit}</td>
-                <td><button onClick={() => {deleteProperty(property.id)}}>Delete</button></td>
-            </tr>
-          </tbody>
+      <table className='detailsTable'>
+        <thead>
+          <tr>
+            <th>Cost Type</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Upfront Cost</td>
+            <td>{formattedCurrency(upfrontCost)}</td>
+          </tr>
+          <tr>
+            <td>Holding Cost</td>
+            <td>{formattedCurrency(holdingCost)}</td>
+          </tr>
+          <tr>
+            <td>Total Cost</td>
+            <td>{formattedCurrency(totalCost)}</td>
+          </tr>
+          <tr>
+            <td>Profit</td>
+            <td>{formattedCurrency(profit)}</td>
+          </tr>
+          <tr>
+            <td>Annualized Profit</td>
+            <td>{formattedCurrency(annualProfit)}</td>
+          </tr>
+          <td colSpan="2">
+            <div className="button-container">
+            <button className='delete-button' onClick={() => {deleteProperty(property.id)}}>
+              Delete
+            </button>
+            </div>
+          </td>
+        </tbody>
       </table>
-
     </div>
   );
 }

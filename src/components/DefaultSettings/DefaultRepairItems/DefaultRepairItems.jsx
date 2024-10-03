@@ -20,6 +20,12 @@ function DefaultRepairItems({defaultRepairs}) {
     setRepairName('');
   }
 
+  const formattedCurrency = (value) => {
+    const number = parseFloat(value);
+    const truncated = Math.floor(number * 100) / 100;
+    return `$${truncated.toFixed(2)}`;
+  }
+
   return (
     <div className='defaultRepair'>
       <form className='defaultRepairForm'>
@@ -44,7 +50,7 @@ function DefaultRepairItems({defaultRepairs}) {
               <div className='defaultRepairItem'
                     key={item.id}>
                 <span className='defaultRepairItemName'>{item.repair_name}:</span>
-                <span className='defaultRepairItemCost'>${item.repair_cost}</span>
+                <span className='defaultRepairItemCost'>{formattedCurrency(item.repair_cost)}</span>
                 <span className='deleteDefaultRepairBtn'
                       onClick={e => {
                         e.preventDefault();

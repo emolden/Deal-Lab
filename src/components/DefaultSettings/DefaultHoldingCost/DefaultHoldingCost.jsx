@@ -20,6 +20,12 @@ function DefaultHoldingCost({defaultHoldings}) {
     setHoldingCost('');
   }
 
+  const formattedCurrency = (value) => {
+    const number = parseFloat(value);
+    const truncated = Math.floor(number * 100) / 100;
+    return `$${truncated.toFixed(2)}`;
+  }
+
 
 // Getting error for not having an unique key prop.
 // Might not recognize 'default_holding_id' as an id.
@@ -47,7 +53,7 @@ function DefaultHoldingCost({defaultHoldings}) {
             <div className='defaultHoldingItem'
                   key={item.id}>
               <span className='defaultHoldingItemName'>{item.holding_name}:</span>
-              <span className='defaultHoldingItemCost'>${item.holding_cost}</span>
+              <span className='defaultHoldingItemCost'>{formattedCurrency(item.holding_cost)}</span>
               <span className='deleteDefaultHoldingBtn'
                     onClick={e => {
                       e.preventDefault();
