@@ -167,7 +167,7 @@ router.post('/', async (req, res) => {
         //-------------DELETE THIS WHEN APP IS FULLY BUILT AND UNCOMMENT THE API CALLS --------------------------------
         const propertiesData = [
           userId,
-          1,
+          propertyApiId,
           '6817 Dutton Ave N, Brooklyn Park, MN 55428',
           249000.00,
           2300,
@@ -188,7 +188,7 @@ router.post('/', async (req, res) => {
           res.sendStatus(201)
       
         } catch(err) {
-            console.log('User registration failed: ', err);
+            console.log('Add property failed: ', err);
             await connection.query('Rollback;')
             res.sendStatus(500);
           } finally {
