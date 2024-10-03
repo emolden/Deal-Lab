@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-function DefaultHoldingCost({defaultSettings}) {
+function DefaultHoldingCost({defaultHoldings}) {
   const dispatch = useDispatch();
   const [holdingName, setHoldingName] = useState('');
   const [holdingCost, setHoldingCost] = useState('');
@@ -42,10 +42,10 @@ function DefaultHoldingCost({defaultSettings}) {
       </form>
 
       <div className='defaultHoldingItems'>
-        {!defaultSettings ? '' : defaultSettings.map((item) => {
+        {!defaultHoldings ? '' : defaultHoldings.map((item) => {
           return (
             <div className='defaultHoldingItem'
-                  key={item.default_holding_id}>
+                  key={item.id}>
               <span className='defaultHoldingItemName'>{item.holding_name}:</span>
               <span className='defaultHoldingItemCost'>{item.holding_cost}</span>
               <span className='deleteDefaultHoldingBtn'

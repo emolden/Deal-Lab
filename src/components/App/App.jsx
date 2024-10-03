@@ -247,7 +247,7 @@ function App() {
 
           <ProtectedRoute
             exact
-            path="/default-settings"
+            path="/default-settings/:id"
           >
             <DefaultSettings />
           </ProtectedRoute>

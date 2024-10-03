@@ -4,6 +4,8 @@ import axios from 'axios';
 function* getDefaults(action) {
   try {
     const response = yield axios.get('/api/defaultSettings')
+    console.log('RESPONSE DATA:', response.data);
+    
     yield put({
       type: 'SET_DEFAULTS',
       payload: response.data

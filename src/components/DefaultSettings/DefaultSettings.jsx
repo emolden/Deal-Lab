@@ -4,11 +4,16 @@ import DefaultHoldingCost from './DefaultHoldingCost/DefaultHoldingCost';
 import DefaultRepairItems from './DefaultRepairItems/DefaultRepairItems';
 import { useSelector, useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom/cjs/react-router-dom.min';
 
 function DefaultSettings() {
   const user = useSelector(store => store.user);
   const defaultSettings = useSelector(store => store.defaultSettings);
+  const defaultHoldings = defaultSettings.defaultHoldings;
+  const defaultRepairs = defaultSettings.defaultRepairs;
   const dispatch = useDispatch();
+  const params = useParams();
+  const defaultSettingsId = params.id;
 
 
   // QUESTION:
@@ -21,7 +26,7 @@ function DefaultSettings() {
     dispatch({
       type: "GET_DEFAULTS"
     })
-  }, [dispatch])
+  }, [defaultSettingsId])
 
   const updateHoldingPeriod = () => {
     dispatch({
@@ -47,8 +52,8 @@ function DefaultSettings() {
               />
       </div>
 
-      <DefaultHoldingCost defaultSettings={defaultSettings} />
-      <DefaultRepairItems defaultSettings={defaultSettings} />
+      <DefaultHoldingCost defaultHoldings={defaultHoldings} />
+      <DefaultRepairItems defaultRepairs={defaultRepairs} />
 
       <button className='defaultSaveBtn'
               onClick={updateHoldingPeriod}>Save</button>

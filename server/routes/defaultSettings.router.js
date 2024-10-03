@@ -6,28 +6,32 @@ const router = express.Router();
 /**
  * GET defaults
  */
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   const userId = req.user.id;
 
-  const sqlText = `
-    SELECT "default_holdings".id AS "default_holding_id", "default_holdings".holding_name, "default_holdings".holding_cost,
-      "default_repairs".id AS "default_repair_id", "default_repairs".repair_name, "default_repairs".repair_cost,
-      "user".holding_period_default
-      FROM "default_holdings"
-      JOIN "user"
-        ON "user".id = "default_holdings".user_id
-      JOIN "default_repairs"
-        ON "default_repairs".user_id = "user".id
-      WHERE "user".id = $1;
+  try {
+    const defaultHoldingsSqlText = `
+      SELECT * FROM "default_holdings"
+        WHERE "user_id" = $1;
     `
-    pool.query(sqlText, [userId])
-    .then((results) => {
-      console.log('Get all default settings');
-      res.send(results.rows)
-    }) .catch((error) => {
-      console.log('Error getting default settings:', error);
-      res.sendStatus(500);
-    })
+    const defaultHoldingsResponse = await pool.query(defaultHoldingsSqlText, [userId]);
+    // console.log('defaultHoldingsResponse.rows DATA:', defaultHoldingsResponse.rows);
+    const defaultHoldings = defaultHoldingsResponse.rows;
+
+    const defaultRepairsSqlText = `
+      SELECT * FROM "default_repairs"
+        WHERE "user_id" = $1;
+    `
+    const defaultRepairsResponse = await pool.query(defaultRepairsSqlText, [userId]);
+    const defaultRepairs = defaultRepairsResponse.rows;
+
+    res.send({defaultHoldings: defaultHoldings, defaultRepairs: defaultRepairs});
+
+  } catch (error) {
+    console.log('Error getting all default items:', error);
+    res.sendStatus(500);
+  }
+
 });
 
 
@@ -164,3 +168,23 @@ router.put('/:userId/:propertyId', (req, res) => {
 
 
 module.exports = router;
+
+// const sqlText = `
+// SELECT "default_holdings".id AS "default_holding_id", "default_holdings".holding_name, "default_holdings".holding_cost,
+//   "default_repairs".id AS "default_repair_id", "default_repairs".repair_name, "default_repairs".repair_cost,
+//   "user".holding_period_default
+//   FROM "default_holdings"
+//   JOIN "user"
+//     ON "user".id = "default_holdings".user_id
+//   JOIN "default_repairs"
+//     ON "default_repairs".user_id = "user".id
+//   WHERE "user".id = $1;
+// `
+// pool.query(sqlText, [userId])
+// .then((results) => {
+//   console.log('Get all default settings');
+//   res.send(results.rows)
+// }) .catch((error) => {
+//   console.log('Error getting default settings:', error);
+//   res.sendStatus(500);
+// })

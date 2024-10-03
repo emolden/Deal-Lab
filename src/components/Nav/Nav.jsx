@@ -8,6 +8,8 @@ import Hamburger from '../Hamburger/Hamburger';
 function Nav() {
   const user = useSelector((store) => store.user);
 
+  const defaultSettingsLink = "/default-settings/" + `${user.id}`
+
   return (
     <div className="nav">
       <Link to="/home">
@@ -32,7 +34,7 @@ function Nav() {
               Properties
             </Link>
 
-            <Link className="navLink" to="/default-settings">
+            <Link className="navLink" to={defaultSettingsLink}>
               Default Settings
             </Link>
 
