@@ -26,7 +26,7 @@ function PropertySearchForm({userId}) {
   }, []);
   
   
-
+  //sends the formattedAddress to the properties.saga
   const addAddress = (e) => {
     e.preventDefault();
     dispatch ({
@@ -35,22 +35,20 @@ function PropertySearchForm({userId}) {
     })
   } 
 
-
-  const handleChange = (address) => {
-    setSearchBarAddress(address.label);
-    console.log('in handle change function: ',  address.label)
-    geocodeByPlaceId(address.value.place_id)
-      .then(results => setFormattedAddress(results[0].formatted_address))
-      .catch(error => console.error(error));
-      console.log(formattedAddress)
-  }
-
-  // Runs when search menu is opened, emptying the menu of text
-  const menuOpened = () => {
-    if (searchBarAddress !== "") {
-      setSearchBarAddress("");
+    // Runs when search menu is opened, emptying the menu of text
+    const menuOpened = () => {
+      if (searchBarAddress !== "") {
+        setSearchBarAddress("");
+      }
+    };
+    
+    //runs when the user clicks on an address from the dropdown menu
+    const handleChange = (address) => {
+      setSearchBarAddress(address);
+      geocodeByPlaceId(address.value.place_id)
+        .then(results => setFormattedAddress(results[0].formatted_address))
+        .catch(error => console.error('error getting geocodeByPlaceId', error));
     }
-  };
 
 
   return (
@@ -59,7 +57,6 @@ function PropertySearchForm({userId}) {
 
       {isLoaded ? (  
       <GooglePlacesAutocomplete
-        apiKey="AIzaSyC9pViRyFvm5jpR2ezl9PISh66E3ChmqME"
         apiOptions={{ language: 'en'}}
         autocompletionRequests={{
           componentRestrictions: {
@@ -67,12 +64,11 @@ function PropertySearchForm({userId}) {
           }
         }}
           selectProps={{
-            // className: "searchBar", // Provides the component with a class for styling
+            className: "searchBar", // Provides the component with a class for styling
             isClearable: true, // Allows the textbox to be emptied with X
-            // onBlur: () => menuClosed(), // Triggers menuClosed() when clicking off of the textbox
             onMenuOpen: () => menuOpened(), // Triggers textbox to clear when clicking on it
-            searchBarAddress,
-            onChange: handleChange,//updates the state of searchBarAddresss as the user types
+            value: searchBarAddress,
+            onChange: handleChange, //is triggered by the user clicking on an address from the dropdown menu
             placeholder: "Enter an address", // Sets the placeholder for textbox
             // styles: {
             //   input: (provided) => ({
