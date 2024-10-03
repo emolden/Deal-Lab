@@ -17,19 +17,60 @@ router.get('/', rejectUnauthenticated, (req, res) => {
 // Handles POST request with new user data
 // The only thing different from this and every other post we've seen
 // is that the password gets encrypted before being inserted
-router.post('/register', (req, res, next) => {
+router.post('/register', async (req, res, next) => {
   const username = req.body.username;
   const password = encryptLib.encryptPassword(req.body.password);
+  const defaultHoldingPeriod = 6;
+  const defaultRepairItemName = 'Miscellaneous';
+  const defaultRepairItemCost = 20000;
+  const defaultHoldingItemName = 'Utilities';
+  const defaultHoldingItemCost = 200;
 
-  const queryText = `INSERT INTO "user" (username, password)
-    VALUES ($1, $2) RETURNING id`;
-  pool
-    .query(queryText, [username, password])
-    .then(() => res.sendStatus(201))
-    .catch((err) => {
+  let connection;
+  try {
+
+    connection = await pool.connect()
+    await connection.query('BEGIN;')
+
+    //inserts a new user in the user table
+    const newUserText = `
+      INSERT INTO "user" 
+        (username, password, holding_period_default)
+        VALUES 
+        ($1, $2, $3) RETURNING id;
+    `;
+    const newUserResult = await connection.query(newUserText, [username, password, defaultHoldingPeriod])
+    console.log(newUserResult.rows) 
+    const userId = newUserResult.rows[0].id
+
+    const repairDefaultText = `
+      INSERT INTO "default_repairs"
+        (user_id, repair_name, repair_cost)
+        VALUES
+        ($1, $2, $3)
+    `;
+    const repairDefaultValues = [userId, defaultRepairItemName, defaultRepairItemCost]
+    const repairDefaultResult = await connection.query(repairDefaultText, repairDefaultValues)
+
+    const holdingDefaultText = `
+    INSERT INTO "default_holdings"
+      (user_id, holding_name, holding_cost)
+      VALUES
+      ($1, $2, $3)
+  `;
+  const holdingDefaultValues = [userId, defaultHoldingItemName, defaultHoldingItemCost]
+  const holdingDefaultResult = await connection.query(holdingDefaultText, holdingDefaultValues)
+
+    await connection.query('Commit;')
+    res.sendStatus(201)
+
+  } catch(err) {
       console.log('User registration failed: ', err);
+      await connection.query('Rollback;')
       res.sendStatus(500);
-    });
+    } finally {
+      await connection.release()
+    }
 });
 
 // Handles login form authenticate/login POST
