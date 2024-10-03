@@ -3,10 +3,8 @@ import {
   HashRouter as Router, Redirect, Route, Switch,
 } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import Nav from '../Nav/Nav';
 import Footer from '../Footer/Footer';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
-// import AboutPage from '../AboutPage/AboutPage';
 import PropertyPage from '../PropertyPage/PropertyPage';
 import DefaultSettings from '../DefaultSettings/DefaultSettings';
 import LandingPage from '../LandingPage/LandingPage';
@@ -14,13 +12,8 @@ import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
 import Header from '../Header/Header';
 import './App.css';
-
 import { ThemeProvider } from 'styled-components';
-// import { GlobalStyles } from './global';
 import { theme } from './theme';
-// import Menu from '../Menu/Menu';
-// import Hamburger from '../Hamburger';
-// import { useOnClickOutside } from '../../hooks/hooks';
 
 
 function App() {
@@ -28,10 +21,6 @@ function App() {
   console.log('app comp is rendering');
   const dispatch = useDispatch();
   const user = useSelector(store => store.user);
-
-  // const [open, setOpen] = useState(false);
-  // const node = useRef(); 
-  // useOnClickOutside(node, () => setOpen(false));
 
   useEffect(() => {  
     dispatch({ type: 'FETCH_USER' });
@@ -42,16 +31,9 @@ function App() {
 
     <ThemeProvider theme={theme}>
       <>
-      {/* <GlobalStyles /> */}
-
-      {/* <div ref={node}>
-        <Hamburger open={open} setOpen={setOpen} />
-        <Menu open={open} setOpen={setOpen} />
-      </div> */}
     <Router>
       <div>
         <Header />
-        <Nav />
         <Switch>
           <Redirect exact from="/" to="/home" />
 
