@@ -22,7 +22,7 @@ function ModalUpfrontCosts() {
   const deleteRepairItem = (itemId) => {
     dispatch ({
         type: 'DELETE_PROPERTY_REPAIR_ITEM',
-        payload: itemId
+        payload: {itemId: itemId, propertyId: propertyOfInterest.property[0].id}
     })
 }
 
