@@ -65,6 +65,16 @@ function PropertySearchForm({userId}) {
           }
         }}
           selectProps={{
+            styles: {
+              control: (provided) => ({
+            ...provided,
+            width: "500px",
+            maxWidth: "100%",
+            border: "1px solid (rgba(255, 255, 255, 0.41)",
+            borderRadius: "10px",
+            backdropFilter: "blur(50px)",
+              }),
+            },
             className: "searchBar", // Provides the component with a class for styling
             isClearable: true, // Allows the textbox to be emptied with X
             onMenuOpen: () => menuOpened(), // Triggers textbox to clear when clicking on it

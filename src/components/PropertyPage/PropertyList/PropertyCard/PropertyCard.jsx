@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import Swal from 'sweetalert2'
 
-function PropertyCard({property, userId}) {
+function PropertyCard({ property, userId, onOpenModal }) {
   const dispatch = useDispatch();
   // 20000 is the repair number.
   const upfrontCost = Number(property.purchase_price) + 20000; 
@@ -70,6 +70,12 @@ function PropertyCard({property, userId}) {
     });
   }
 
+  const formattedCurrency = (value) => {
+    const number = parseFloat(value);
+    const truncated = Math.floor(number * 100) / 100;
+    return `$${truncated.toFixed(2)}`;
+  }
+
   return (
     <div className="container">
       <p>Property Card:</p>
@@ -90,13 +96,13 @@ function PropertyCard({property, userId}) {
 
           <tbody className='rentCastBody'>
             <tr>
-                <td onClick={()=>{getPropertyOfInterest(property.id)}}>{property.address}</td>
-                <td>${property.purchase_price}</td>
-                <td>${upfrontCost}</td>
-                <td>${holdingCost}</td>
-                <td>${totalCost}</td>
-                <td>${profit}</td>
-                <td>${annualProfit}</td>
+                <td onClick={()=>{getPropertyOfInterest(property.id); onOpenModal(property); }}>{property.address}</td>
+                <td>{formattedCurrency(property.purchase_price)}</td>
+                <td>${formattedCurrency(upfrontCost)}</td>
+                <td>${formattedCurrency(holdingCost)}</td>
+                <td>${formattedCurrency(totalCost)}</td>
+                <td>${formattedCurrency(profit)}</td>
+                <td>${formattedCurrency(annualProfit)}</td>
                 <td><button onClick={() => {deleteProperty(property.id)}}>Delete</button></td>
             </tr>
           </tbody>
