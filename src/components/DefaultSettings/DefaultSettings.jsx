@@ -5,6 +5,7 @@ import DefaultRepairItems from './DefaultRepairItems/DefaultRepairItems';
 import { useSelector, useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom/cjs/react-router-dom.min';
+import Swal from 'sweetalert2';
 
 function DefaultSettings() {
   const user = useSelector(store => store.user);
@@ -34,6 +35,13 @@ function DefaultSettings() {
       type: 'UPDATE_DEFAULT_HOLDING_PERIOD',
       payload: holdingPeriod
     })
+    //successful save sweet alert
+    Swal.fire({
+      icon: "success",
+      title: "Your work has been saved",
+      showConfirmButton: false,
+      timer: 1500
+    });
   }
 
   console.log('defaultSettings data:', defaultSettings);

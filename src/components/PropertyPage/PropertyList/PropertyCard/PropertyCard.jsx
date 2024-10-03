@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 
 function PropertyCard({property, userId}) {
   const dispatch = useDispatch();
@@ -50,10 +50,11 @@ function PropertyCard({property, userId}) {
           type: 'DELETE_PROPERTY',
           payload: {propertyId, userId}
         });
-        swalWithBootstrapButtons.fire({
-          title: "Deleted!",
-          text: "Your file has been deleted.",
-          icon: "success"
+        Swal.fire({
+          icon: "success",
+          title: "Your file has been deleted.",
+          showConfirmButton: false,
+          timer: 1500
         });
       } 
       //if the user cancels the delete
