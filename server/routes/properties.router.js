@@ -37,10 +37,14 @@ router.post('/', async (req, res) => {
   const api_key = process.env.RENTCAST_API_KEY;
   const address = req.body.address;
   const userId = req.user.id;
+  let propertyApiId;
   console.log('ADDRESS:', address, userId);
   
-
+  let connection;
   try {
+    connection = await pool.connect()
+    await connection.query('BEGIN;')
+
       const checkTimeStampSqlText = `
           SELECT * FROM "property_api_data"
               WHERE "inserted_at" >= CURRENT_TIMESTAMP - INTERVAL '24 hours'
@@ -139,11 +143,16 @@ router.post('/', async (req, res) => {
               RETURNING "id";
           `
           const propertyApiDataResults = await pool.query(propertyApiDataSqlText, propertyApiData);
-          const propertyApiId = propertyApiDataResults.rows[0].id;
-      
+          propertyApiId = propertyApiDataResults.rows[0].id;
 
+        } else if (checkTimeStampData.length > 0) {
 
-          // ================ SQL insert into table: PROPERTIES
+          console.log('Property already exists in database!');
+          propertyApiId = checkTimeStampData[0].id;
+
+      }
+
+                // ================ SQL insert into table: PROPERTIES
           // const propertiesData = [
           //     userId,
           //     propertyApiId,
@@ -152,14 +161,6 @@ router.post('/', async (req, res) => {
           //     taxYear,
           //     valueEstimateResponse.data.priceRangeHigh
           // ]
-
-        } else if (checkTimeStampData.length > 0) {
-
-          console.log('Property already exists in database!');
-          
-
-      }
-
 
                       //--------------------------------- API REQUEST SUCCESSFULLY WORKING----------------------------------
         //----------------------------- HERE IS SOME FAKE API DATA TO USE WHILE BUILDING THE APP ----------------------
@@ -182,13 +183,17 @@ router.post('/', async (req, res) => {
           const propertiesResults = await pool.query(propertiesSqlText, propertiesData);
 
           console.log('Property posted/updated in database!');
-          res.sendStatus(201);
-
-     
-  } catch (error) {
-      console.log('Error in getting API data:', error);
-      res.sendStatus(500);
-  }
+          
+          await connection.query('Commit;')
+          res.sendStatus(201)
+      
+        } catch(err) {
+            console.log('User registration failed: ', err);
+            await connection.query('Rollback;')
+            res.sendStatus(500);
+          } finally {
+            await connection.release()
+          }
 });
 
 
