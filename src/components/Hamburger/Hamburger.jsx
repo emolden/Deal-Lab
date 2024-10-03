@@ -1,15 +1,23 @@
+import React from 'react';
+import { StyledBurger } from './Hamburger.styled';
+import { useState } from 'react';
 
-function Hamburger() {
+function Hamburger({ setOpen, open }) {
 
-    return (
-        <>
-        <div className="hamburger">
-            <div className="burger burger1" />
-            <div className="burger burger2" />
-            <div className="burger burger3" />
-        </div>
-        </>
-    )
+    const hamburgerClick = () => {
+        setOpen(!open);
+    }
+
+  return (
+  
+    <nav>
+    <StyledBurger onClick={hamburgerClick}>
+      <div />
+      <div />
+      <div />
+    </StyledBurger>
+    </nav>
+  )
 }
 
 export default Hamburger;
