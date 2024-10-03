@@ -53,7 +53,7 @@ function ModalUpfrontCosts() {
           return (
             <>
             <li key = {item.repair_items_id}>{item.repair_name}: ${item.repair_cost} </li>
-            <button onClick={() => {deleteRepairItem(item.repair_items.id)}}>❌</button>
+            <button onClick={() => {deleteRepairItem(item.repair_items_id)}}>❌</button>
             </>
           )
         })}

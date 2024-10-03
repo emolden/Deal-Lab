@@ -349,7 +349,21 @@ router.get('/propertyOfInterest/:id', rejectUnauthenticated, async (req, res) =>
  * DELETE property repair item
  */
 router.delete('/repairItem/:id', (req, res) => {
-    // DELETE route code here
+  const itemId = req.params.id;
+
+  const sqlText = `
+    DELETE FROM "repair_items"
+      WHERE "id" = $1;
+  `; 
+  pool.query(sqlText, [itemId])
+
+      .then((results) => {
+        res.sendStatus(201)
+      }) 
+      .catch((error) => {
+        console.log('Error in deleting property repair item:', error);
+        res.sendStatus(500);
+      })
 });
 
 
@@ -386,23 +400,7 @@ router.post('/repairItem/', (req, res) => {
  * DELETE property holding item
  */
 router.delete('/holdingItem/:id', (req, res) => {
-  const itemId = req.params.id;
 
-  const sqlText = `
-    INSERT INTO "repair_items"
-      ("property_id", "name", "cost")
-      VALUES
-      ($1, $2, $3);
-  `; 
-  pool.query(sqlText, [propertyId, repairName, repairCost])
-
-      .then((results) => {
-        res.sendStatus(201)
-      }) 
-      .catch((error) => {
-        console.log('Error in adding property repair item:', error);
-        res.sendStatus(500);
-      })
 });
 
 
