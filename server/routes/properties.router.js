@@ -237,7 +237,6 @@ router.post('/', async (req, res) => {
 /**
  * ----- DELETE property: deleteProperty
  */
-//need to update delete property to also delete holding items and repair items
 router.delete('/:id', (req, res) => {
     // console.log('/api/properties/id delete route received a request! ', req.params.id)
     const propertyId = req.params.id;
