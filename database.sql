@@ -1,16 +1,27 @@
 
+--Database Name: deal_lab_proto
+
+--------- DROP tables -----------------------------------------
+
+DROP TABLE IF EXISTS "repair_items";
+DROP TABLE IF EXISTS "holding_items";
+DROP TABLE IF EXISTS "default_repairs";
+DROP TABLE IF EXISTS "default_holdings";
+DROP TABLE IF EXISTS "properties";
+DROP TABLE IF EXISTS "property_api_data";
+DROP TABLE IF EXISTS "user";
+
+---------CREATE tables --------------------------------------
 
 CREATE TABLE "user" (
   "id" SERIAL PRIMARY KEY,
   "username" VARCHAR (80) UNIQUE NOT NULL,
   "password" VARCHAR (1000) NOT NULL,
-  "holding" INT,
   "holding_period_default" INT DEFAULT 6
 );
 
 CREATE TABLE "property_api_data" (
   "id" SERIAL PRIMARY KEY,
-  "user_id" INT REFERENCES "user" NOT NULL,
   "address" VARCHAR (1000) NOT NULL,
   "inserted_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   "updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

@@ -44,10 +44,9 @@ router.post('/', async (req, res) => {
       const checkTimeStampSqlText = `
           SELECT * FROM "property_api_data"
               WHERE "inserted_at" >= CURRENT_TIMESTAMP - INTERVAL '24 hours'
-              AND "address" = $1
-              AND "user_id" = $2;
+              AND "address" = $1;
       `
-      const checkTimeStampResults = await pool.query(checkTimeStampSqlText, [address, userId]);
+      const checkTimeStampResults = await pool.query(checkTimeStampSqlText, [address]);
       const checkTimeStampData = checkTimeStampResults.rows;
 
   
@@ -107,7 +106,6 @@ router.post('/', async (req, res) => {
           // }
               
           // const propertyApiData = [
-          //     userId,
           //     listingResponse.data[0].formattedAddress,
           //     listingResponse.data[0].price,
           //     taxYear,
@@ -122,7 +120,6 @@ router.post('/', async (req, res) => {
         //----------------------------- HERE IS SOME FAKE API DATA TO USE WHILE BUILDING THE APP ----------------------
         //-------------DELETE THIS WHEN APP IS FULLY BUILT AND UNCOMMENT THE API CALLS --------------------------------
         const propertyApiData = [
-          userId,
           '6817 Dutton Ave N, Brooklyn Park, MN 55428',
           249000.00,
           2300,
@@ -135,10 +132,10 @@ router.post('/', async (req, res) => {
       //-----------------------DELETE TO HERE------------------------------------------------------------------------------
           const propertyApiDataSqlText = `
               INSERT INTO "property_api_data"
-              ("user_id", "address", "purchase_price", "taxes_yearly", "after_repair_value", 
+              ("address", "purchase_price", "taxes_yearly", "after_repair_value", 
               "property_type", "bedrooms", "bathrooms", "square_footage")
               VALUES
-              ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+              ($1, $2, $3, $4, $5, $6, $7, $8)
               RETURNING "id";
           `
           const propertyApiDataResults = await pool.query(propertyApiDataSqlText, propertyApiData);
