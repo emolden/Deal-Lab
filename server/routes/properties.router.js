@@ -201,6 +201,24 @@ router.post('/', async (req, res) => {
             const addHoldingItemResults = await pool.query(addHoldingItemText, addHoldingItemValues);
           }
 
+          const getDefaultRepairsText = `
+          SELECT * FROM "default_repairs"
+            WHERE "user_id" = $1;
+        `;
+        const getDefaultRepairsResults = await pool.query(getDefaultRepairsText, [userId]);
+        console.log('getDefaultRepairsResult: ', getDefaultRepairsResults.rows)
+
+        for(let repairItem of getDefaultRepairsResults.rows) {
+          const addRepairItemText = `
+            INSERT INTO "repair_items"
+              ("property_id", "name", "cost")
+              VALUES
+              ($1, $2, $3);
+          `;
+          const addRepairItemValues = [propertyId, repairItem.repair_name, repairItem.repair_cost];
+          const addRepairItemResults = await pool.query(addRepairItemText, addRepairItemValues);
+        }
+
           console.log('Property posted/updated in database!');
           
           await connection.query('Commit;')
@@ -219,6 +237,7 @@ router.post('/', async (req, res) => {
 /**
  * ----- DELETE property: deleteProperty
  */
+//need to update delete property to also delete holding items and repair items
 router.delete('/:id', (req, res) => {
     // console.log('/api/properties/id delete route received a request! ', req.params.id)
     const propertyId = req.params.id;
