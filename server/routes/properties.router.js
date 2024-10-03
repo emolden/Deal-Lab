@@ -190,10 +190,10 @@ router.post('/', async (req, res) => {
           const getDefaultHoldingsResults = await pool.query(getDefaultHoldingsText, [userId]);
           console.log('getDefaultHoldingsResult: ', getDefaultHoldingsResults.rows)
 
-          for(let holdingItem of getDefaultHoldingsResults) {
+          for(let holdingItem of getDefaultHoldingsResults.rows) {
             const addHoldingItemText = `
               INSERT INTO "holding_items"
-                ("peroperty_id", "name", "cost")
+                ("property_id", "name", "cost")
                 VALUES
                 ($1, $2, $3);
             `;
