@@ -1,5 +1,5 @@
 import React from 'react';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import { geocodeByPlaceId } from "react-google-places-autocomplete";
@@ -9,9 +9,7 @@ function PropertySearchForm({userId}) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [searchBarAddress, setSearchBarAddress] = useState("");
   const [formattedAddress, setFormattedAddress] = useState("");
-  // const [zipCode, setZipCode] = useState('');
   const dispatch = useDispatch();
-  // const myRef = useRef(null);
 
   //forces GooglePlacesAutocomplete dom render to wait till Google script is loaded
   useEffect(() => {
@@ -39,27 +37,20 @@ function PropertySearchForm({userId}) {
 
 
   const handleChange = (address) => {
-    // setSearchBarAddress(address.label);
-    console.log('in handle change function: ',  address)
+    setSearchBarAddress(address.label);
+    console.log('in handle change function: ',  address.label)
     geocodeByPlaceId(address.value.place_id)
       .then(results => setFormattedAddress(results[0].formatted_address))
       .catch(error => console.error(error));
       console.log(formattedAddress)
-
-    // const placeId = address.value.place_id;
-    // console.log("window.google", window.google.maps, myRef.current)
-
-    // if(window.google && window.google.maps) {
-    //   const serviceInstance = new window.google.maps.places.placesService(document.serviceInstance.getDetails({ placeId }, (place, status) => {
-    //     if (status === window.google.maps.places.PlacesServiceStatus.OK && place) {
-    //       const postalCode = place.address_components.find(component => component.types.includes('postal_code'));
-    //       if(postalCode) {
-    //         setZipCode(postalCode.long_name);
-    //       }
-    //     }
-    //   }))
-    // }
   }
+
+  // Runs when search menu is opened, emptying the menu of text
+  const menuOpened = () => {
+    if (searchBarAddress !== "") {
+      setSearchBarAddress("");
+    }
+  };
 
 
   return (
@@ -77,13 +68,12 @@ function PropertySearchForm({userId}) {
         }}
           selectProps={{
             // className: "searchBar", // Provides the component with a class for styling
-            // isClearable: true, // Allows the textbox to be emptied with X
+            isClearable: true, // Allows the textbox to be emptied with X
             // onBlur: () => menuClosed(), // Triggers menuClosed() when clicking off of the textbox
-            // onMenuOpen: () => menuOpened(), // Triggers textbox to clear when clicking on it
+            onMenuOpen: () => menuOpened(), // Triggers textbox to clear when clicking on it
             searchBarAddress,
             onChange: handleChange,//updates the state of searchBarAddresss as the user types
-            // onSelect: handleSelect,
-            // placeholder: "Enter an address", // Sets the placeholder for textbox
+            placeholder: "Enter an address", // Sets the placeholder for textbox
             // styles: {
             //   input: (provided) => ({
             //     ...provided,
@@ -129,25 +119,11 @@ function PropertySearchForm({userId}) {
             //   }),
             // },
           }}
-          // 👇 biases autocomplete search results to locations near IP address
-          // ipbias
         />
       ) : (
         <p>Loading...</p>
       )}
-        {/* <button onClick={() => console.log(searchBarAddress)}>Submit</button> */}
-      {/* <form>
-          <label for='addressInput'>Property Address:</label>
-          <input className='rentCastInput'
-                  name='addressInput'
-                  type='text'
-                  placeholder='1234 Penny Ln, Liverpool, BL 196700'
-                  value={address}
-                  onChange={e => setAddress(e.target.value)}
-                  /> */}
           <button onClick={addAddress}>Add</button>
-      {/* </form> */}
-
     </div>
   );
 }
