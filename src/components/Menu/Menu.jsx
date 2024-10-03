@@ -33,6 +33,8 @@ function Menu({ open, setOpen }) {
     handleLinkClick();
   };
 
+  const defaultSettingsPage = "/default-settings/" + `${user.id}`;
+
   return (
     <StyledMenu open={open}>
         <CloseButton onClick={() => setOpen(false)}>X</CloseButton>
@@ -45,7 +47,7 @@ function Menu({ open, setOpen }) {
           <Link to="/property-page" onClick={handleLinkClick}>
             Properties
           </Link>
-          <Link to="/default-settings" onClick={handleLinkClick}>
+          <Link to={defaultSettingsPage} onClick={handleLinkClick}>
             Default Settings
           </Link>
           <StyledLogOutButton onClick={handleLogout}>

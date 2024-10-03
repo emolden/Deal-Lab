@@ -1,5 +1,12 @@
 const defaultSettingsReducer = (state = {}, action) => {
-    return state;
+    switch (action.type) {
+        case 'SET_DEFAULTS':
+            return action.payload;
+        case 'UNSET_DEFAULTS':
+            return {};
+        default:
+            return state;
+    }
 };
 
 export default defaultSettingsReducer;
