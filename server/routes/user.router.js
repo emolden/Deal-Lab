@@ -52,6 +52,15 @@ router.post('/register', async (req, res, next) => {
     const repairDefaultValues = [userId, defaultRepairItemName, defaultRepairItemCost]
     const repairDefaultResult = await connection.query(repairDefaultText, repairDefaultValues)
 
+    const holdingDefaultText = `
+    INSERT INTO "default_holdings"
+      (user_id, holding_name, holding_cost)
+      VALUES
+      ($1, $2, $3)
+  `;
+  const holdingDefaultValues = [userId, defaultHoldingItemName, defaultHoldingItemCost]
+  const holdingDefaultResult = await connection.query(holdingDefaultText, holdingDefaultValues)
+
     await connection.query('Commit;')
     res.sendStatus(201)
 
