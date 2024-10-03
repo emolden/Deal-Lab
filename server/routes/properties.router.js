@@ -349,7 +349,21 @@ router.get('/propertyOfInterest/:id', rejectUnauthenticated, async (req, res) =>
  * DELETE property repair item
  */
 router.delete('/repairItem/:id', (req, res) => {
-    // DELETE route code here
+  const itemId = req.params.id;
+
+  const sqlText = `
+    DELETE FROM "repair_items"
+      WHERE "id" = $1;
+  `; 
+  pool.query(sqlText, [itemId])
+
+      .then((results) => {
+        res.sendStatus(201)
+      }) 
+      .catch((error) => {
+        console.log('Error in deleting property repair item:', error);
+        res.sendStatus(500);
+      })
 });
 
 
@@ -357,7 +371,6 @@ router.delete('/repairItem/:id', (req, res) => {
  * POST property repair item
  */
 router.post('/repairItem/', (req, res) => {
-        // console.log('/api/properties/id delete route received a request! ', req.params.id)
   const propertyId = req.body.propertyId;
   const repairName = req.body.repairName;
   const repairCost = req.body.repairCost;
@@ -387,7 +400,7 @@ router.post('/repairItem/', (req, res) => {
  * DELETE property holding item
  */
 router.delete('/holdingItem/:id', (req, res) => {
-    // DELETE route code here
+
 });
 
 

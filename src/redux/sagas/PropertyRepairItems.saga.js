@@ -15,6 +15,15 @@ function* addPropertyRepairItem(action) {
 }
 
 function* deletePropertyRepairItem(action) {
+  try {
+    yield axios.delete(`api/properties/repairItem/${action.payload.itemId}`)
+    yield put({
+        type: 'GET_PROPERTY_OF_INTEREST',
+        payload: action.payload.propertyId
+    })
+  } catch (error) {
+    console.log('Error in getting property details:', error);
+  }
 }
 
 function* propertyRepairItemsSaga() {
