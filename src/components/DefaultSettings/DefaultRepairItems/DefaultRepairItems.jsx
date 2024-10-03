@@ -63,6 +63,14 @@ function DefaultRepairItems({defaultRepairs}) {
             )
           })}
       </div>
+      <h4>Total: $
+        <span>
+          {!defaultRepairs ? '' : defaultRepairs.reduce((total, item) => {
+            total = total + Number(item.repair_cost)
+            return total
+          }, 0)}
+        </span>
+      </h4>
     </div>
 
   );
