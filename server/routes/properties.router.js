@@ -178,9 +178,10 @@ router.post('/', async (req, res) => {
             INSERT INTO "properties"
               ("user_id", "property_api_id", "address", "purchase_price", "taxes_yearly", "after_repair_value")
               VALUES
-              ($1, $2, $3, $4, $5, $6);
+              ($1, $2, $3, $4, $5, $6) RETURNING id;
           `;
           const propertiesResults = await pool.query(propertiesSqlText, propertiesData);
+          const propertyId = propertiesResults.rows[0].id
 
           const getDefaultHoldingsText = `
             SELECT * FROM "default_holdings"
@@ -188,6 +189,17 @@ router.post('/', async (req, res) => {
           `;
           const getDefaultHoldingsResults = await pool.query(getDefaultHoldingsText, [userId]);
           console.log('getDefaultHoldingsResult: ', getDefaultHoldingsResults.rows)
+
+          for(let holdingItem of getDefaultHoldingsResults) {
+            const addHoldingItemText = `
+              INSERT INTO "holding_items"
+                ("peroperty_id", "name", "cost")
+                VALUES
+                ($1, $2, $3);
+            `;
+            const addHoldingItemValues = [propertyId, holdingItem.holding_name, holdingItem.holding_cost];
+            const addHoldingItemResults = await pool.query(addHoldingItemText, addHoldingItemValues);
+          }
 
           console.log('Property posted/updated in database!');
           
