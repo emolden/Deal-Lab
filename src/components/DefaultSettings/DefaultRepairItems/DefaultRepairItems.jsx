@@ -44,7 +44,7 @@ function DefaultRepairItems({defaultRepairs}) {
               <div className='defaultRepairItem'
                     key={item.id}>
                 <span className='defaultRepairItemName'>{item.repair_name}:</span>
-                <span className='defaultRepairItemCost'>{item.repair_cost}</span>
+                <span className='defaultRepairItemCost'>${item.repair_cost}</span>
                 <span className='deleteDefaultRepairBtn'
                       onClick={e => {
                         e.preventDefault();
@@ -57,6 +57,14 @@ function DefaultRepairItems({defaultRepairs}) {
             )
           })}
       </div>
+      <h4>Total: $
+        <span>
+          {!defaultRepairs ? '' : defaultRepairs.reduce((total, item) => {
+            total = total + Number(item.repair_cost)
+            return total
+          }, 0)}
+        </span>
+      </h4>
     </div>
 
   );
