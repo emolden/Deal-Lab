@@ -356,9 +356,29 @@ router.delete('/repairItem/:id', (req, res) => {
 /**
  * POST property repair item
  */
-router.post('/repairItem/:id', (req, res) => {
-    // POST route code here
+router.post('/repairItem/', (req, res) => {
+        // console.log('/api/properties/id delete route received a request! ', req.params.id)
+  const propertyId = req.body.propertyId;
+  const repairName = req.body.repairName;
+  const repairCost = req.body.repairCost;
+
+  const sqlText = `
+    INSERT INTO "repair_items"
+      ("property_id", "name", "cost")
+      VALUES
+      ($1, $2, $3);
+  `; 
+  pool.query(sqlText, [propertyId, repairName, repairCost])
+
+      .then((results) => {
+        res.sendStatus(201)
+      }) 
+      .catch((error) => {
+        console.log('Error in adding property repair item:', error);
+        res.sendStatus(500);
+      })
 });
+
 
 
 

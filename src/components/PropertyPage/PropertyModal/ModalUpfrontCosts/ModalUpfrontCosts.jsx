@@ -1,11 +1,23 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import { useState } from 'react';
 
 function ModalUpfrontCosts() {
+
+  const dispatch = useDispatch();
+
   const propertyOfInterest = useSelector((store) => store.propertyOfInterest);
   const [repairName, setRepairName] = useState("");
   const [repairCost, setRepairCost] = useState("");
+
+  const addRepairItem = () => {
+      dispatch ({
+          type: 'ADD_PROPERTY_REPAIR_ITEM',
+          payload: {propertyId: propertyOfInterest.property[0].id, repairName: repairName, repairCost: repairCost }
+      })
+      setRepairName("");
+      setRepairCost("");
+  }
 
   return (
     <div className="container">
@@ -28,7 +40,7 @@ function ModalUpfrontCosts() {
         value={repairCost}
         onChange={e => setRepairCost(e.target.value)}
       />
-      <button>Add</button>
+      <button onClick={addRepairItem}>Add</button>
       <ul>
         {propertyOfInterest.repairItems.map((item) => {
           return (
