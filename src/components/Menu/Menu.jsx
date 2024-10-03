@@ -1,47 +1,107 @@
+
+// import React from "react";
+// import { StyledMenu } from "./Menu.styled";
+// import { Link } from "react-router-dom/cjs/react-router-dom.min";
+// import { useDispatch } from 'react-redux'; // Import useDispatch
+// import { StyledLogOutButton } from "../App/LogOutButton/LogOutButton.styled"; // Import styled button
+
+// function Menu({ open, setOpen }) {
+//   const dispatch = useDispatch(); // Get dispatch function
+
+//   const handleLinkClick = () => {
+//     setOpen(false); // Close the menu
+//   };
+
+//   const handleLogout = () => {
+//     dispatch({ type: 'LOGOUT' }); // Dispatch logout action
+//     handleLinkClick(); // Close the menu after logging out
+//   };
+
+//   return (
+//     <StyledMenu open={open}>
+//       <Link to="/property-page" onClick={handleLinkClick}>
+//         Properties
+//       </Link>
+//       <Link to="/default-settings" onClick={handleLinkClick}>
+//         Default Settings
+//       </Link>
+//       <StyledLogOutButton
+//         onClick={handleLogout} // Call handleLogout on click
+//       >
+//         Logout
+//       </StyledLogOutButton>
+//     </StyledMenu>
+//   );
+// }
+
+// export default Menu;
+
+
 import React from "react";
-import styled from "styled-components";
 import { StyledMenu } from "./Menu.styled";
-import DefaultSettings from "../DefaultSettings/DefaultSettings";
-import PropertyPage from "../PropertyPage/PropertyPage";
-import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
+import { useStore } from "react-redux";
 import { StyledLogOutButton } from "../App/LogOutButton/LogOutButton.styled";
 
-// const StyledLogOutButton = styled(LogOutButton)`
-//   display: block; // Ensure it's block level like the links
-//   font-size: 2rem;
-//   text-transform: uppercase;
-//   padding: 2rem 0;
-//   color: ${({ theme }) => theme.primaryDark};
-//   text-decoration: none;
-// `;
-
 function Menu({ open, setOpen }) {
+  const dispatch = useDispatch();
+  const user = useSelector((store) => store.user); // Get login state from Redux
+
   const handleLinkClick = () => {
-    setOpen(false);
+    setOpen(false); // Close the menu
+  };
+
+  const handleLogout = () => {
+    dispatch({ type: 'LOGOUT' }); // Dispatch logout action
+    handleLinkClick(); // Close the menu after logging out
   };
 
   return (
+    // <StyledMenu open={open}>
+    //   {!user.id ? (
+    //     <>
+    //       <Link to="/property-page" onClick={handleLinkClick}>
+    //         Properties
+    //       </Link>
+    //       <Link to="/default-settings" onClick={handleLinkClick}>
+    //         Default Settings
+    //       </Link>
+    //       <StyledLogOutButton onClick={handleLogout}>
+    //         Logout
+    //       </StyledLogOutButton>
+    //     </>
+    //   ) : (
+    //     <Link to="/login" onClick={handleLinkClick}>
+    //       <StyledLogOutButton>
+    //         Login
+    //       </StyledLogOutButton>
+    //     </Link>
+    //   )}
+    // </StyledMenu>
+
     <StyledMenu open={open}>
-      <Link to="/property-page" onClick={handleLinkClick}>
-        Properties
+      {!user.id ? (
+        <Link to="/login" onClick={handleLinkClick}>
+          Login
       </Link>
-      <Link to="/default-settings" onClick={handleLinkClick}>
-        Default Settings
-      </Link>
-      <StyledLogOutButton
-        onClick={() => {
-          // Handle logout logic here
-          handleLinkClick();
-        }}
-      >
-        Logout
-      </StyledLogOutButton>
+      ) : (
+        <>
+        {/* {user.id && ( */}
+          <Link to="/property-page" onClick={handleLinkClick}>
+            Properties
+          </Link>
+          <Link to="/default-settings" onClick={handleLinkClick}>
+            Default Settings
+          </Link>
+          <StyledLogOutButton onClick={handleLogout}>
+            Logout
+          </StyledLogOutButton>
+        </>
+        
+      )}
     </StyledMenu>
   );
 }
-
-// Menu.propTypes = {
-//     open: bool.isRequired,
-//   }
 
 export default Menu;

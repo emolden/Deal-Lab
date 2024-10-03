@@ -36,12 +36,12 @@ function Header() {
 
         <div>
         {/* If no user is logged in, show these links */}
-        {!user.id && (
+        {/* {!user.id && (
           // If there's no user, show login/registration links
           <Link className="navLink" to="/login">
             Login / Register
           </Link>
-        )}
+        )} */}
         <nav>
         {/* If a user is logged in, show these links */}
         {user.id && (
