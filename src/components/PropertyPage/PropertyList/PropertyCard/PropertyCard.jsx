@@ -80,6 +80,8 @@ function PropertyCard({ property, userId, onOpenModal }) {
     <div className="property-card">
       <h3 className='address' onClick={() => {getPropertyOfInterest(property.id); onOpenModal(property); }}>{property.address}</h3>
 
+      {/* <div className="more-details">More details</div> */}
+
       <table className='detailsTable'>
         <thead>
           <tr>

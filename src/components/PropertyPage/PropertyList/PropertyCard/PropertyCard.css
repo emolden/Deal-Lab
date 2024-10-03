@@ -3,37 +3,47 @@
     display: flex; /* Use flexbox for alignment */
     flex-wrap: wrap; /* Allow wrapping to next line */
     justify-content: flex-start; /* Space out cards evenly */
-    margin: 0 -8px; /* Optional: margin to offset padding */
+    margin: 0 -8px;
 }
 .property-card {
     flex: 0 0 30%; /* Flex-grow, flex-shrink, flex-basis (30% width) */
-    box-sizing: border-box; /* Include padding and border in width */
-    margin: 8px; /* Margin around each card */
-    background-color: #f9f9f9; /* Light background */
-    border: 1px solid #ccc; /* Light border */
-    border-radius: 5px; /* Rounded corners */
+    box-sizing: border-box;
+    margin: 8px; 
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 5px;
     padding: 16px; /* Spacing inside the card */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+    transition: transform 0.3s ease, background-color 0.3s ease;
   }
+
+  .property-card:hover {
+    transform: translateY(-5px); /* Move the card up */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Add a deeper shadow */
+}
+
+.property-card:hover .more-details {
+    display: block; 
+}
   
   .property-card h3 {
-    cursor: pointer; /* Pointer cursor for the address */
-    margin-bottom: 16px; /* Space below the title */
+    cursor: pointer;
+    margin-bottom: 16px; 
   }
   
   .detailsTable {
     width: 100%;
-    border-collapse: collapse; /* Collapse borders */
+    border-collapse: collapse; 
   }
   
   .detailsTable th, .detailsTable td {
-    border: 1px solid #ddd; /* Border between cells */
-    padding: 8px; /* Padding in cells */
-    text-align: left; /* Align text to the left */
+    border: 1px solid #ddd; 
+    padding: 8px;
+    text-align: left; 
   }
   
   .detailsTable th {
-    background-color: #f2f2f2; /* Light background for headers */
+    background-color: #f2f2f2; 
   }
   
   .detailsTable tr:hover {
@@ -73,7 +83,6 @@
 
   .delete-button:hover {
     background-color: #7974d7; 
-    /* color: #343078; */
     transform: scale(1.05); 
 }
 
