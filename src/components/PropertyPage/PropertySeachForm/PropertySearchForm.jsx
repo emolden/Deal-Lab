@@ -30,7 +30,7 @@ function PropertySearchForm({userId}) {
   //sends the formattedAddress to the properties.saga
   const addAddress = (e) => {
     e.preventDefault();
-    // ************* THIS GOIES IN PAYLOAD.ADDRESS: formattedAddress
+    // ************* THIS GOES IN PAYLOAD.ADDRESS: formattedAddress
     dispatch ({
         type: 'ADD_PROPERTY',
         payload: {address: address , userId: userId}
