@@ -47,7 +47,7 @@ function DefaultHoldingCost({defaultHoldings}) {
             <div className='defaultHoldingItem'
                   key={item.id}>
               <span className='defaultHoldingItemName'>{item.holding_name}:</span>
-              <span className='defaultHoldingItemCost'>{item.holding_cost}</span>
+              <span className='defaultHoldingItemCost'>${item.holding_cost}</span>
               <span className='deleteDefaultHoldingBtn'
                     onClick={e => {
                       e.preventDefault();
