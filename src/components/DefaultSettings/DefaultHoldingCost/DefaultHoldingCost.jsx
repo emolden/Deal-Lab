@@ -60,6 +60,14 @@ function DefaultHoldingCost({defaultHoldings}) {
           )
         })}
       </div>
+      <h4>Total: $
+        <span>
+          {!defaultHoldings ? '' : defaultHoldings.reduce((total, item) => {
+            total = total + Number(item.holding_cost)
+            return total
+          }, 0)}
+        </span>
+      </h4>
     </div>
   );
 }
