@@ -1,0 +1,80 @@
+
+.property-cards-container {
+    display: flex; /* Use flexbox for alignment */
+    flex-wrap: wrap; /* Allow wrapping to next line */
+    justify-content: flex-start; /* Space out cards evenly */
+    margin: 0 -8px; /* Optional: margin to offset padding */
+}
+.property-card {
+    flex: 0 0 30%; /* Flex-grow, flex-shrink, flex-basis (30% width) */
+    box-sizing: border-box; /* Include padding and border in width */
+    margin: 8px; /* Margin around each card */
+    background-color: #f9f9f9; /* Light background */
+    border: 1px solid #ccc; /* Light border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 16px; /* Spacing inside the card */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  }
+  
+  .property-card h3 {
+    cursor: pointer; /* Pointer cursor for the address */
+    margin-bottom: 16px; /* Space below the title */
+  }
+  
+  .detailsTable {
+    width: 100%;
+    border-collapse: collapse; /* Collapse borders */
+  }
+  
+  .detailsTable th, .detailsTable td {
+    border: 1px solid #ddd; /* Border between cells */
+    padding: 8px; /* Padding in cells */
+    text-align: left; /* Align text to the left */
+  }
+  
+  .detailsTable th {
+    background-color: #f2f2f2; /* Light background for headers */
+  }
+  
+  .detailsTable tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .address {
+    background-color: #008000;
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 5px 5px 0 0;
+    margin: 0;
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: center; /* Center the button horizontally */
+    align-items: center; /* Center the button vertically if needed */
+  }
+  
+  .delete-button {
+    display: inline-block;
+    padding: 5px 10px;
+    border-width: 1px 1px 3px;
+    border-radius: 4px;
+    background-color: #343078;
+    color: #f8f8f8;
+    font-size: 1.1rem;
+    outline: 0;
+    cursor: pointer;
+    margin: 0.5rem; 
+    position: relative; 
+  }
+
+  .delete-button:hover {
+    background-color: #7974d7; 
+    /* color: #343078; */
+    transform: scale(1.05); 
+}
+
+ 

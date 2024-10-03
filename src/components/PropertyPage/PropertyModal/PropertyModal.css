@@ -47,6 +47,11 @@
     border-radius: 2px;
     padding: 3px 7px;
   }
+
+  .modal-close:hover {
+    background-color: #7974d7; 
+    transform: scale(1.05); 
+  }
   
   .modalRight {
     width: 100%;
@@ -68,6 +73,11 @@
     margin: .5rem;
     position: relative;
     right: -550px;
+  }
+
+  .modal-btn:hover {
+    background-color: #7974d7; 
+    transform: scale(1.05); 
   }
 
   .grid-container {

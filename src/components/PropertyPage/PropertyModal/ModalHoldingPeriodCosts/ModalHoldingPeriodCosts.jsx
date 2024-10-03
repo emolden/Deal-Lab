@@ -11,9 +11,8 @@ function ModalHoldingPeriodCosts() {
 
   const formattedCurrency = (value) => {
     const number = parseFloat(value);
-    const truncated = Math.floor(number * 100) / 100;
-    return `$${truncated.toFixed(2)}`;
-  }
+    return `$${number.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  };
 
   return (
     <div className="container">
