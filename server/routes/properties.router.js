@@ -37,10 +37,14 @@ router.post('/', async (req, res) => {
   const api_key = process.env.RENTCAST_API_KEY;
   const address = req.body.address;
   const userId = req.user.id;
+  let propertyApiId;
   console.log('ADDRESS:', address, userId);
   
-
+  let connection;
   try {
+    connection = await pool.connect()
+    await connection.query('BEGIN;')
+
       const checkTimeStampSqlText = `
           SELECT * FROM "property_api_data"
               WHERE "inserted_at" >= CURRENT_TIMESTAMP - INTERVAL '24 hours'
@@ -139,11 +143,16 @@ router.post('/', async (req, res) => {
               RETURNING "id";
           `
           const propertyApiDataResults = await pool.query(propertyApiDataSqlText, propertyApiData);
-          const propertyApiId = propertyApiDataResults.rows[0].id;
-      
+          propertyApiId = propertyApiDataResults.rows[0].id;
 
+        } else if (checkTimeStampData.length > 0) {
 
-          // ================ SQL insert into table: PROPERTIES
+          console.log('Property already exists in database!');
+          propertyApiId = checkTimeStampData[0].id;
+
+      }
+
+                // ================ SQL insert into table: PROPERTIES
           // const propertiesData = [
           //     userId,
           //     propertyApiId,
@@ -153,20 +162,12 @@ router.post('/', async (req, res) => {
           //     valueEstimateResponse.data.priceRangeHigh
           // ]
 
-        } else if (checkTimeStampData.length > 0) {
-
-          console.log('Property already exists in database!');
-          
-
-      }
-
-
                       //--------------------------------- API REQUEST SUCCESSFULLY WORKING----------------------------------
         //----------------------------- HERE IS SOME FAKE API DATA TO USE WHILE BUILDING THE APP ----------------------
         //-------------DELETE THIS WHEN APP IS FULLY BUILT AND UNCOMMENT THE API CALLS --------------------------------
         const propertiesData = [
           userId,
-          1,
+          propertyApiId,
           '6817 Dutton Ave N, Brooklyn Park, MN 55428',
           249000.00,
           2300,
@@ -174,21 +175,62 @@ router.post('/', async (req, res) => {
       ]
       //-----------------------DELETE TO HERE------------------------------------------------------------------------------
           const propertiesSqlText = `
-          INSERT INTO "properties"
-          ("user_id", "property_api_id", "address", "purchase_price", "taxes_yearly", "after_repair_value")
-          VALUES
-          ($1, $2, $3, $4, $5, $6);
-          `
+            INSERT INTO "properties"
+              ("user_id", "property_api_id", "address", "purchase_price", "taxes_yearly", "after_repair_value")
+              VALUES
+              ($1, $2, $3, $4, $5, $6) RETURNING id;
+          `;
           const propertiesResults = await pool.query(propertiesSqlText, propertiesData);
+          const propertyId = propertiesResults.rows[0].id
+
+          const getDefaultHoldingsText = `
+            SELECT * FROM "default_holdings"
+              WHERE "user_id" = $1;
+          `;
+          const getDefaultHoldingsResults = await pool.query(getDefaultHoldingsText, [userId]);
+          console.log('getDefaultHoldingsResult: ', getDefaultHoldingsResults.rows)
+
+          for(let holdingItem of getDefaultHoldingsResults.rows) {
+            const addHoldingItemText = `
+              INSERT INTO "holding_items"
+                ("property_id", "name", "cost")
+                VALUES
+                ($1, $2, $3);
+            `;
+            const addHoldingItemValues = [propertyId, holdingItem.holding_name, holdingItem.holding_cost];
+            const addHoldingItemResults = await pool.query(addHoldingItemText, addHoldingItemValues);
+          }
+
+          const getDefaultRepairsText = `
+          SELECT * FROM "default_repairs"
+            WHERE "user_id" = $1;
+        `;
+        const getDefaultRepairsResults = await pool.query(getDefaultRepairsText, [userId]);
+        console.log('getDefaultRepairsResult: ', getDefaultRepairsResults.rows)
+
+        for(let repairItem of getDefaultRepairsResults.rows) {
+          const addRepairItemText = `
+            INSERT INTO "repair_items"
+              ("property_id", "name", "cost")
+              VALUES
+              ($1, $2, $3);
+          `;
+          const addRepairItemValues = [propertyId, repairItem.repair_name, repairItem.repair_cost];
+          const addRepairItemResults = await pool.query(addRepairItemText, addRepairItemValues);
+        }
 
           console.log('Property posted/updated in database!');
-          res.sendStatus(201);
-
-     
-  } catch (error) {
-      console.log('Error in getting API data:', error);
-      res.sendStatus(500);
-  }
+          
+          await connection.query('Commit;')
+          res.sendStatus(201)
+      
+        } catch(err) {
+            console.log('Add property failed: ', err);
+            await connection.query('Rollback;')
+            res.sendStatus(500);
+          } finally {
+            await connection.release()
+          }
 });
 
 

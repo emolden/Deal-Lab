@@ -9,6 +9,7 @@ function PropertySearchForm({userId}) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [searchBarAddress, setSearchBarAddress] = useState("");
   const [formattedAddress, setFormattedAddress] = useState("");
+  const [address, setAddress] = useState("");
   const dispatch = useDispatch();
 
   //forces GooglePlacesAutocomplete dom render to wait till Google script is loaded
@@ -29,9 +30,10 @@ function PropertySearchForm({userId}) {
   //sends the formattedAddress to the properties.saga
   const addAddress = (e) => {
     e.preventDefault();
+    // ************* THIS GOIES IN PAYLOAD.ADDRESS: formattedAddress
     dispatch ({
         type: 'ADD_PROPERTY',
-        payload: {address: formattedAddress, userId: userId}
+        payload: {address: address , userId: userId}
     })
     setSearchBarAddress("");
   } 
@@ -56,7 +58,8 @@ function PropertySearchForm({userId}) {
     <div className="container">
       <p>Property Search Form:</p>
 
-      {isLoaded ? (  
+{/* **************UNCOMMENT FROM HERE TO 123**************************** */}
+      {/* {isLoaded ? (  
       <GooglePlacesAutocomplete
         apiOptions={{ language: 'en'}}
         autocompletionRequests={{
@@ -119,7 +122,20 @@ function PropertySearchForm({userId}) {
         />
       ) : (
         <p>Loading...</p>
-      )}
+      )} */}
+
+      {/* ************** THIS IS DUMMY DATA TO BE DELETED******************************** */}
+      <form>
+          <label for='addressInput'>Property Address:</label>
+          <input className='rentCastInput'
+                  name='addressInput'
+                  type='text'
+                  placeholder='1234 Penny Ln, Liverpool, BL 196700'
+                  value={address}
+                  onChange={e => setAddress(e.target.value)}
+                  />
+      </form>
+      {/* ***************DELETE TO HERE **************************************** */}
           <button onClick={addAddress}>Add</button>
     </div>
   );
