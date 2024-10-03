@@ -39,64 +39,34 @@ const PropertyModal = ({ isOpen, onClose, propertyCard }) => {
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <div>
         <button onClick={onClose} className="modal-close">X</button>
-        
-        <div className="modalRight">
-          <p>Property Address: {propertyCard.address}</p>
-          <p>Purchase Price: {formattedCurrency(propertyCard.purchase_price)}</p>
+          <h2 className="modal-header">{propertyCard.address}</h2>
+        </div>
+          {/* <p>Purchase Price: {formattedCurrency(propertyCard.purchase_price)}</p>
           <p>Upfront Cost: {formattedCurrency(upfrontCost)}</p>
           <p>Holding Period Cost: {formattedCurrency(holdingCost)}</p>
           <p>Total Cost: {formattedCurrency(totalCost)}</p>
           <p>Profit: {formattedCurrency(profit)}</p>
-          <p>Annualized Profit: {formattedCurrency(annualProfit)}</p>
-          
-          {/* Include your specific modal components here */}
-          <ModalUpfrontCosts />
-          <ModalHoldingPeriodCosts />
-          <ModalProfitEstimation />
-        </div>
+          <p>Annualized Profit: {formattedCurrency(annualProfit)}</p> */}
+          <div className="modalRight grid-container">
+            <div className='section upfront-costs'>
+              <h3 className='section-header'>Upfront Costs:</h3>
+              <ModalUpfrontCosts />
+            </div>
+            <div className='section holding-period-costs'>
+            <h3 className='section-header'>Holding Period Costs:</h3>
+              <ModalHoldingPeriodCosts />
+            </div>
+            <div className='section profit-estimation'>
+            <h3 className='section-header'>Profit Estimation</h3>
+              <ModalProfitEstimation />
+            </div>
+          </div>
+          <button className='modal-btn'>Edit</button>
       </div>
     </div>
   );
 };
 
 export default PropertyModal;
-
-
-// import React from 'react';
-// import {useSelector} from 'react-redux';
-// import ModalHoldingPeriodCosts from './ModalHoldingPeriodCosts/ModalHoldingPeriodCosts';
-// import ModalUpfrontCosts from './ModalUpfrontCosts/ModalUpfrontCosts';
-// import ModalProfitEstimation from './ModalProfitEstimation/ModalProfitEstimation';
-// import PropertyCard from '../PropertyList/PropertyCard/PropertyCard';
-// import './PropertyModal.css';
-
-
-// const PropertyModal = ({ isOpen, onClose, propertyCard }) => {
-//   if (!isOpen) return null;
-
-//   const propertyOfInterest = useSelector((store) => store.propertyOfInterest);
-
-//   return (
-//     <div className="container">
-//       <div onClick={onClose} className="modal-overlay">
-//         <div onClick={(e) => e.stopPropagation()} className="modal-content">
-//           <button onClick={onClose} className="overlay">X</button>
-//       {/* THIS IS RENDERING A "0" ON THE DOM!!! WHY????????????????????????????*/}
-//       {Object.keys(propertyOfInterest).length && 
-//         <div className="modalRight">
-//           <p>Property Modal: {propertyOfInterest.property[0].address}</p>
-          
-//           <ModalUpfrontCosts />
-//           <ModalHoldingPeriodCosts />
-//           <ModalProfitEstimation />
-//           <PropertyCard />
-//         </div>
-//       } 
-//       </div>  
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default PropertyModal;

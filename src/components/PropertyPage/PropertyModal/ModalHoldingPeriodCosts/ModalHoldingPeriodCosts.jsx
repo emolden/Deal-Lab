@@ -5,6 +5,10 @@ import {useSelector} from 'react-redux';
 function ModalHoldingPeriodCosts() {
   const propertyOfInterest = useSelector((store) => store.propertyOfInterest);
 
+  const monthlyTax = propertyOfInterest.property[0].taxes_yearly / 12;
+  const holdingCost = monthlyTax + 100; // Include other holding costs as needed
+  const totalHoldingCost = holdingCost * propertyOfInterest.property[0].holding_period;
+
   const formattedCurrency = (value) => {
     const number = parseFloat(value);
     const truncated = Math.floor(number * 100) / 100;
@@ -15,7 +19,7 @@ function ModalHoldingPeriodCosts() {
     <div className="container">
       {Object.keys(propertyOfInterest).length && 
         <>
-          <p>Holding Costs:</p>
+          {/* <p>Holding Costs:</p> */}
           <p>Holding Items:</p>
           <ul>
             <li> Taxes: {formattedCurrency(propertyOfInterest.property[0].taxes_yearly/12)}</li>
@@ -26,7 +30,9 @@ function ModalHoldingPeriodCosts() {
             })}
           </ul>
           <p>Holding Period: {propertyOfInterest.property[0].holding_period} Months</p>
-        
+        <p>
+          <span className="bold-text">Total Holding Cost: {formattedCurrency(totalHoldingCost)}</span>
+          </p>
         </>
       }
     </div>

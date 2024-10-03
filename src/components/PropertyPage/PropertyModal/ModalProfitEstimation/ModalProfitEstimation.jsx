@@ -13,10 +13,12 @@ function ModalProfitEstimation() {
 
   return (
     <div className="container">
-      <p>Profit Estimation:</p>
+      {/* <p>Profit Estimation:</p> */}
       {Object.keys(propertyOfInterest).length && 
         <>
-          <p>After Repair Value: ${formattedCurrency(propertyOfInterest.property[0].after_repair_value)}</p>
+          <p>
+            <span className='bold-text'>After Repair Value: ${formattedCurrency(propertyOfInterest.property[0].after_repair_value)}</span>
+          </p>
         </>
       }
     </div>
