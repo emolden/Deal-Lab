@@ -50,7 +50,7 @@ function DefaultRepairItems({defaultRepairs}) {
                         e.preventDefault();
                         dispatch({
                           type: 'DELETE_DEFAULT_REPAIR_ITEM',
-                          payload: item.default_repair_id
+                          payload: item.id
                         })
                       }}>❌</span>
               </div>

@@ -69,6 +69,7 @@ function* addDefaultRepairItem(action) {
 
 function* deleteDefaultRepairItem(action) {
   const repairId = action.payload;
+  console.log('in deleteDefaultRepairItem', action.payload)
   try {
     yield axios.delete(`/api/defaultSettings/repairItem/${repairId}`)
     yield put({

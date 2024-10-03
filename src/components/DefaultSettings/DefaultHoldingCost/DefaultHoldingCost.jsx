@@ -53,7 +53,7 @@ function DefaultHoldingCost({defaultHoldings}) {
                       e.preventDefault();
                       dispatch({
                         type: 'DELETE_DEFAULT_HOLDING_ITEM',
-                        payload: item.default_holding_id
+                        payload: item.id
                       })
                     }}>❌</span>
             </div>

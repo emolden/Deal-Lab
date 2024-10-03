@@ -26,6 +26,7 @@ function DefaultSettings() {
     dispatch({
       type: "GET_DEFAULTS"
     })
+    console.log('default repairs are : ', defaultRepairs)
   }, [defaultSettingsId])
 
   const updateHoldingPeriod = () => {
