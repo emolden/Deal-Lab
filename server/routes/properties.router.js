@@ -400,15 +400,47 @@ router.post('/repairItem/', (req, res) => {
  * DELETE property holding item
  */
 router.delete('/holdingItem/:id', (req, res) => {
+  const itemId = req.params.id;
 
+  const sqlText = `
+    DELETE FROM "holding_items"
+      WHERE "id" = $1;
+  `; 
+  pool.query(sqlText, [itemId])
+
+      .then((results) => {
+        res.sendStatus(201)
+      }) 
+      .catch((error) => {
+        console.log('Error in deleting property holding item:', error);
+        res.sendStatus(500);
+      })
 });
 
 
 /**
  * POST property holding item
  */
-router.post('/holdingItem/:id', (req, res) => {
-    // POST route code here
+router.post('/holdingItem', (req, res) => {
+  const propertyId = req.body.propertyId;
+  const holdingName = req.body.holdingName;
+  const holdingCost = req.body.holdingCost;
+
+  const sqlText = `
+    INSERT INTO "holding_items"
+      ("property_id", "name", "cost")
+      VALUES
+      ($1, $2, $3);
+  `; 
+  pool.query(sqlText, [propertyId, holdingName, holdingCost])
+
+      .then((results) => {
+        res.sendStatus(201)
+      }) 
+      .catch((error) => {
+        console.log('Error in adding property holding item:', error);
+        res.sendStatus(500);
+      })
 });
 
 

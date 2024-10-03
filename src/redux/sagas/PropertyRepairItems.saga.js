@@ -10,7 +10,7 @@ function* addPropertyRepairItem(action) {
         payload: action.payload.propertyId
     })
   } catch (error) {
-    console.log('Error in getting property details:', error);
+    console.log('Error adding property repair item:', error);
   }
 }
 
@@ -22,7 +22,7 @@ function* deletePropertyRepairItem(action) {
         payload: action.payload.propertyId
     })
   } catch (error) {
-    console.log('Error in getting property details:', error);
+    console.log('Error deleting property repair item:', error);
   }
 }
 

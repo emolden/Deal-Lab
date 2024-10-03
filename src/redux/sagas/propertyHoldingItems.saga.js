@@ -2,9 +2,27 @@ import { put, takeLatest } from 'redux-saga/effects';
 import axios from 'axios';
 
 function* addPropertyHoldingItem(action) {
+  try {
+    yield axios.post(`api/properties/holdingItem`, action.payload)
+    yield put({
+        type: 'GET_PROPERTY_OF_INTEREST',
+        payload: action.payload.propertyId
+    })
+  } catch (error) {
+    console.log('Error adding property repair item:', error);
+  }
 }
 
 function* deletePropertyHoldingItem(action) {
+  try {
+    yield axios.delete(`api/properties/holdingItem/${action.payload.itemId}`)
+    yield put({
+        type: 'GET_PROPERTY_OF_INTEREST',
+        payload: action.payload.propertyId
+    })
+  } catch (error) {
+    console.log('Error deleting property repair item:', error);
+  }
 }
 
 function* propertyHoldingItemsSaga() {
