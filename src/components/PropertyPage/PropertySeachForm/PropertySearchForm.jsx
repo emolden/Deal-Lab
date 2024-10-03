@@ -33,6 +33,7 @@ function PropertySearchForm({userId}) {
         type: 'ADD_PROPERTY',
         payload: {address: formattedAddress, userId: userId}
     })
+    setSearchBarAddress("");
   } 
 
     // Runs when search menu is opened, emptying the menu of text
