@@ -19,6 +19,13 @@ function ModalUpfrontCosts() {
       setRepairCost("");
   }
 
+  const deleteRepairItem = (itemId) => {
+    dispatch ({
+        type: 'DELETE_PROPERTY_REPAIR_ITEM',
+        payload: itemId
+    })
+}
+
   return (
     <div className="container">
       {Object.keys(propertyOfInterest).length && 
@@ -44,7 +51,10 @@ function ModalUpfrontCosts() {
       <ul>
         {propertyOfInterest.repairItems.map((item) => {
           return (
+            <>
             <li key = {item.repair_items_id}>{item.repair_name}: ${item.repair_cost} </li>
+            <button onClick={() => {deleteRepairItem(item.repair_items.id)}}>❌</button>
+            </>
           )
         })}
       </ul>
