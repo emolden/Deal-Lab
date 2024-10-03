@@ -62,10 +62,11 @@ function PropertyCard({property, userId}) {
         /* Read more about handling dismissals below */
         result.dismiss === Swal.DismissReason.cancel
       ) {
-        swalWithBootstrapButtons.fire({
-          title: "Cancelled",
-          text: "Your property has NOT been deleted.",
-          icon: "error"
+        Swal.fire({
+          icon: "error",
+          title: "Your property has NOT been deleted.",
+          showConfirmButton: false,
+          timer: 1500
         });
       }
     });
