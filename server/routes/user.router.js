@@ -21,6 +21,10 @@ router.post('/register', async (req, res, next) => {
   const username = req.body.username;
   const password = encryptLib.encryptPassword(req.body.password);
   const defaultHoldingPeriod = 6;
+  const defaultRepairItemName = 'Miscellaneous';
+  const defaultRepairItemCost = 20000;
+  const defaultHoldingItemName = 'Utilities';
+  const defaultHoldingItemCost = 200;
 
   let connection;
   try {
@@ -36,14 +40,27 @@ router.post('/register', async (req, res, next) => {
         ($1, $2, $3) RETURNING id;
     `;
     const newUserResult = await connection.query(newUserText, [username, password, defaultHoldingPeriod])
-    
+    console.log(newUserResult.rows) 
+    const userId = newUserResult.rows[0].id
 
+    const repairDefaultText = `
+      INSERT INTO "default_repairs"
+        (user_id, repair_name, repair_cost)
+        VALUES
+        ($1, $2, $3)
+    `;
+    const repairDefaultValues = [userId, defaultRepairItemName, defaultRepairItemCost]
+    const repairDefaultResult = await connection.query(repairDefaultText, repairDefaultValues)
 
+    await connection.query('Commit;')
     res.sendStatus(201)
 
   } catch(err) {
       console.log('User registration failed: ', err);
+      await connection.query('Rollback;')
       res.sendStatus(500);
+    } finally {
+      await connection.release()
     }
 });
 
