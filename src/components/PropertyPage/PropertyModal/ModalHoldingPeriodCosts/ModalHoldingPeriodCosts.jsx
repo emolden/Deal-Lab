@@ -9,15 +9,15 @@ function ModalHoldingPeriodCosts() {
 
   const propertyOfInterest = useSelector((store) => store.propertyOfInterest);
   const [holdingName, setHoldingName] = useState("");
-  const [holdingCost, setHoldingCost] = useState("");
+  const [holdingItemCost, setHoldingItemCost] = useState("");
 
   const addHoldingItem = () => {
     dispatch ({
         type: 'ADD_PROPERTY_HOLDING_ITEM',
-        payload: {propertyId: propertyOfInterest.property[0].id, holdingName: holdingName, holdingCost: holdingCost }
+        payload: {propertyId: propertyOfInterest.property[0].id, holdingName: holdingName, holdingCost: holdingItemCost }
     })
     setHoldingName("");
-    setHoldingCost("");
+    setHoldingItemCost("");
 }
 
 const deleteHoldingItem = (itemId) => {
@@ -53,8 +53,8 @@ const deleteHoldingItem = (itemId) => {
             name='holdingCostInput'
             type='text'
             placeholder='holding Cost'
-            value={holdingCost}
-            onChange={e => setHoldingCost(e.target.value)}
+            value={holdingItemCost}
+            onChange={e => setHoldingItemCost(e.target.value)}
           />
           <button onClick={addHoldingItem}>Add</button>
           <ul>
