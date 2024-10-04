@@ -10,23 +10,70 @@ const axios = require('axios');
 /**
  * ----- GET properties: getProperties
  */
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   console.log('in get properties/id: ', req.params.id);
   const userId = req.params.id;
 
-  const sqlText = `
-      SELECT * FROM "properties"
-          WHERE "user_id" = $1
-          ORDER BY "inserted_at" DESC;
-  `
+  let connection;
+  try{
 
-    pool.query(sqlText, [userId])
-    .then((results) => {
-        res.send(results.rows);
-    }) .catch((error) => {
-        console.log('Error in getting properties:', error);
-        res.sendStatus(500);
-    })
+    connection = await pool.connect()
+    await connection.query('BEGIN;')
+
+    const propertiesText = `
+        SELECT * FROM "properties"
+            WHERE "user_id" = $1
+            ORDER BY "inserted_at" DESC;
+    `;
+    const propertiesResult = await connection.query(propertiesText, [userId])
+    const properties = propertiesResult.rows
+
+    const repairText = `
+      SELECT 
+        "properties"."id" AS "id",
+        "repair_items"."id" AS "repair_id",
+        "repair_items"."name" AS "repair_name",
+        "repair_items"."cost" AS "repair_cost"
+        FROM "properties"
+        JOIN "repair_items"
+          ON "properties"."id" = "repair_items"."property_id"
+        WHERE "user_id" = 1
+        ORDER BY "inserted_at" DESC;
+    `;
+    const repairResult = await connection.query(repairText, [userId])
+    const repairItems = repairResult.rows
+
+    const holdingText = `
+      SELECT
+        "properties"."id" AS "id",
+        "holding_items"."id" AS "holding_id",
+        "holding_items"."name" AS "holding_name",
+        "holding_items"."cost" AS "holding_cost" 
+        FROM "properties"
+        JOIN "holding_items"
+          ON "properties"."id" = "holding_items"."property_id"
+        WHERE "user_id" = 1
+        ORDER BY "inserted_at" DESC;
+    `;
+    const holdingResult = await connection.query(holdingText, [userId])
+    const holdingItems = holdingResult.rows
+
+    const propertyInfo = {
+      properties: properties,
+      repairItems: repairItems,
+      holdignItems: holdingItems
+    }
+
+    await connection.query('Commit;')
+    res.send(propertyInfo);
+    
+  }catch(err) {
+    console.log('GET properties failed: ', err);
+    await connection.query('Rollback;')
+    res.sendStatus(500);
+  } finally {
+    await connection.release()
+  }
 });
 
 

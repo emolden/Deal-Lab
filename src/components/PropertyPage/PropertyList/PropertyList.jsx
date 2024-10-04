@@ -23,8 +23,8 @@ function PropertyList({ userId, onOpenModal }) {
     <div className="container">
       <p>Property List:</p>
       <div className='property-cards-container'>
-      {Array.isArray(allProperties) && allProperties.length > 0 ? (
-        allProperties.map((property) => (
+      {Array.isArray(allProperties.properties) && allProperties.properties.length > 0 ? (
+        allProperties.properties.map((property) => (
           // <div >
             <PropertyCard 
               key={property.id}
