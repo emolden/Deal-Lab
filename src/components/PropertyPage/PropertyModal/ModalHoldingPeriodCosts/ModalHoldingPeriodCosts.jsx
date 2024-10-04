@@ -1,6 +1,8 @@
 import React from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import { useState } from 'react';
+import totalHoldingCost from '../../../../helpers/totalHoldingCost';
+import monthlyHoldingCost from '../../../../helpers/monthlyHoldingCost'
 
 
 function ModalHoldingPeriodCosts() {
@@ -9,15 +11,15 @@ function ModalHoldingPeriodCosts() {
 
   const propertyOfInterest = useSelector((store) => store.propertyOfInterest);
   const [holdingName, setHoldingName] = useState("");
-  const [holdingCost, setHoldingCost] = useState("");
+  const [holdingItemCost, setHoldingItemCost] = useState("");
 
   const addHoldingItem = () => {
     dispatch ({
         type: 'ADD_PROPERTY_HOLDING_ITEM',
-        payload: {propertyId: propertyOfInterest.property[0].id, holdingName: holdingName, holdingCost: holdingCost }
+        payload: {propertyId: propertyOfInterest.property[0].id, holdingName: holdingName, holdingCost: holdingItemCost }
     })
     setHoldingName("");
-    setHoldingCost("");
+    setHoldingItemCost("");
 }
 
 const deleteHoldingItem = (itemId) => {
@@ -26,10 +28,6 @@ const deleteHoldingItem = (itemId) => {
       payload: {itemId: itemId, propertyId: propertyOfInterest.property[0].id}
   })
 }
-
-  const monthlyTax = propertyOfInterest.property[0].taxes_yearly / 12;
-  const holdingCost = monthlyTax + 100; // Include other holding costs as needed
-  const totalHoldingCost = holdingCost * propertyOfInterest.property[0].holding_period;
 
   const formattedCurrency = (value) => {
     const number = parseFloat(value);
@@ -53,8 +51,8 @@ const deleteHoldingItem = (itemId) => {
             name='holdingCostInput'
             type='text'
             placeholder='holding Cost'
-            value={holdingCost}
-            onChange={e => setHoldingCost(e.target.value)}
+            value={holdingItemCost}
+            onChange={e => setHoldingItemCost(e.target.value)}
           />
           <button onClick={addHoldingItem}>Add</button>
           <ul>
@@ -68,9 +66,10 @@ const deleteHoldingItem = (itemId) => {
               )
             })}
           </ul>
+          <p>Monthly Total: {formattedCurrency(monthlyHoldingCost(propertyOfInterest.property[0].taxes_yearly/12, propertyOfInterest.holdingItems))}</p>
           <p>Holding Period: {propertyOfInterest.property[0].holding_period} Months</p>
         <p>
-          <span className="bold-text">Total Holding Cost: {formattedCurrency(totalHoldingCost)}</span>
+          <span className="bold-text">Total Holding Cost: {formattedCurrency(totalHoldingCost(propertyOfInterest.property[0].holding_period, propertyOfInterest.property[0].taxes_yearly/12, propertyOfInterest.holdingItems))}</span>
           </p>
         </>
       }

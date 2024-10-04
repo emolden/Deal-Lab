@@ -1,11 +1,12 @@
+import repairCost from "./repairCost";
 
 //upfrontCost takes in two parameters
     //repairCost is a number of the form 23457
     //purchasePrice is a number of the form 325529
 //and returns one number of the form 348986
 
-function upfrontCost (repairCost, purchasePrice) {
-    let totalUpfrontCost = repairCost + purchasePrice;
+function upfrontCost (repairItems, purchasePrice) {
+    let totalUpfrontCost = Number(repairCost(repairItems)) + Number(purchasePrice);
     
     return totalUpfrontCost;
 }
