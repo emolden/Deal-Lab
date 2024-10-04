@@ -29,10 +29,6 @@ const deleteHoldingItem = (itemId) => {
   })
 }
 
-  // const monthlyTax = propertyOfInterest.property[0].taxes_yearly / 12;
-  // const holdingCost = monthlyTax + 100; // Include other holding costs as needed
-  // const totalHoldingCost = holdingCost * propertyOfInterest.property[0].holding_period;
-
   const formattedCurrency = (value) => {
     const number = parseFloat(value);
     return `$${number.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -73,7 +69,7 @@ const deleteHoldingItem = (itemId) => {
           <p>Monthly Total: {formattedCurrency(monthlyHoldingCost(propertyOfInterest.property[0].taxes_yearly/12, propertyOfInterest.holdingItems))}</p>
           <p>Holding Period: {propertyOfInterest.property[0].holding_period} Months</p>
         <p>
-          <span className="bold-text">Total Holding Cost: {formattedCurrency(totalHoldingCost(propertyOfInterest.property[0].holding_period, monthlyHoldingCost(propertyOfInterest.property[0].taxes_yearly/12, propertyOfInterest.holdingItems)))}</span>
+          <span className="bold-text">Total Holding Cost: {formattedCurrency(totalHoldingCost(propertyOfInterest.property[0].holding_period, propertyOfInterest.property[0].taxes_yearly/12, propertyOfInterest.holdingItems))}</span>
           </p>
         </>
       }

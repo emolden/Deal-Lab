@@ -69,7 +69,7 @@ function ModalUpfrontCosts() {
       <p>Total Repair Cost: {formattedCurrency(repairCost(propertyOfInterest.repairItems))}</p>
       
         <p>
-          <span className="bold-text">Total Upfront Cost: {formattedCurrency(upfrontCost(repairCost(propertyOfInterest.repairItems), propertyOfInterest.property[0].purchase_price))}</span>
+          <span className="bold-text">Total Upfront Cost: {formattedCurrency(upfrontCost(propertyOfInterest.repairItems, propertyOfInterest.property[0].purchase_price))}</span>
         </p>
       </>
       }
