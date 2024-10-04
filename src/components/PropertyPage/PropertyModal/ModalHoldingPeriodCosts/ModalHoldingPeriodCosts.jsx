@@ -60,8 +60,8 @@ const deleteHoldingItem = (itemId) => {
             {propertyOfInterest.holdingItems.map((item) => {
               return (
                 <>
-                <li key = {item.holding_items_id}>{item.holding_name}: ${item.holding_cost} </li>
-                <button onClick={() => {deleteHoldingItem(item.holding_items_id)}}>❌</button>
+                <li key = {item.holding_items_id}>{item.holding_name}: {formattedCurrency(item.holding_cost)} </li>
+                <button onClick={() => {deleteHoldingItem(item.holding_items_id)}}>X</button>
                 </>
               )
             })}

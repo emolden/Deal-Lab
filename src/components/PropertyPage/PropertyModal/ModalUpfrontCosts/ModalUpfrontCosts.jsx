@@ -60,8 +60,8 @@ function ModalUpfrontCosts() {
         {propertyOfInterest.repairItems.map((item) => {
           return (
             <>
-            <li key = {item.repair_items_id}>{item.repair_name}: ${item.repair_cost} </li>
-            <button onClick={() => {deleteRepairItem(item.repair_items_id)}}>❌</button>
+            <li key = {item.repair_items_id}>{item.repair_name}: {formattedCurrency(item.repair_cost)} </li>
+            <button onClick={() => {deleteRepairItem(item.repair_items_id)}}>X</button>
             </>
           )
         })}

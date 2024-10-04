@@ -59,11 +59,11 @@ const PropertyModal = ({ isOpen, onClose, propertyCard }) => {
               <ModalHoldingPeriodCosts />
             </div>
             <div className='section profit-estimation'>
-            <h3 className='section-header'>Profit Estimation</h3>
+            <h3 className='section-header'>Profit Estimation:</h3>
               <ModalProfitEstimation />
             </div>
           </div>
-          <button className='modal-btn'>Edit</button>
+          {/* <button className='modal-btn'>Edit</button> */}
       </div>
     </div>
   );
