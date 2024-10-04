@@ -2,6 +2,13 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import Swal from 'sweetalert2'
 import './PropertyCard.css';
+// import annualizedProfit from '../../../../helpers/annualizedProfit';
+// import monthlyHoldingCost from '../../../../helpers/monthlyHoldingCost';
+// import profit from '../../../../helpers/profit';
+// import repairCost from '../../../../helpers/repairCost';
+// import totalCost from '../../../../helpers/totalCost';
+// import totalHoldingCost from '../../../../helpers/totalHoldingCost';
+// import upfrontCost from '../../../../helpers/upfrontCost';
 
 function PropertyCard({ property, userId, onOpenModal }) {
   const dispatch = useDispatch();
