@@ -29,8 +29,6 @@ function ModalUpfrontCosts() {
     })
 }
 
-  // const totalUpfrontCost = propertyOfInterest.property[0].purchase_price + 20000;
-
   const formattedCurrency = (value) => {
     const number = parseFloat(value);
     return `$${number.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;

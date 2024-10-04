@@ -1,6 +1,8 @@
 import React from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import { useState } from 'react';
+import totalHoldingCost from '../../../../helpers/totalHoldingCost';
+import monthlyHoldingCost from '../../../../helpers/monthlyHoldingCost'
 
 
 function ModalHoldingPeriodCosts() {
@@ -27,9 +29,9 @@ const deleteHoldingItem = (itemId) => {
   })
 }
 
-  const monthlyTax = propertyOfInterest.property[0].taxes_yearly / 12;
-  const holdingCost = monthlyTax + 100; // Include other holding costs as needed
-  const totalHoldingCost = holdingCost * propertyOfInterest.property[0].holding_period;
+  // const monthlyTax = propertyOfInterest.property[0].taxes_yearly / 12;
+  // const holdingCost = monthlyTax + 100; // Include other holding costs as needed
+  // const totalHoldingCost = holdingCost * propertyOfInterest.property[0].holding_period;
 
   const formattedCurrency = (value) => {
     const number = parseFloat(value);
@@ -68,9 +70,10 @@ const deleteHoldingItem = (itemId) => {
               )
             })}
           </ul>
+          <p>Monthly Total: {formattedCurrency(monthlyHoldingCost(propertyOfInterest.property[0].taxes_yearly/12, propertyOfInterest.holdingItems))}</p>
           <p>Holding Period: {propertyOfInterest.property[0].holding_period} Months</p>
         <p>
-          {/* <span className="bold-text">Total Holding Cost: {formattedCurrency(totalHoldingCost)}</span> */}
+          <span className="bold-text">Total Holding Cost: {formattedCurrency(totalHoldingCost(propertyOfInterest.property[0].holding_period, monthlyHoldingCost(propertyOfInterest.property[0].taxes_yearly/12, propertyOfInterest.holdingItems)))}</span>
           </p>
         </>
       }

@@ -9,7 +9,7 @@
 function monthlyHoldingCost (monthlyTaxes, holdingItems) {
     let totalMonthlyHoldingCost = monthlyTaxes;
     for(let item of holdingItems) {
-        totalMonthlyHoldingCost + item.cost;
+        totalMonthlyHoldingCost = totalMonthlyHoldingCost + Number(item.holding_cost);
     }
     return totalMonthlyHoldingCost;
 }
