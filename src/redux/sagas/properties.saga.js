@@ -51,14 +51,24 @@ function* deleteProperty(action) {
 function* updateProperty(action) {
 }
 
-function* backToDefault(action) {
+function* updateBackToDefault(action) {
+  // console.log('Payload for back to default:', action.payload);
+  const propertyId = action.payload;
+  try {
+      yield axios.put(`/api/properties/backToDefault/${propertyId}`)
+      yield put({
+        type: 'GET_PROPERTY_OF_INTEREST',
+        payload: propertyId
+      })
+  } catch (error) {
+    console.log('Error in updating back to default:', error);
+  }
 }
 
 //getPropertyOfInterest sends an axios request to the properties.router.js and
 //sends the response data to the PropertyOfInterest reducer.
 function* getPropertyOfInterest(action) {
   // console.log('in getPropertyOfInterest saga and the playload is: ', action.payload);
-
   try {
     //to properties.router.js with the property id as a paramater
     const response = yield axios.get(`/api/properties/propertyOfInterest/${action.payload}`);
@@ -74,7 +84,7 @@ function* propertiesSaga() {
     yield takeLatest('ADD_PROPERTY', addProperty);
     yield takeLatest('DELETE_PROPERTY', deleteProperty);
     yield takeLatest('UPDATE_PROPERTY', updateProperty);
-    yield takeLatest('BACK_TO_DEFAULT', backToDefault);
+    yield takeLatest('UPDATE_BACK_TO_DEFAULT', updateBackToDefault);
     yield takeLatest('GET_PROPERTY_OF_INTEREST', getPropertyOfInterest);
   }
   

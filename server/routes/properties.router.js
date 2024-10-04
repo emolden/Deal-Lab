@@ -343,6 +343,73 @@ router.get('/propertyOfInterest/:id', rejectUnauthenticated, async (req, res) =>
 });
 
 
+  /**
+ * ----- PUT back to default: updateBackToDefault
+ */
+router.put('/backToDefault/:id', async (req, res) => {
+  console.log('params.id:', req.params.id);
+  const propertyId = req.params.id;
+  const userId = req.user.id;
+  const connection = await pool.connect()
+
+  try {
+    await connection.query('BEGIN;')
+
+    // check 24 hours thing
+
+    const deleteHoldingItems = `
+    
+    `
+    const deleteRepairItems = `
+    
+    `
+
+    const getDefaultHoldingsText = `
+      SELECT * FROM "default_holdings"
+        WHERE "user_id" = $1;
+    `;
+    const getDefaultHoldingsResults = await pool.query(getDefaultHoldingsText, [userId]);
+    console.log('getDefaultHoldingsResult: ', getDefaultHoldingsResults.rows)
+
+    for(let holdingItem of getDefaultHoldingsResults.rows) {
+      const addHoldingItemText = `
+        INSERT INTO "holding_items"
+          ("property_id", "name", "cost")
+          VALUES
+          ($1, $2, $3);
+      `;
+      const addHoldingItemValues = [propertyId, holdingItem.holding_name, holdingItem.holding_cost];
+      const addHoldingItemResults = await pool.query(addHoldingItemText, addHoldingItemValues);
+    }
+
+    const getDefaultRepairsText = `
+    SELECT * FROM "default_repairs"
+      WHERE "user_id" = $1;
+  `;
+  const getDefaultRepairsResults = await pool.query(getDefaultRepairsText, [userId]);
+  console.log('getDefaultRepairsResult: ', getDefaultRepairsResults.rows)
+
+  for(let repairItem of getDefaultRepairsResults.rows) {
+    const addRepairItemText = `
+      INSERT INTO "repair_items"
+        ("property_id", "name", "cost")
+        VALUES
+        ($1, $2, $3);
+    `;
+    const addRepairItemValues = [propertyId, repairItem.repair_name, repairItem.repair_cost];
+    const addRepairItemResults = await pool.query(addRepairItemText, addRepairItemValues);
+
+    await connection.query('Commit;');
+    res.sendStatus(200);
+  }
+  } catch (error) {
+    console.log('Update back to default failed:', error);
+    await connection.query('Rollback;')
+    res.sendStatus(500);
+  } finally {
+    await connection.release()
+  }
+})
 
 // ===================== Repair Item =====================
 /**
