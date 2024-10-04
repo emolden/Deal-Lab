@@ -64,14 +64,14 @@ CREATE TABLE "default_repairs" (
 
 CREATE TABLE "holding_items" (
 	"id" SERIAL PRIMARY KEY,
-	"property_id" INT REFERENCES "properties" NOT NULL,
+	"property_id" INT REFERENCES "properties" ON DELETE CASCADE,
 	"name" VARCHAR (1000),
 	"cost" DECIMAL
 );
 
 CREATE TABLE "repair_items" (
 	"id" SERIAL PRIMARY KEY,
-	"property_id" INT REFERENCES "properties" NOT NULL,
+	"property_id" INT REFERENCES "properties" ON DELETE CASCADE,
 	"name" VARCHAR (1000),
 	"cost" DECIMAL
 );
