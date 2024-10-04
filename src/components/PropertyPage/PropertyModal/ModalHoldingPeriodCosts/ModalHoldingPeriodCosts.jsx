@@ -70,7 +70,7 @@ const deleteHoldingItem = (itemId) => {
           </ul>
           <p>Holding Period: {propertyOfInterest.property[0].holding_period} Months</p>
         <p>
-          <span className="bold-text">Total Holding Cost: {formattedCurrency(totalHoldingCost)}</span>
+          {/* <span className="bold-text">Total Holding Cost: {formattedCurrency(totalHoldingCost)}</span> */}
           </p>
         </>
       }

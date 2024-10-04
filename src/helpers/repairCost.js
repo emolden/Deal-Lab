@@ -7,7 +7,7 @@
 function repairCost (repairItems) {
     let totalRepairCost = 0;
     for(let item of repairItems) {
-        totalRepairCost + item.cost;
+        totalRepairCost =totalRepairCost + Number(item.repair_cost);
     }
     return totalRepairCost;
 }

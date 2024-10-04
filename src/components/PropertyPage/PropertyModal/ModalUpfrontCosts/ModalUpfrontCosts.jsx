@@ -1,6 +1,9 @@
 import React from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import { useState } from 'react';
+import upfrontCost from '../../../../helpers/upfrontCost';
+import repairCost from '../../../../helpers/repairCost';
+
 
 function ModalUpfrontCosts() {
 
@@ -8,15 +11,15 @@ function ModalUpfrontCosts() {
 
   const propertyOfInterest = useSelector((store) => store.propertyOfInterest);
   const [repairName, setRepairName] = useState("");
-  const [repairCost, setRepairCost] = useState("");
+  const [repairItemCost, setRepairItemCost] = useState("");
 
   const addRepairItem = () => {
       dispatch ({
           type: 'ADD_PROPERTY_REPAIR_ITEM',
-          payload: {propertyId: propertyOfInterest.property[0].id, repairName: repairName, repairCost: repairCost }
+          payload: {propertyId: propertyOfInterest.property[0].id, repairName: repairName, repairCost: repairItemCost }
       })
       setRepairName("");
-      setRepairCost("");
+      setRepairItemCost("");
   }
 
   const deleteRepairItem = (itemId) => {
@@ -26,7 +29,7 @@ function ModalUpfrontCosts() {
     })
 }
 
-  const totalUpfrontCost = propertyOfInterest.property[0].purchase_price + 20000;
+  // const totalUpfrontCost = propertyOfInterest.property[0].purchase_price + 20000;
 
   const formattedCurrency = (value) => {
     const number = parseFloat(value);
@@ -51,8 +54,8 @@ function ModalUpfrontCosts() {
         name='repairCostInput'
         type='text'
         placeholder='Repair Cost'
-        value={repairCost}
-        onChange={e => setRepairCost(e.target.value)}
+        value={repairItemCost}
+        onChange={e => setRepairItemCost(e.target.value)}
       />
       <button onClick={addRepairItem}>Add</button>
       <ul>
@@ -65,9 +68,10 @@ function ModalUpfrontCosts() {
           )
         })}
       </ul>
+      <p>Total Repair Cost: {formattedCurrency(repairCost(propertyOfInterest.repairItems))}</p>
       
         <p>
-          <span className="bold-text">Total Upfront Cost: {formattedCurrency(totalUpfrontCost)}</span>
+          <span className="bold-text">Total Upfront Cost: {formattedCurrency(upfrontCost(repairCost(propertyOfInterest.repairItems), propertyOfInterest.property[0].purchase_price))}</span>
         </p>
       </>
       }
