@@ -16,7 +16,7 @@ function ModalProfitEstimation() {
       {Object.keys(propertyOfInterest).length && 
         <>
           <p>
-            <span className='bold-text'>After Repair Value: ${formattedCurrency(propertyOfInterest.property[0].after_repair_value)}</span>
+            <span className='bold-text'>After Repair Value: {formattedCurrency(propertyOfInterest.property[0].after_repair_value)}</span>
           </p>
         </>
       }

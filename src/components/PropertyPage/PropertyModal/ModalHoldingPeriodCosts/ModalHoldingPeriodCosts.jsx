@@ -9,7 +9,7 @@ function ModalHoldingPeriodCosts() {
 
   const propertyOfInterest = useSelector((store) => store.propertyOfInterest);
   const [holdingName, setHoldingName] = useState("");
-  const [holdingCost, setHoldingCost] = useState("");
+  const [holdingItemCost, setHoldingItemCost] = useState("");
 
   const addHoldingItem = () => {
     dispatch ({
@@ -17,7 +17,7 @@ function ModalHoldingPeriodCosts() {
         payload: {propertyId: propertyOfInterest.property[0].id, holdingName: holdingName, holdingCost: holdingCost }
     })
     setHoldingName("");
-    setHoldingCost("");
+    setHoldingItemCost("");
 }
 
 const deleteHoldingItem = (itemId) => {
@@ -53,8 +53,8 @@ const deleteHoldingItem = (itemId) => {
             name='holdingCostInput'
             type='text'
             placeholder='holding Cost'
-            value={holdingCost}
-            onChange={e => setHoldingCost(e.target.value)}
+            value={holdingItemCost}
+            onChange={e => setHoldingItemCost(e.target.value)}
           />
           <button onClick={addHoldingItem}>Add</button>
           <ul>
@@ -62,8 +62,8 @@ const deleteHoldingItem = (itemId) => {
             {propertyOfInterest.holdingItems.map((item) => {
               return (
                 <>
-                <li key = {item.holding_items_id}>{item.holding_name}: ${item.holding_cost} </li>
-                <button onClick={() => {deleteHoldingItem(item.holding_items_id)}}>❌</button>
+                <li key = {item.holding_items_id}>{item.holding_name}: {formattedCurrency(item.holding_cost)} </li>
+                <button onClick={() => {deleteHoldingItem(item.holding_items_id)}}>X</button>
                 </>
               )
             })}
