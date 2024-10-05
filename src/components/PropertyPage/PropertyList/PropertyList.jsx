@@ -16,6 +16,8 @@ function PropertyList({ userId, onOpenModal }) {
     })
   }, [])
 
+
+
   console.log('allProperties data:', allProperties);
   
   return (
@@ -30,7 +32,10 @@ function PropertyList({ userId, onOpenModal }) {
               key={property.id}
               property={property} 
               userId={userId} 
-              onOpenModal={onOpenModal} />
+              onOpenModal={onOpenModal}
+              allRepairItems={allProperties.repairItems}
+              allHoldingItems = {allProperties.holdingItems} 
+            />
           // </div>
         ))
       ) : (

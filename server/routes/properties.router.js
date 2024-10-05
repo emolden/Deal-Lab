@@ -37,7 +37,7 @@ router.get('/:id', async (req, res) => {
         FROM "properties"
         JOIN "repair_items"
           ON "properties"."id" = "repair_items"."property_id"
-        WHERE "user_id" = 1
+        WHERE "user_id" = $1
         ORDER BY "inserted_at" DESC;
     `;
     const repairResult = await connection.query(repairText, [userId])
@@ -52,7 +52,7 @@ router.get('/:id', async (req, res) => {
         FROM "properties"
         JOIN "holding_items"
           ON "properties"."id" = "holding_items"."property_id"
-        WHERE "user_id" = 1
+        WHERE "user_id" = $1
         ORDER BY "inserted_at" DESC;
     `;
     const holdingResult = await connection.query(holdingText, [userId])
@@ -61,7 +61,7 @@ router.get('/:id', async (req, res) => {
     const propertyInfo = {
       properties: properties,
       repairItems: repairItems,
-      holdignItems: holdingItems
+      holdingItems: holdingItems
     }
 
     await connection.query('Commit;')
