@@ -23,32 +23,13 @@ const PropertyModal = ({ isOpen, onClose, propertyCard }) => {
 
   if (!isOpen) return null;
 
-  const upfrontCost = Number(propertyCard.purchase_price) + 20000; 
-  const holdingCost = ((Number(propertyCard.taxes_yearly) / 12) + 100) * Number(propertyCard.holding_period);
-  const totalCost = upfrontCost + holdingCost;
-  const profit = Number(propertyCard.after_repair_value) - totalCost;
-  const annualProfit = (profit / Number(propertyCard.holding_period)) * 12;
-
-
-  const formattedCurrency = (value) => {
-    const number = parseFloat(value);
-    const truncated = Math.floor(number * 100) / 100;
-    return `$${truncated.toFixed(2)}`;
-  };
-
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div>
         <button onClick={onClose} className="modal-close">X</button>
-          <h2 className="modal-header">{propertyCard.address}</h2>
+          <h2 className="modal-header">{propertyOfInterest.property.address}</h2>
         </div>
-          {/* <p>Purchase Price: {formattedCurrency(propertyCard.purchase_price)}</p>
-          <p>Upfront Cost: {formattedCurrency(upfrontCost)}</p>
-          <p>Holding Period Cost: {formattedCurrency(holdingCost)}</p>
-          <p>Total Cost: {formattedCurrency(totalCost)}</p>
-          <p>Profit: {formattedCurrency(profit)}</p>
-          <p>Annualized Profit: {formattedCurrency(annualProfit)}</p> */}
           <div className="modalRight grid-container">
             <div className='section upfront-costs'>
               <h3 className='section-header'>Upfront Costs:</h3>

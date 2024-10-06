@@ -38,7 +38,7 @@ const updateTaxes = (propertyId) => {
 
   const formattedCurrency = (value) => {
     const number = parseFloat(value);
-    return `$${number.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    return `$${number.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
   };
 
   return (
