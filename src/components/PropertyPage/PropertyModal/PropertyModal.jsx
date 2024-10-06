@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import ModalUpfrontCosts from './ModalUpfrontCosts/ModalUpfrontCosts'; // Import your specific components
 import ModalHoldingPeriodCosts from './ModalHoldingPeriodCosts/ModalHoldingPeriodCosts';
 import ModalProfitEstimation from './ModalProfitEstimation/ModalProfitEstimation';
@@ -64,6 +64,7 @@ const PropertyModal = ({ isOpen, onClose, propertyCard }) => {
             </div>
           </div>
           {/* <button className='modal-btn'>Edit</button> */}
+          {/* <button onClick={saveUpdatedPropertyInfo}>Save</button> */}
       </div>
     </div>
   );

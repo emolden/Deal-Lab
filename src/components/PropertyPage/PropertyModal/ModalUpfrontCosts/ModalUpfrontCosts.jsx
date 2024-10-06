@@ -31,7 +31,7 @@ function ModalUpfrontCosts() {
 
   const formattedCurrency = (value) => {
     const number = parseFloat(value);
-    return `$${number.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    return `$${number.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
   };
 
   return (
@@ -39,7 +39,11 @@ function ModalUpfrontCosts() {
       {Object.keys(propertyOfInterest).length && 
       <>
       {/* <p>Upfront Costs:</p> */}
-      <p> Purchase Price: {formattedCurrency(propertyOfInterest.property[0].purchase_price)}</p>
+      <p> Purchase Price:</p> 
+      <input
+        value= {formattedCurrency(Number(propertyOfInterest.property[0].purchase_price))}
+        onChange={e => {e.preventDefault; dispatch({type: 'UPDATE_PROPERTY_PURCHASE_PRICE', payload: e.target.value})}}
+      />
       <p>Repair Items:</p>
       <input className='repiarItemInput'
         name='repairItemInput'
