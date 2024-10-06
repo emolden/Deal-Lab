@@ -63,8 +63,11 @@ const updateTaxes = (propertyId) => {
           />
           <button onClick={addHoldingItem}>Add</button>
           <ul>
-            <li> Taxes: {formattedCurrency(propertyOfInterest.property[0].taxes_yearly/12)}</li>
-            <button onClick={() => {updateTaxes(propertyOfInterest.property[0].id)}}>X</button>
+            {propertyOfInterest.property[0].taxes_yearly && propertyOfInterest.property[0].taxes_yearly > 0 ? 
+            <>
+              <li> Taxes: {formattedCurrency(propertyOfInterest.property[0].taxes_yearly/12)}</li>
+              <button onClick={() => {updateTaxes(propertyOfInterest.property[0].id)}}>X</button>
+            </> : ''}
             {propertyOfInterest.holdingItems.map((item) => {
               return (
                 <>
