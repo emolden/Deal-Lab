@@ -51,6 +51,37 @@ const propertyOfInterestReducer = (state = {}, action) => {
             repairItems: state.repairItems,
             property: prop
           };
+          
+          case 'UPDATE_PROPERTY_AFTER_REPAIR_VALUE':
+            let newValue = '';  
+            for(let char of action.payload) {
+              if(char === "$") {
+              }
+              else if (char === ','){
+              }
+              else{
+                console.log('char should be a number: ', char, newPrice)
+                newPrice += char;
+              }
+            }
+            let newProperty = [{
+              address: state.property[0].address,
+              after_repair_value: newValue,
+              holding_period: state.property[0].holding_period,
+              id: state.property[0].id,
+              inserted_at: state.property[0].inserted_at,
+              is_selected: state.property[0].is_selected,
+              property_api_id: state.property[0].property_api_id,
+              purchase_price: state.property[0].purchase_price,
+              taxes_yearly: state.property[0].taxes_yearly,
+              updated_at: state.property[0].updated_at,
+              user_id: state.property[0].user_id,
+            }];
+            return {
+              holdingItems: state.holdingItems,
+              repairItems: state.repairItems,
+              property: newProperty
+            };
         default:
           return state;
       }
