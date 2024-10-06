@@ -498,7 +498,7 @@ router.post('/holdingItem', (req, res) => {
 });
 
 router.put('/taxes', (req, res) => {
-  const propertyId = req.body;
+  const propertyId = req.body.propertyId;
 
   const sqlText = `
     UPDATE "properties"
