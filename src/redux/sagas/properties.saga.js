@@ -69,6 +69,19 @@ function* getPropertyOfInterest(action) {
   }
 }
 
+function* updatePropertyTaxes(action) {
+  console.log('in update property taxes: ', action.payload)
+  try {
+    yield axios.put(`api/properties/taxes/`, {propertyId: action.payload})
+    yield put({
+        type: 'GET_PROPERTY_OF_INTEREST',
+        payload: action.payload
+    })
+  } catch (error) {
+    console.log('Error updating property taxes:', error);
+  }
+}
+
 function* propertiesSaga() {
     yield takeLatest('GET_PROPERTIES', getProperties);
     yield takeLatest('ADD_PROPERTY', addProperty);
@@ -76,6 +89,7 @@ function* propertiesSaga() {
     yield takeLatest('UPDATE_PROPERTY', updateProperty);
     yield takeLatest('BACK_TO_DEFAULT', backToDefault);
     yield takeLatest('GET_PROPERTY_OF_INTEREST', getPropertyOfInterest);
+    yield takeLatest('UPDATE_PROPERTY_TAXES', updatePropertyTaxes);
   }
   
   export default propertiesSaga;

@@ -497,6 +497,27 @@ router.post('/holdingItem', (req, res) => {
       })
 });
 
+router.put('/taxes', (req, res) => {
+  const propertyId = req.body.propertyId;
+
+  const sqlText = `
+    UPDATE "properties"
+      SET "taxes_yearly" = 0
+      WHERE "id" = $1;
+  `; 
+  pool.query(sqlText, [propertyId])
+
+      .then((results) => {
+        res.sendStatus(201)
+      }) 
+      .catch((error) => {
+        console.log('Error in updating property taxes:', error);
+        res.sendStatus(500);
+      })
+});
+
+
+
 
 
 module.exports = router;
