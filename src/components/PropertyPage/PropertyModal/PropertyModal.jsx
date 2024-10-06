@@ -28,7 +28,7 @@ const PropertyModal = ({ isOpen, onClose, propertyCard }) => {
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div>
         <button onClick={onClose} className="modal-close">X</button>
-          <h2 className="modal-header">{propertyOfInterest.property.address}</h2>
+          <h2 className="modal-header">{propertyCard.address}</h2>
         </div>
           <div className="modalRight grid-container">
             <div className='section upfront-costs'>

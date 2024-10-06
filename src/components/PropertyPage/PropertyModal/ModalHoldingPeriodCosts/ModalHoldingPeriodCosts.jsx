@@ -78,7 +78,12 @@ const updateTaxes = (propertyId) => {
             })}
           </ul>
           <p>Monthly Total: {formattedCurrency(monthlyHoldingCost(propertyOfInterest.property[0].taxes_yearly/12, propertyOfInterest.holdingItems))}</p>
-          <p>Holding Period: {propertyOfInterest.property[0].holding_period} Months</p>
+          <p>Holding Period:
+            <input
+              value= {Number(propertyOfInterest.property[0].holding_period)}
+              onChange={e => {e.preventDefault; dispatch({type: 'UPDATE_PROPERTY_HOLDING_PERIOD', payload: e.target.value})}}
+            />
+            Months</p>
         <p>
           <span className="bold-text">Total Holding Cost: {formattedCurrency(totalHoldingCost(propertyOfInterest.property[0].holding_period, propertyOfInterest.property[0].taxes_yearly/12, propertyOfInterest.holdingItems))}</span>
           </p>
