@@ -72,10 +72,10 @@ function* getPropertyOfInterest(action) {
 function* updatePropertyTaxes(action) {
   try {
     yield axios.put(`api/properties/taxes/`, action.payload)
-    // yield put({
-    //     type: 'GET_PROPERTY_OF_INTEREST',
-    //     payload: action.payload.propertyId
-    // })
+    yield put({
+        type: 'GET_PROPERTY_OF_INTEREST',
+        payload: action.payload
+    })
   } catch (error) {
     console.log('Error updating property taxes:', error);
   }
