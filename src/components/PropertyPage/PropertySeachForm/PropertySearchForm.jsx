@@ -31,6 +31,10 @@ function PropertySearchForm({userId}) {
   const addAddress = (e) => {
     e.preventDefault();
     // ************* THIS GOES IN PAYLOAD.ADDRESS: formattedAddress
+    console.log('searchBar address:', searchBarAddress);
+    console.log('formattedAddress:', formattedAddress);
+    
+    
     dispatch ({
         type: 'ADD_PROPERTY',
         payload: {address: formattedAddress , userId: userId}

@@ -1,7 +1,12 @@
 
 import React from 'react';
+<<<<<<< HEAD
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
+=======
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+>>>>>>> main
 import ModalUpfrontCosts from './ModalUpfrontCosts/ModalUpfrontCosts'; // Import your specific components
 import ModalHoldingPeriodCosts from './ModalHoldingPeriodCosts/ModalHoldingPeriodCosts';
 import ModalProfitEstimation from './ModalProfitEstimation/ModalProfitEstimation';
@@ -9,6 +14,7 @@ import ModalProfitEstimation from './ModalProfitEstimation/ModalProfitEstimation
 
 const PropertyModal = ({ isOpen, onClose, propertyCard }) => {
   const propertyOfInterest = useSelector((store) => store.propertyOfInterest);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (isOpen) {
@@ -21,8 +27,19 @@ const PropertyModal = ({ isOpen, onClose, propertyCard }) => {
     }
   }, [isOpen]);
 
-  if (!isOpen) return null;
+  
 
+
+
+  const handleBackToDefault = () => {
+    dispatch({
+      type: 'UPDATE_BACK_TO_DEFAULT',
+      payload: propertyOfInterest.property[0].id
+    })
+  }
+
+  console.log('propertyOfInterest data is:', propertyOfInterest);
+  
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -44,8 +61,9 @@ const PropertyModal = ({ isOpen, onClose, propertyCard }) => {
               <ModalProfitEstimation />
             </div>
           </div>
-          {/* <button className='modal-btn'>Edit</button> */}
           {/* <button onClick={saveUpdatedPropertyInfo}>Save</button> */}
+          <button onClick={handleBackToDefault}>Back To Default</button>
+
       </div>
     </div>
   );
