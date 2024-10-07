@@ -31,7 +31,9 @@ function PropertyPage({ userId }) {
       <PropertyModal 
         isOpen={isModalOpen}
         onClose={handleCloseModal}
-        propertyCard={selectedProperty}/>
+        propertyCard={selectedProperty}
+        userId={userId}
+      />
     </div>
   );
 }

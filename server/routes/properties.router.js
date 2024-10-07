@@ -307,22 +307,32 @@ router.delete('/:id', (req, res) => {
 /**
  * ----- PUT property: updateProperty
  */
+//put route updates the holding period, purchase price, and after repair 
+//value for a specific property in the database
 router.put('/', (req, res) => {
        console.log('/api/properties put route received a request! ', req.body)
-      //  const propertyId = req.params.id;
+       const propertyId = req.body.id;
+       const holdingPeriod = req.body.holdingPeriod;
+       const purchasePrice = req.body.purchasePrice;
+       const afterRepairValue = req.body.afterRepairValue;
 
-      //  const sqlText = `
-      //    DELETE FROM "properties"
-      //      WHERE "id" = $1;
-      //  `
+       const sqlText = `
+         UPDATE "properties"
+          SET holding_period = $1,
+              purchase_price = $2,
+              after_repair_value = $3
+          WHERE "id" = $1;
+       `;
+
+       const sqlValues = [holdingPeriod, purchasePrice, afterRepairValue, propertyId]
      
-      //    pool.query(sqlText, [propertyId])
-      //    .then((results) => {
-      //        res.send(results.rows);
-      //    }) .catch((error) => {
-      //        console.log('Error in deleting property:', error);
-      //        res.sendStatus(500);
-      //    })
+         pool.query(sqlText, sqlValues)
+         .then((results) => {
+             res.sendStatus(201);
+         }) .catch((error) => {
+             console.log('Error in updating property:', error);
+             res.sendStatus(500);
+         })
   });
 
 

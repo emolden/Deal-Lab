@@ -50,14 +50,21 @@ function* deleteProperty(action) {
   }
 }
 
+//receives updated property information, sends the infomaiton to the server,
+//and gets new property and properties 
 function* updateProperty(action) {
   console.log('in update property: ', action.payload)
   try {
+    //sends a put request to to the properties router
     yield axios.put(`api/properties`, action.payload)
-    // yield put({
-    //     type: 'GET_PROPERTY_OF_INTEREST',
-    //     payload: action.payload
-    // })
+    yield put({
+        type: 'GET_PROPERTY_OF_INTEREST',
+        payload: action.payload.id
+    })
+    yield put({
+      type: 'GET_PROPERTIES',
+      payload: action.payload.id
+  })
   } catch (error) {
     console.log('Error updating property taxes:', error);
   }
