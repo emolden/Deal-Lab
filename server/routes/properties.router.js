@@ -311,7 +311,7 @@ router.delete('/:id', (req, res) => {
 //value for a specific property in the database
 router.put('/', (req, res) => {
        console.log('/api/properties put route received a request! ', req.body)
-       const propertyId = req.body.id;
+       const propertyId = req.body.propertyId;
        const holdingPeriod = req.body.holdingPeriod;
        const purchasePrice = req.body.purchasePrice;
        const afterRepairValue = req.body.afterRepairValue;
@@ -321,7 +321,7 @@ router.put('/', (req, res) => {
           SET holding_period = $1,
               purchase_price = $2,
               after_repair_value = $3
-          WHERE "id" = $1;
+          WHERE "id" = $4;
        `;
 
        const sqlValues = [holdingPeriod, purchasePrice, afterRepairValue, propertyId]

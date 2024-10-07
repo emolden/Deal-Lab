@@ -7,7 +7,7 @@ import ModalHoldingPeriodCosts from './ModalHoldingPeriodCosts/ModalHoldingPerio
 import ModalProfitEstimation from './ModalProfitEstimation/ModalProfitEstimation';
 
 
-const PropertyModal = ({ isOpen, onClose, propertyCard }) => {
+const PropertyModal = ({ isOpen, onClose, propertyCard, userId }) => {
 
   const dispatch = useDispatch();
 
@@ -42,7 +42,8 @@ const PropertyModal = ({ isOpen, onClose, propertyCard }) => {
         propertyId: propertyOfInterest.property[0].id,
         holdingPeriod: propertyOfInterest.property[0].holding_period,
         purchasePrice: propertyOfInterest.property[0].purchase_price,
-        afterRepairValue: propertyOfInterest.property[0].after_repair_value
+        afterRepairValue: propertyOfInterest.property[0].after_repair_value,
+        userId: userId
     }
   })
 }
