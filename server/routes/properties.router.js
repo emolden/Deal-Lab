@@ -49,195 +49,189 @@ router.post('/', async (req, res) => {
     connection = await pool.connect()
     await connection.query('BEGIN;')
 
-      const checkTimeStampSqlText = `
-          SELECT * FROM "property_api_data"
-              WHERE "inserted_at" >= CURRENT_TIMESTAMP - INTERVAL '24 hours'
-              AND "address" = $1;
-      `
-      const checkTimeStampResults = await pool.query(checkTimeStampSqlText, [address]);
-      const checkTimeStampData = checkTimeStampResults.rows;
-
-  
-      
-      if (checkTimeStampData.length === 0) {
+    const checkTimeStampSqlText = `
+        SELECT * FROM "property_api_data"
+            WHERE "inserted_at" >= CURRENT_TIMESTAMP - INTERVAL '24 hours'
+            AND "address" = $1;
+    `
+    const checkTimeStampResults = await pool.query(checkTimeStampSqlText, [address]);
+    const checkTimeStampData = checkTimeStampResults.rows;
+    console.log('checkTimeStampData is:', checkTimeStampData);
+    
 
 
-      //---------------UNCOMMENT BELOW THIS LINE----------------------------------------------------------------------------
-
-          // ================ Axios for LISTING
-          const theListingResponse = await axios({
-              method: 'GET',
-              url: `https://api.rentcast.io/v1/listings/sale?address=${address}&limit=1`,
-              headers: {
-                  'accept': 'application/json',
-                  'X-Api-Key': `${api_key}`
-              }
-          })
-          listingResponse = theListingResponse
-          console.log("Data from listingResponse:", listingResponse.data);
-          
-
-
-          // ================ Axios for RECORDS (taxesYearly)
-          const theRecordsResponse = await axios({
-              method: 'GET',
-              url: `https://api.rentcast.io/v1/properties?address=${address}&limit=1`,
-              headers: {
-                  'accept': 'application/json',
-                  'X-Api-Key': `${api_key}`
-              }
-          })
-          recordsResponse = theRecordsResponse;
-          console.log("Data from recordsResponse:", recordsResponse.data);
-
-
-
-          // ================ Axios for VALUE ESTIMATE (afterRepairValue)
-          const theValueEstimateResponse = await axios({
-              method: 'GET',
-              url: `https://api.rentcast.io/v1/avm/value?address=${address}&limit=1&compCount=5`,
-              headers: {
-                  'accept': 'application/json',
-                  'X-Api-Key': `${api_key}`
-              }
-          })
-          valueEstimateResponse = theValueEstimateResponse;
-          console.log("Data from valueEstimateResponse:", valueEstimateResponse.data);
-
-
-
-          // ================ SQL insert into table: PROPERTY_API_DATA
-          const lastYear = new Date().getFullYear() - 1;
-          taxYear = recordsResponse.data[0].propertyTaxes;
-          
-          if (!taxYear) {
-              taxYear = null;
-          } else if (taxYear) {
-              taxYear = recordsResponse.data[0].propertyTaxes[`${lastYear}`].total;
-          }
-              
-          const propertyApiData = [
-              listingResponse.data[0].formattedAddress,
-              listingResponse.data[0].price,
-              taxYear,
-              valueEstimateResponse.data.priceRangeHigh,
-              listingResponse.data[0].propertyType,
-              listingResponse.data[0].bedrooms,
-              listingResponse.data[0].bathrooms,
-              listingResponse.data[0].squareFootage
-          ]
-
-                      //--------------------------------- API REQUEST SUCCESSFULLY WORKING----------------------------------
-        //----------------------------- HERE IS SOME FAKE API DATA TO USE WHILE BUILDING THE APP ----------------------
-        //-------------DELETE THIS WHEN APP IS FULLY BUILT AND UNCOMMENT THE API CALLS --------------------------------
-      //   const propertyApiData = [
-      //     '6817 Dutton Ave N, Brooklyn Park, MN 55428',
-      //     249000.00,
-      //     2300,
-      //     345000.00,
-      //     'single family',
-      //     3,
-      //     1,
-      //     1092.00
-      // ]
-      //-----------------------DELETE TO HERE------------------------------------------------------------------------------
-          const propertyApiDataSqlText = `
-              INSERT INTO "property_api_data"
-              ("address", "purchase_price", "taxes_yearly", "after_repair_value", 
-              "property_type", "bedrooms", "bathrooms", "square_footage")
-              VALUES
-              ($1, $2, $3, $4, $5, $6, $7, $8)
-              RETURNING "id";
-          `
-          const propertyApiDataResults = await pool.query(propertyApiDataSqlText, propertyApiData);
-          propertyApiId = propertyApiDataResults.rows[0].id;
-
-        } else if (checkTimeStampData.length > 0) {
-
-          console.log('Property already exists in database!');
-          propertyApiId = checkTimeStampData[0].id;
-
-      }
-
-                // ================ SQL insert into table: PROPERTIES
-          const propertiesData = [
-              userId,
-              propertyApiId,
-              listingResponse.data[0].formattedAddress,
-              listingResponse.data[0].price,
-              taxYear,
-              valueEstimateResponse.data.priceRangeHigh
-          ]
-
-                      //--------------------------------- API REQUEST SUCCESSFULLY WORKING----------------------------------
-        //----------------------------- HERE IS SOME FAKE API DATA TO USE WHILE BUILDING THE APP ----------------------
-        //-------------DELETE THIS WHEN APP IS FULLY BUILT AND UNCOMMENT THE API CALLS --------------------------------
-      //   const propertiesData = [
-      //     userId,
-      //     propertyApiId,
-      //     '6817 Dutton Ave N, Brooklyn Park, MN 55428',
-      //     249000.00,
-      //     2300,
-      //     345000.00,
-      // ]
-      //-----------------------DELETE TO HERE------------------------------------------------------------------------------
-          const propertiesSqlText = `
-            INSERT INTO "properties"
-              ("user_id", "property_api_id", "address", "purchase_price", "taxes_yearly", "after_repair_value")
-              VALUES
-              ($1, $2, $3, $4, $5, $6) RETURNING id;
-          `;
-          const propertiesResults = await pool.query(propertiesSqlText, propertiesData);
-          const propertyId = propertiesResults.rows[0].id
-
-          const getDefaultHoldingsText = `
-            SELECT * FROM "default_holdings"
-              WHERE "user_id" = $1;
-          `;
-          const getDefaultHoldingsResults = await pool.query(getDefaultHoldingsText, [userId]);
-          console.log('getDefaultHoldingsResult: ', getDefaultHoldingsResults.rows)
-
-          for(let holdingItem of getDefaultHoldingsResults.rows) {
-            const addHoldingItemText = `
-              INSERT INTO "holding_items"
-                ("property_id", "name", "cost")
-                VALUES
-                ($1, $2, $3);
-            `;
-            const addHoldingItemValues = [propertyId, holdingItem.holding_name, holdingItem.holding_cost];
-            const addHoldingItemResults = await pool.query(addHoldingItemText, addHoldingItemValues);
-          }
-
-          const getDefaultRepairsText = `
-          SELECT * FROM "default_repairs"
-            WHERE "user_id" = $1;
-        `;
-        const getDefaultRepairsResults = await pool.query(getDefaultRepairsText, [userId]);
-        console.log('getDefaultRepairsResult: ', getDefaultRepairsResults.rows)
-
-        for(let repairItem of getDefaultRepairsResults.rows) {
-          const addRepairItemText = `
-            INSERT INTO "repair_items"
-              ("property_id", "name", "cost")
-              VALUES
-              ($1, $2, $3);
-          `;
-          const addRepairItemValues = [propertyId, repairItem.repair_name, repairItem.repair_cost];
-          const addRepairItemResults = await pool.query(addRepairItemText, addRepairItemValues);
+    if (checkTimeStampData.length === 0) {
+      // ================ Axios for VALUE ESTIMATE (afterRepairValue)
+      const theValueEstimateResponse = await axios({
+        method: 'GET',
+        url: `https://api.rentcast.io/v1/avm/value?address=${address}&limit=1&compCount=5`,
+        headers: {
+            'accept': 'application/json',
+            'X-Api-Key': `${api_key}`
         }
+      })
+      valueEstimateResponse = theValueEstimateResponse;
+      console.log("Data from valueEstimateResponse:", valueEstimateResponse.data);
 
-          console.log('Property posted/updated in database!');
-          
-          await connection.query('Commit;')
-          res.sendStatus(201)
-      
-        } catch(err) {
-            console.log('Add property failed: ', err);
-            await connection.query('Rollback;')
-            res.sendStatus(500);
-          } finally {
-            await connection.release()
+
+
+      // ================ Axios for RECORDS (taxesYearly)
+      const theRecordsResponse = await axios({
+        method: 'GET',
+        url: `https://api.rentcast.io/v1/properties?address=${address}&limit=1`,
+        headers: {
+            'accept': 'application/json',
+            'X-Api-Key': `${api_key}`
+        }
+      })
+      recordsResponse = theRecordsResponse;
+      console.log("Data from recordsResponse:", recordsResponse.data);
+
+
+      // ================ Axios for LISTING
+      const newFormattedAddress = recordsResponse.data[0].formattedAddress;
+
+      try {
+        const theListingResponse = await axios({
+          method: 'GET',
+          url: `https://api.rentcast.io/v1/listings/sale?address=${newFormattedAddress}&limit=1`,
+          headers: {
+              'accept': 'application/json',
+              'X-Api-Key': `${api_key}`
           }
+        })
+        listingResponse = theListingResponse;
+
+      } catch(error) {
+        console.log('Address cannot be found in listing.');
+
+        listingResponse = {data: [{
+          formattedAddress: newFormattedAddress,
+          price: valueEstimateResponse.data.price,
+          propertyType: (recordsResponse.data[0].propertyType ? recordsResponse.data[0].propertyType : 'Single Family'),
+          bedrooms: (recordsResponse.data[0].bedrooms ? recordsResponse.data[0].bedrooms : 3),
+          bathrooms: (recordsResponse.data[0].bathrooms ? recordsResponse.data[0].bathrooms : 2),
+          squareFootage: (recordsResponse.data[0].squareFootage ? recordsResponse.data[0].squareFootage : 1500)
+        }]}
+      }
+      console.log("Data from listingResponse:", listingResponse.data);
+
+
+
+      // ================ SQL insert into table: PROPERTY_API_DATA
+      const lastYear = new Date().getFullYear() - 1;
+      taxYear = recordsResponse.data[0].propertyTaxes;
+      
+      if (!taxYear) {
+          taxYear = null;
+      } else if (taxYear) {
+          taxYear = recordsResponse.data[0].propertyTaxes[`${lastYear}`].total;
+      }
+          
+      const propertyApiData = [
+          listingResponse.data[0].formattedAddress,
+          listingResponse.data[0].price,
+          taxYear,
+          valueEstimateResponse.data.priceRangeHigh,
+          listingResponse.data[0].propertyType,
+          listingResponse.data[0].bedrooms,
+          listingResponse.data[0].bathrooms,
+          listingResponse.data[0].squareFootage
+      ]
+
+      const propertyApiDataSqlText = `
+          INSERT INTO "property_api_data"
+          ("address", "purchase_price", "taxes_yearly", "after_repair_value", 
+          "property_type", "bedrooms", "bathrooms", "square_footage")
+          VALUES
+          ($1, $2, $3, $4, $5, $6, $7, $8)
+          RETURNING "id";
+      `
+      const propertyApiDataResults = await pool.query(propertyApiDataSqlText, propertyApiData);
+      propertyApiId = propertyApiDataResults.rows[0].id;
+
+    } else if (checkTimeStampData.length > 0) {
+
+      console.log('Property already exists in database!');
+      propertyApiId = checkTimeStampData[0].id;
+    }
+
+
+
+    // ================ SQL insert into table: PROPERTIES
+    const propertiesData = [
+        userId,
+        propertyApiId,
+        listingResponse.data[0].formattedAddress,
+        listingResponse.data[0].price,
+        taxYear,
+        valueEstimateResponse.data.priceRangeHigh
+    ]
+
+    const propertiesSqlText = `
+      INSERT INTO "properties"
+        ("user_id", "property_api_id", "address", "purchase_price", "taxes_yearly", "after_repair_value")
+        VALUES
+        ($1, $2, $3, $4, $5, $6) RETURNING id;
+    `;
+    const propertiesResults = await pool.query(propertiesSqlText, propertiesData);
+    const propertyId = propertiesResults.rows[0].id
+
+
+
+    // ================ SQL insert into table: HOLDING
+    const getDefaultHoldingsText = `
+      SELECT * FROM "default_holdings"
+        WHERE "user_id" = $1;
+    `;
+    const getDefaultHoldingsResults = await pool.query(getDefaultHoldingsText, [userId]);
+    console.log('getDefaultHoldingsResult: ', getDefaultHoldingsResults.rows)
+
+    for(let holdingItem of getDefaultHoldingsResults.rows) {
+      const addHoldingItemText = `
+        INSERT INTO "holding_items"
+          ("property_id", "name", "cost")
+          VALUES
+          ($1, $2, $3);
+      `;
+      const addHoldingItemValues = [propertyId, holdingItem.holding_name, holdingItem.holding_cost];
+      const addHoldingItemResults = await pool.query(addHoldingItemText, addHoldingItemValues);
+    }
+
+
+
+    // ================ SQL insert into table: REPAIR
+    const getDefaultRepairsText = `
+    SELECT * FROM "default_repairs"
+      WHERE "user_id" = $1;
+    `;
+    const getDefaultRepairsResults = await pool.query(getDefaultRepairsText, [userId]);
+    console.log('getDefaultRepairsResult: ', getDefaultRepairsResults.rows)
+
+    for(let repairItem of getDefaultRepairsResults.rows) {
+      const addRepairItemText = `
+        INSERT INTO "repair_items"
+          ("property_id", "name", "cost")
+          VALUES
+          ($1, $2, $3);
+      `;
+      const addRepairItemValues = [propertyId, repairItem.repair_name, repairItem.repair_cost];
+      const addRepairItemResults = await pool.query(addRepairItemText, addRepairItemValues);
+    }
+
+
+    console.log('Property posted/updated in database!');
+    
+    await connection.query('Commit;')
+    res.sendStatus(201)
+
+  } catch(err) {
+      console.log('Add property failed: ', err);
+      await connection.query('Rollback;')
+      res.sendStatus(500);
+  } finally {
+    await connection.release()
+  }
 });
 
 
@@ -359,56 +353,212 @@ router.put('/backToDefault/:id', async (req, res) => {
   const userId = req.user.id;
   const connection = await pool.connect()
 
+  // const api_key = process.env.RENTCAST_API_KEY;
+  // let propertyApiId;
+  // let listingResponse = {};
+  // let recordsResponse = {};
+  // let valueEstimateResponse = {};
+  // let taxYear;
+
   try {
     await connection.query('BEGIN;')
 
-    // check 24 hours thing
+    // const deleteHoldingItemsSqlText = `
+    //   DELETE FROM "holding_items"
+    //     WHERE "property_id" = $1;
+    // `
+    // const deleteHoldingItemsResponse = await pool.query(deleteHoldingItemsSqlText, [propertyId])
 
-    const deleteHoldingItems = `
-    
+
+    // const deleteRepairItemsSqlText = `
+    //   DELETE FROM "repair_items"
+    //     WHERE "property_id" = $1;
+    // `
+    // const deleteRepairItemsResponse = await pool.query(deleteRepairItemsSqlText, [propertyId])
+
+    const getAddressSqlText = `
+      SELECT address FROM "properties"
+        WHERE "id" = $1;
     `
-    const deleteRepairItems = `
+    const getAddressResponse = await pool.query(getAddressSqlText, [propertyId])
+    const addressResult = getAddressResponse.rows[0].address;
+
+
     
-    `
-
-    const getDefaultHoldingsText = `
-      SELECT * FROM "default_holdings"
-        WHERE "user_id" = $1;
-    `;
-    const getDefaultHoldingsResults = await pool.query(getDefaultHoldingsText, [userId]);
-    console.log('getDefaultHoldingsResult: ', getDefaultHoldingsResults.rows)
-
-    for(let holdingItem of getDefaultHoldingsResults.rows) {
-      const addHoldingItemText = `
-        INSERT INTO "holding_items"
-          ("property_id", "name", "cost")
-          VALUES
-          ($1, $2, $3);
-      `;
-      const addHoldingItemValues = [propertyId, holdingItem.holding_name, holdingItem.holding_cost];
-      const addHoldingItemResults = await pool.query(addHoldingItemText, addHoldingItemValues);
-    }
-
-    const getDefaultRepairsText = `
-    SELECT * FROM "default_repairs"
-      WHERE "user_id" = $1;
-  `;
-  const getDefaultRepairsResults = await pool.query(getDefaultRepairsText, [userId]);
-  console.log('getDefaultRepairsResult: ', getDefaultRepairsResults.rows)
-
-  for(let repairItem of getDefaultRepairsResults.rows) {
-    const addRepairItemText = `
-      INSERT INTO "repair_items"
-        ("property_id", "name", "cost")
-        VALUES
-        ($1, $2, $3);
-    `;
-    const addRepairItemValues = [propertyId, repairItem.repair_name, repairItem.repair_cost];
-    const addRepairItemResults = await pool.query(addRepairItemText, addRepairItemValues);
+    // ========================== RECALLING API && CHECKING TIMESTAMP ==========================
+    //   const checkTimeStampSqlText = `
+    //       SELECT * FROM "property_api_data"
+    //           WHERE "inserted_at" >= CURRENT_TIMESTAMP - INTERVAL '24 hours'
+    //           AND "address" = $1;
+    //   `
+    //   const checkTimeStampResults = await pool.query(checkTimeStampSqlText, [address]);
+    //   const checkTimeStampData = checkTimeStampResults.rows;
+    //   console.log('checkTimeStampData is:', checkTimeStampData);
+      
+  
+  
+    //   if (checkTimeStampData.length === 0) {
+    //     // ================ Axios for RECORDS (taxesYearly)
+    //     const theRecordsResponse = await axios({
+    //         method: 'GET',
+    //         url: `https://api.rentcast.io/v1/properties?address=${address}&limit=1`,
+    //         headers: {
+    //             'accept': 'application/json',
+    //             'X-Api-Key': `${api_key}`
+    //         }
+    //     })
+    //     recordsResponse = theRecordsResponse;
+    //     console.log("Data from recordsResponse:", recordsResponse.data);
+  
+  
+  
+    //     // ================ Axios for VALUE ESTIMATE (afterRepairValue)
+    //     const theValueEstimateResponse = await axios({
+    //       method: 'GET',
+    //       url: `https://api.rentcast.io/v1/avm/value?address=${address}&limit=1&compCount=5`,
+    //       headers: {
+    //           'accept': 'application/json',
+    //           'X-Api-Key': `${api_key}`
+    //       }
+    //     })
+    //     valueEstimateResponse = theValueEstimateResponse;
+    //     console.log("Data from valueEstimateResponse:", valueEstimateResponse.data);
+  
+  
+  
+    //     // ================ Axios for LISTING
+    //     const formattedAddress = recordsResponse.data[0].formattedAddress;
+    //     const theListingResponse = await axios({
+    //       method: 'GET',
+    //       url: `https://api.rentcast.io/v1/listings/sale?address=${formattedAddress}&limit=1`,
+    //       headers: {
+    //           'accept': 'application/json',
+    //           'X-Api-Key': `${api_key}`
+    //       }
+    //     })
+    //     listingResponse = theListingResponse
+    //     console.log("Data from listingResponse:", listingResponse.data);
+  
+  
+  
+    //     // ================ SQL insert into table: PROPERTY_API_DATA
+    //     const lastYear = new Date().getFullYear() - 1;
+    //     taxYear = recordsResponse.data[0].propertyTaxes;
+        
+    //     if (!taxYear) {
+    //         taxYear = null;
+    //     } else if (taxYear) {
+    //         taxYear = recordsResponse.data[0].propertyTaxes[`${lastYear}`].total;
+    //     }
+            
+    //     const propertyApiData = [
+    //         listingResponse.data[0].formattedAddress,
+    //         listingResponse.data[0].price,
+    //         taxYear,
+    //         valueEstimateResponse.data.priceRangeHigh,
+    //         listingResponse.data[0].propertyType,
+    //         listingResponse.data[0].bedrooms,
+    //         listingResponse.data[0].bathrooms,
+    //         listingResponse.data[0].squareFootage
+    //     ]
+  
+    //     const propertyApiDataSqlText = `
+    //         INSERT INTO "property_api_data"
+    //         ("address", "purchase_price", "taxes_yearly", "after_repair_value", 
+    //         "property_type", "bedrooms", "bathrooms", "square_footage")
+    //         VALUES
+    //         ($1, $2, $3, $4, $5, $6, $7, $8)
+    //         RETURNING "id";
+    //     `
+    //     const propertyApiDataResults = await pool.query(propertyApiDataSqlText, propertyApiData);
+    //     propertyApiId = propertyApiDataResults.rows[0].id;
+  
+    //   } else if (checkTimeStampData.length > 0) {
+  
+    //     console.log('Property already exists in database!');
+    //     propertyApiId = checkTimeStampData[0].id;
+    //   }
+  
+  
+  
+    //   // ================ SQL insert into table: PROPERTIES
+    //   const propertiesData = [
+    //       userId,
+    //       propertyApiId,
+    //       listingResponse.data[0].formattedAddress,
+    //       listingResponse.data[0].price,
+    //       taxYear,
+    //       valueEstimateResponse.data.priceRangeHigh
+    //   ]
+  
+    //   const propertiesSqlText = `
+    //     INSERT INTO "properties"
+    //       ("user_id", "property_api_id", "address", "purchase_price", "taxes_yearly", "after_repair_value")
+    //       VALUES
+    //       ($1, $2, $3, $4, $5, $6) RETURNING id;
+    //   `;
+    //   const propertiesResults = await pool.query(propertiesSqlText, propertiesData);
+    //   const propertyId = propertiesResults.rows[0].id
+  
+  
+  
+    //   // ================ SQL insert into table: HOLDING
+    //   const getDefaultHoldingsText = `
+    //     SELECT * FROM "default_holdings"
+    //       WHERE "user_id" = $1;
+    //   `;
+    //   const getDefaultHoldingsResults = await pool.query(getDefaultHoldingsText, [userId]);
+    //   console.log('getDefaultHoldingsResult: ', getDefaultHoldingsResults.rows)
+  
+    //   for(let holdingItem of getDefaultHoldingsResults.rows) {
+    //     const addHoldingItemText = `
+    //       INSERT INTO "holding_items"
+    //         ("property_id", "name", "cost")
+    //         VALUES
+    //         ($1, $2, $3);
+    //     `;
+    //     const addHoldingItemValues = [propertyId, holdingItem.holding_name, holdingItem.holding_cost];
+    //     const addHoldingItemResults = await pool.query(addHoldingItemText, addHoldingItemValues);
+    //   }
+  
+  
+  
+    //   // ================ SQL insert into table: REPAIR
+    //   const getDefaultRepairsText = `
+    //   SELECT * FROM "default_repairs"
+    //     WHERE "user_id" = $1;
+    //   `;
+    //   const getDefaultRepairsResults = await pool.query(getDefaultRepairsText, [userId]);
+    //   console.log('getDefaultRepairsResult: ', getDefaultRepairsResults.rows)
+  
+    //   for(let repairItem of getDefaultRepairsResults.rows) {
+    //     const addRepairItemText = `
+    //       INSERT INTO "repair_items"
+    //         ("property_id", "name", "cost")
+    //         VALUES
+    //         ($1, $2, $3);
+    //     `;
+    //     const addRepairItemValues = [propertyId, repairItem.repair_name, repairItem.repair_cost];
+    //     const addRepairItemResults = await pool.query(addRepairItemText, addRepairItemValues);
+    //   }
+  
+  
+    //   console.log('Property posted/updated in database!');
+      
+    //   await connection.query('Commit;')
+    //   res.sendStatus(201)
 
     await connection.query('Commit;');
-    res.sendStatus(200);
-  }
+    console.log('Update back to default done');
+
+
+    // ========================== IF NOT CALLING API, SEND THIS ==========================
+    res.send({address: addressResult, userId: userId});
+
+
+    // ========================== IF CALLING API, SEND THIS ==========================
+    // res.sendStatus(200);
+
   } catch (error) {
     console.log('Update back to default failed:', error);
     await connection.query('Rollback;')

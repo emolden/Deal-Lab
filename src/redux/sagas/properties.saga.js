@@ -21,7 +21,9 @@ function* addProperty(action) {
   const address = action.payload.address;
   const userId = action.payload.userId
   try {
-    yield axios.post(`api/properties`, {address})
+    const response = yield axios.post(`api/properties`, {address})
+    console.log('addProperty data:', response.data);
+    
     yield put({
         type: 'GET_PROPERTIES',
         payload: userId
@@ -55,11 +57,23 @@ function* updateBackToDefault(action) {
   // console.log('Payload for back to default:', action.payload);
   const propertyId = action.payload;
   try {
-      yield axios.put(`/api/properties/backToDefault/${propertyId}`)
-      yield put({
-        type: 'GET_PROPERTY_OF_INTEREST',
-        payload: propertyId
-      })
+      const response = yield axios.put(`/api/properties/backToDefault/${propertyId}`)
+      console.log('UPDATE DEFAULT DATA:', response.data);
+      
+
+      // ========================== IF CALLING API IN ROUTE ==========================
+      // yield put({
+      //   type: 'GET_PROPERTY_OF_INTEREST',
+      //   payload: propertyId
+      // })
+
+      // ========================== IF NOT, CALL addProperty ==========================
+      // yield put({
+      //   type: 'ADD_PROPERTY',
+      //   payload: response.data
+      // })
+
+
   } catch (error) {
     console.log('Error in updating back to default:', error);
   }
