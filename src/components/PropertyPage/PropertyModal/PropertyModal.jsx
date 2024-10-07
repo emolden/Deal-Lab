@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import ModalUpfrontCosts from './ModalUpfrontCosts/ModalUpfrontCosts'; // Import your specific components
 import ModalHoldingPeriodCosts from './ModalHoldingPeriodCosts/ModalHoldingPeriodCosts';
 import ModalProfitEstimation from './ModalProfitEstimation/ModalProfitEstimation';
+import Swal from 'sweetalert2';
 
 
 const PropertyModal = ({ isOpen, onClose, propertyCard, userId }) => {
@@ -46,6 +47,12 @@ const PropertyModal = ({ isOpen, onClose, propertyCard, userId }) => {
         userId: userId
     }
   })
+  Swal.fire({
+    icon: "success",
+    title: "Your work has been saved",
+    showConfirmButton: false,
+    timer: 1500
+  });
 }
   
 

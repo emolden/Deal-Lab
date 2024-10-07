@@ -320,7 +320,8 @@ router.put('/', (req, res) => {
          UPDATE "properties"
           SET holding_period = $1,
               purchase_price = $2,
-              after_repair_value = $3
+              after_repair_value = $3,
+              "updated_at" = CURRENT_TIMESTAMP
           WHERE "id" = $4;
        `;
 
