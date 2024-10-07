@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import ModalUpfrontCosts from './ModalUpfrontCosts/ModalUpfrontCosts'; // Import your specific components
 import ModalHoldingPeriodCosts from './ModalHoldingPeriodCosts/ModalHoldingPeriodCosts';
@@ -9,6 +9,7 @@ import ModalProfitEstimation from './ModalProfitEstimation/ModalProfitEstimation
 
 const PropertyModal = ({ isOpen, onClose, propertyCard }) => {
   const propertyOfInterest = useSelector((store) => store.propertyOfInterest);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (isOpen) {
@@ -35,6 +36,16 @@ const PropertyModal = ({ isOpen, onClose, propertyCard }) => {
     const truncated = Math.floor(number * 100) / 100;
     return `$${truncated.toFixed(2)}`;
   };
+
+  const handleBackToDefault = () => {
+    dispatch({
+      type: 'UPDATE_BACK_TO_DEFAULT',
+      payload: propertyOfInterest.property[0].id
+    })
+  }
+
+  console.log('propertyOfInterest data is:', propertyOfInterest);
+  
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -64,6 +75,7 @@ const PropertyModal = ({ isOpen, onClose, propertyCard }) => {
             </div>
           </div>
           {/* <button className='modal-btn'>Edit</button> */}
+          <button onClick={handleBackToDefault}>Back To Default</button>
       </div>
     </div>
   );
