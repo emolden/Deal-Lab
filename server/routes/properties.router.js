@@ -308,7 +308,21 @@ router.delete('/:id', (req, res) => {
  * ----- PUT property: updateProperty
  */
 router.put('/', (req, res) => {
-    // PUT  route code here
+       console.log('/api/properties put route received a request! ', req.body)
+      //  const propertyId = req.params.id;
+
+      //  const sqlText = `
+      //    DELETE FROM "properties"
+      //      WHERE "id" = $1;
+      //  `
+     
+      //    pool.query(sqlText, [propertyId])
+      //    .then((results) => {
+      //        res.send(results.rows);
+      //    }) .catch((error) => {
+      //        console.log('Error in deleting property:', error);
+      //        res.sendStatus(500);
+      //    })
   });
 
 

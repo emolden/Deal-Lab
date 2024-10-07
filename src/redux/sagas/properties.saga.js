@@ -51,6 +51,16 @@ function* deleteProperty(action) {
 }
 
 function* updateProperty(action) {
+  console.log('in update property: ', action.payload)
+  try {
+    yield axios.put(`api/properties`, action.payload)
+    // yield put({
+    //     type: 'GET_PROPERTY_OF_INTEREST',
+    //     payload: action.payload
+    // })
+  } catch (error) {
+    console.log('Error updating property taxes:', error);
+  }
 }
 
 function* updateBackToDefault(action) {
@@ -87,7 +97,7 @@ function* getPropertyOfInterest(action) {
 }
 
 function* updatePropertyTaxes(action) {
-  console.log('in update property taxes: ', action.payload)
+  // console.log('in update property taxes: ', action.payload)
   try {
     yield axios.put(`api/properties/taxes/`, {propertyId: action.payload})
     yield put({

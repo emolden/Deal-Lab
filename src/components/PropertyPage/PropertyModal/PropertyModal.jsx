@@ -45,6 +45,7 @@ const PropertyModal = ({ isOpen, onClose, propertyCard }) => {
         afterRepairValue: propertyOfInterest.property[0].after_repair_value
     }
   })
+}
   
 
 
