@@ -31,9 +31,13 @@ function PropertySearchForm({userId}) {
   const addAddress = (e) => {
     e.preventDefault();
     // ************* THIS GOES IN PAYLOAD.ADDRESS: formattedAddress
+    console.log('searchBar address:', searchBarAddress);
+    console.log('formattedAddress:', formattedAddress);
+    
+    
     dispatch ({
         type: 'ADD_PROPERTY',
-        payload: {address: address , userId: userId}
+        payload: {address: formattedAddress , userId: userId}
     })
     setSearchBarAddress("");
   } 
@@ -59,7 +63,7 @@ function PropertySearchForm({userId}) {
       <p>Property Search Form:</p>
 
 {/* **************UNCOMMENT FROM HERE TO 123**************************** */}
-      {/* {isLoaded ? (  
+      {isLoaded ? (  
       <GooglePlacesAutocomplete
         apiOptions={{ language: 'en'}}
         autocompletionRequests={{
@@ -132,10 +136,10 @@ function PropertySearchForm({userId}) {
         />
       ) : (
         <p>Loading...</p>
-      )} */}
+      )}
 
       {/* ************** THIS IS DUMMY DATA TO BE DELETED******************************** */}
-      <form>
+      {/* <form>
           <label for='addressInput'>Property Address:</label>
           <input className='rentCastInput'
                   name='addressInput'
@@ -144,7 +148,7 @@ function PropertySearchForm({userId}) {
                   value={address}
                   onChange={e => setAddress(e.target.value)}
                   />
-      </form>
+      </form> */}
       {/* ***************DELETE TO HERE **************************************** */}
           <button onClick={addAddress}>Add</button>
     </div>

@@ -1,24 +1,40 @@
 import React from 'react';
+import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import Swal from 'sweetalert2'
 import './PropertyCard.css';
-// import annualizedProfit from '../../../../helpers/annualizedProfit';
-// import monthlyHoldingCost from '../../../../helpers/monthlyHoldingCost';
-// import profit from '../../../../helpers/profit';
-// import repairCost from '../../../../helpers/repairCost';
-// import totalCost from '../../../../helpers/totalCost';
-// import totalHoldingCost from '../../../../helpers/totalHoldingCost';
-// import upfrontCost from '../../../../helpers/upfrontCost';
+import upfrontCost from '../../../../helpers/upfrontCost';
+import totalHoldingCost from '../../../../helpers/totalHoldingCost'
+import totalCost from '../../../../helpers/totalCost';
+import profit from '../../../../helpers/profit';
+import annualizedProfit from '../../../../helpers/annualizedProfit';
 
-function PropertyCard({ property, userId, onOpenModal }) {
+function PropertyCard({ property, userId, onOpenModal, allRepairItems, allHoldingItems }) {
   const dispatch = useDispatch();
-  // 20000 is the repair number.
-  const upfrontCost = Number(property.purchase_price) + 20000; 
-  const holdingCost = ((Number(property.taxes_yearly) / 12) + 100) * Number(property.holding_period);
-  const totalCost = upfrontCost + holdingCost;
-  const profit = Number(property.after_repair_value) - totalCost;
-  const annualProfit = (profit / Number(property.holding_period)) * 12;
-  
+
+  const getRepairItems = (propId, allRepairItems) => {
+    let repairItems = []
+    for(let item of allRepairItems) {
+      if(item.id === propId) {
+        repairItems.push({repairName: item.repair_name, repair_cost: item.repair_cost})
+      } 
+    }
+    // console.log('repair items: ', propId, repairItems)
+    return repairItems;
+  }
+
+  const getHoldingItems = (propId, allHoldingItems) => {
+    let holdingItems = []
+    for(let item of allHoldingItems) {
+      
+      if(item.id === propId) {
+      holdingItems.push({holdingName: item.holding_name, holding_cost: item.holding_cost})
+      }
+    }
+    // console.log('holding items: ', propId, holdingItems)
+    return holdingItems;
+  }
+
   //getPropertyOfInterest function runs when the user clicks "edit" or
   //on the address card. This function sends a a dispatch to the properties.saga.js
   //with the property id as the payload.
@@ -101,23 +117,23 @@ function PropertyCard({ property, userId, onOpenModal }) {
         <tbody>
           <tr>
             <td>Upfront Cost</td>
-            <td>{formattedCurrency(upfrontCost)}</td>
+            <td>{formattedCurrency(upfrontCost(getRepairItems(property.id, allRepairItems), property.purchase_price))}</td>
           </tr>
           <tr>
             <td>Holding Cost</td>
-            <td>{formattedCurrency(holdingCost)}</td>
+            <td>{formattedCurrency(totalHoldingCost(property.holding_period, property.taxes_yearly/12, getHoldingItems(property.id, allHoldingItems)))}</td>
           </tr>
           <tr>
             <td>Total Cost</td>
-            <td>{formattedCurrency(totalCost)}</td>
+            <td>{formattedCurrency(totalCost(getRepairItems(property.id, allRepairItems), property.purchase_price, property.holding_period, property.taxes_yearly/12, getHoldingItems(property.id, allHoldingItems)))}</td>
           </tr>
           <tr>
             <td>Profit</td>
-            <td>{formattedCurrency(profit)}</td>
+            <td>{formattedCurrency(profit (property.after_repair_value, getRepairItems(property.id, allRepairItems), property.purchase_price, property.holding_period, property.taxes_yearly/12, getHoldingItems(property.id, allHoldingItems)))}</td>
           </tr>
           <tr>
             <td>Annualized Profit</td>
-            <td>{formattedCurrency(annualProfit)}</td>
+            <td>{formattedCurrency(annualizedProfit(property.after_repair_value, getRepairItems(property.id, allRepairItems), property.purchase_price, property.holding_period, property.taxes_yearly/12, getHoldingItems(property.id, allHoldingItems)))}</td>
           </tr>
           <td colSpan="2">
             <div className="button-container">
