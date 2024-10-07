@@ -63,7 +63,7 @@ const PropertyModal = ({ isOpen, onClose, propertyCard }) => {
               <ModalProfitEstimation />
             </div>
           </div>
-          {/* <button className='modal-btn'>Edit</button> */}
+          <button className='modal-btn'>Set Back to Default Settings</button>
       </div>
     </div>
   );

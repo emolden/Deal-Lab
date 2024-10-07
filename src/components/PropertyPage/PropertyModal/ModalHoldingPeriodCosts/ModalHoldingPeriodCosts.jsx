@@ -38,7 +38,6 @@ const deleteHoldingItem = (itemId) => {
     <div className="container">
       {Object.keys(propertyOfInterest).length && 
         <>
-          {/* <p>Holding Costs:</p> */}
           <p>Holding Items:</p>
           <input className='holdingItemInput'
             name='holdingItemInput'
