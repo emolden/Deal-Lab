@@ -78,8 +78,10 @@ const PropertyModal = ({ isOpen, onClose, propertyCard, userId }) => {
               <ModalProfitEstimation />
             </div>
           </div>
-          <button onClick={handleBackToDefault}>Back To Default</button>
-          <button onClick={saveUpdatedPropertyInfo}>Save</button>
+          <div className="">
+          <button className="modal-btn-2" onClick={handleBackToDefault}>Back To Default</button>
+          <button className="modal-btn" onClick={saveUpdatedPropertyInfo}>Save</button>
+          </div>
       </div>
     </div>
   );

@@ -22,9 +22,8 @@ function DefaultHoldingCost({defaultHoldings}) {
 
   const formattedCurrency = (value) => {
     const number = parseFloat(value);
-    const truncated = Math.floor(number * 100) / 100;
-    return `$${truncated.toFixed(2)}`;
-  }
+    return ` $${number.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+  };
 
 
 // Getting error for not having an unique key prop.
@@ -43,7 +42,7 @@ function DefaultHoldingCost({defaultHoldings}) {
                 placeholder='Expense Cost'
                 value={holdingCost}
                 onChange={e => setHoldingCost(e.target.value)} />
-        <span className='addDefaultHoldingBtn'
+        <span className='addBtn'
                 onClick={addDefaultHoldingItem}>Add</span>
       </form>
 
@@ -66,12 +65,12 @@ function DefaultHoldingCost({defaultHoldings}) {
           )
         })}
       </div>
-      <h4>Total: $
+      <h4>Total: 
         <span>
-          {!defaultHoldings ? '' : defaultHoldings.reduce((total, item) => {
+          {formattedCurrency(!defaultHoldings ? '' : defaultHoldings.reduce((total, item) => {
             total = total + Number(item.holding_cost)
             return total
-          }, 0)}
+          }, 0))}
         </span>
       </h4>
     </div>

@@ -6,6 +6,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom/cjs/react-router-dom.min';
 import Swal from 'sweetalert2';
+// import './PropertyModal/PropertyModal.css';
+
 
 function DefaultSettings() {
   const user = useSelector(store => store.user);
@@ -51,7 +53,7 @@ function DefaultSettings() {
   return (
     <div className="defaultSettings">
       <h2 className="defaultSettingsTitle">Default Settings</h2>
-
+      <div>
       <div className='holdingPeriodDefault'>
         <span className='defaultSettingsText'>Holding Period (in months):</span>
         <input className='holdingPeriodInput'
@@ -60,12 +62,14 @@ function DefaultSettings() {
               onChange={e => setHoldingPeriod(e.target.value)}
               />
       </div>
-
+      <div className="section holding-period-costs">
       <DefaultHoldingCost defaultHoldings={defaultHoldings} />
       <DefaultRepairItems defaultRepairs={defaultRepairs} />
 
       <button className='defaultSaveBtn'
               onClick={updateHoldingPeriod}>Save</button>
+    </div>
+    </div>
     </div>
   );
 }

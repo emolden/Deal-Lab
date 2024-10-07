@@ -6,6 +6,7 @@
     flex-direction: column;
     position: relative;
     padding: 50px 0px;
+    
 }
 
 .defaultSettingsTitle {
@@ -13,12 +14,35 @@
     text-align: center;
     font-size: 45px;
     font-weight: bold;
+    
 }
 
 .defaultSettingsText {
     margin-left: 10px;
     font-weight: bold;
 }
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two columns */
+    grid-template-rows: repeat(2, auto); /* Two rows */
+    gap: 8px; /* Space between items */
+    margin-top: 20px; /* Space from address strip */
+    padding: 0 0 10px 0;
+  }
+
+  .section {
+    border: 1px solid #ccc; /* Border color */
+    border-radius: 5px; /* Rounded corners for the sections */
+    padding: 15px; /* Padding inside sections */
+    background: white; /* Background for the sections */
+    box-sizing: border-box;
+  }
+
+  .upfront-costs {
+    grid-column: 1; /* First column */
+    grid-row: 1; /* First row */
+  }
 
 /* ======== Default Holding Period ======== */
 .holdingPeriodDefault {
@@ -144,26 +168,26 @@
     color: rgb(147, 147, 147);
     font-size: 12px;
 }
-
-.addDefaultRepairBtn {
-    border: 1px solid rgb(19, 86, 255);
+/* ----- SECTION BUTTONS ----- */
+.addBtn {
+    border: 1px solid #343078;
     border-radius: 4.5px;
     padding: 4px 8px;
-    background-color: rgb(14, 106, 255);
-    color: rgb(255, 255, 255);
+    background-color: #343078;
+    color: #f8f8f8;
     font-size: 11px;
     font-weight: bold;
+    cursor: pointer;
     text-transform: uppercase;
-    box-shadow: 1px 1px 1px rgba(169, 169, 169, 0.8),
-                1px 1px 1px rgba(169, 169, 169, 0.8);
 }
 
-.addDefaultRepairBtn:hover {
+.addBtn:hover {
     cursor: pointer;
-    border: 1px solid rgb(149, 178, 251);
-    color: rgb(42, 123, 255);
-    background-color: rgb(163, 196, 250);
+    background-color: #7974d7; 
+    transform: scale(1.05); 
 }
+/* ----- END SECTION BUTTONS ----- */
+
 
 .defaultRepairItems {
     margin: 20px auto;

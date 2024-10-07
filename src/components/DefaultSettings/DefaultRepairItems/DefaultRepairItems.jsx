@@ -22,9 +22,8 @@ function DefaultRepairItems({defaultRepairs}) {
 
   const formattedCurrency = (value) => {
     const number = parseFloat(value);
-    const truncated = Math.floor(number * 100) / 100;
-    return `$${truncated.toFixed(2)}`;
-  }
+    return ` $${number.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+  };
 
   return (
     <div className='defaultRepair'>
@@ -40,7 +39,7 @@ function DefaultRepairItems({defaultRepairs}) {
                 placeholder='Repair Cost'
                 value={repairCost}
                 onChange={e => setRepairCost(e.target.value)}/>
-        <span className='addDefaultRepairBtn'
+        <span className='addBtn'
               onClick={addDefaultRepairItem}>Add</span>
       </form>
 
@@ -63,12 +62,12 @@ function DefaultRepairItems({defaultRepairs}) {
             )
           })}
       </div>
-      <h4>Total: $
+      <h4>Total: 
         <span>
-          {!defaultRepairs ? '' : defaultRepairs.reduce((total, item) => {
+          {formattedCurrency(!defaultRepairs ? '' : defaultRepairs.reduce((total, item) => {
             total = total + Number(item.repair_cost)
             return total
-          }, 0)}
+          }, 0))}
         </span>
       </h4>
     </div>
