@@ -62,17 +62,10 @@ function* updateBackToDefault(action) {
       
 
       // ========================== IF CALLING API IN ROUTE ==========================
-      // yield put({
-      //   type: 'GET_PROPERTY_OF_INTEREST',
-      //   payload: propertyId
-      // })
-
-      // ========================== IF NOT, CALL addProperty ==========================
-      // yield put({
-      //   type: 'ADD_PROPERTY',
-      //   payload: response.data
-      // })
-
+      yield put({
+        type: 'GET_PROPERTY_OF_INTEREST',
+        payload: propertyId
+      })
 
   } catch (error) {
     console.log('Error in updating back to default:', error);
