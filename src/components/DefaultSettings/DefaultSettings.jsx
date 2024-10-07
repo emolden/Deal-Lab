@@ -62,7 +62,7 @@ function DefaultSettings() {
               onChange={e => setHoldingPeriod(e.target.value)}
               />
       </div>
-      <div className="section holding-period-costs">
+      <div className=" section grid-container">
       <DefaultHoldingCost defaultHoldings={defaultHoldings} />
       <DefaultRepairItems defaultRepairs={defaultRepairs} />
 

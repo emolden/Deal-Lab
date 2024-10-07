@@ -65,13 +65,14 @@ const updateTaxes = (propertyId) => {
             {propertyOfInterest.property[0].taxes_yearly && propertyOfInterest.property[0].taxes_yearly > 0 ? 
             <>
               <li> Taxes: {formattedCurrency(propertyOfInterest.property[0].taxes_yearly/12)}</li>
-              <button onClick={() => {updateTaxes(propertyOfInterest.property[0].id)}}>X</button>
+              <img onClick={() => {updateTaxes(propertyOfInterest.property[0].id)}} className="deleteDefaultRepairBtn" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" />
             </> : ''}
             {propertyOfInterest.holdingItems.map((item) => {
               return (
                 <>
                 <li key = {item.holding_items_id}>{item.holding_name}: {formattedCurrency(item.holding_cost)} </li>
-                <button onClick={() => {deleteHoldingItem(item.holding_items_id)}}>X</button>
+                <img onClick={() => {deleteHoldingItem(item.holding_items_id)}} className="deleteDefaultRepairBtn" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" />
+                
                 </>
               )
             })}

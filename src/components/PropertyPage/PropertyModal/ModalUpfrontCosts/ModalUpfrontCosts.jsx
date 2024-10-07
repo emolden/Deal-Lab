@@ -65,7 +65,7 @@ function ModalUpfrontCosts() {
           return (
             <>
             <li key = {item.repair_items_id}>{item.repair_name}: {formattedCurrency(item.repair_cost)} </li>
-            <button onClick={() => {deleteRepairItem(item.repair_items_id)}}>X</button>
+            <img onClick={() => {deleteRepairItem(item.repair_items_id)}} className="deleteDefaultRepairBtn" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" />
             </>
           )
         })}
