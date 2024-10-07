@@ -1,15 +1,19 @@
 
 import React from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useEffect } from 'react';
 import ModalUpfrontCosts from './ModalUpfrontCosts/ModalUpfrontCosts'; // Import your specific components
 import ModalHoldingPeriodCosts from './ModalHoldingPeriodCosts/ModalHoldingPeriodCosts';
 import ModalProfitEstimation from './ModalProfitEstimation/ModalProfitEstimation';
+import Swal from 'sweetalert2';
 
 
-const PropertyModal = ({ isOpen, onClose, propertyCard }) => {
-  const propertyOfInterest = useSelector((store) => store.propertyOfInterest);
+const PropertyModal = ({ isOpen, onClose, propertyCard, userId }) => {
+
   const dispatch = useDispatch();
+
+  const propertyOfInterest = useSelector((store) => store.propertyOfInterest);
+  
 
   useEffect(() => {
     if (isOpen) {
@@ -24,19 +28,6 @@ const PropertyModal = ({ isOpen, onClose, propertyCard }) => {
 
   if (!isOpen) return null;
 
-  const upfrontCost = Number(propertyCard.purchase_price) + 20000; 
-  const holdingCost = ((Number(propertyCard.taxes_yearly) / 12) + 100) * Number(propertyCard.holding_period);
-  const totalCost = upfrontCost + holdingCost;
-  const profit = Number(propertyCard.after_repair_value) - totalCost;
-  const annualProfit = (profit / Number(propertyCard.holding_period)) * 12;
-
-
-  const formattedCurrency = (value) => {
-    const number = parseFloat(value);
-    const truncated = Math.floor(number * 100) / 100;
-    return `$${truncated.toFixed(2)}`;
-  };
-
   const handleBackToDefault = () => {
     dispatch({
       type: 'UPDATE_BACK_TO_DEFAULT',
@@ -44,8 +35,27 @@ const PropertyModal = ({ isOpen, onClose, propertyCard }) => {
     })
   }
 
-  console.log('propertyOfInterest data is:', propertyOfInterest);
+  //sends a dispatch to the properties saga
+  const saveUpdatedPropertyInfo = () => {
+    dispatch({
+      type: 'UPDATE_PROPERTY',
+      payload: {
+        propertyId: propertyOfInterest.property[0].id,
+        holdingPeriod: propertyOfInterest.property[0].holding_period,
+        purchasePrice: propertyOfInterest.property[0].purchase_price,
+        afterRepairValue: propertyOfInterest.property[0].after_repair_value,
+        userId: userId
+    }
+  })
+  Swal.fire({
+    icon: "success",
+    title: "Your work has been saved",
+    showConfirmButton: false,
+    timer: 1500
+  });
+}
   
+
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -54,12 +64,6 @@ const PropertyModal = ({ isOpen, onClose, propertyCard }) => {
         <button onClick={onClose} className="modal-close">X</button>
           <h2 className="modal-header">{propertyCard.address}</h2>
         </div>
-          {/* <p>Purchase Price: {formattedCurrency(propertyCard.purchase_price)}</p>
-          <p>Upfront Cost: {formattedCurrency(upfrontCost)}</p>
-          <p>Holding Period Cost: {formattedCurrency(holdingCost)}</p>
-          <p>Total Cost: {formattedCurrency(totalCost)}</p>
-          <p>Profit: {formattedCurrency(profit)}</p>
-          <p>Annualized Profit: {formattedCurrency(annualProfit)}</p> */}
           <div className="modalRight grid-container">
             <div className='section upfront-costs'>
               <h3 className='section-header'>Upfront Costs:</h3>
@@ -74,8 +78,8 @@ const PropertyModal = ({ isOpen, onClose, propertyCard }) => {
               <ModalProfitEstimation />
             </div>
           </div>
-          {/* <button className='modal-btn'>Edit</button> */}
           <button onClick={handleBackToDefault}>Back To Default</button>
+          <button onClick={saveUpdatedPropertyInfo}>Save</button>
       </div>
     </div>
   );
