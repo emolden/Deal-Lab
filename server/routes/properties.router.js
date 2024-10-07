@@ -1,4 +1,10 @@
 const express = require('express');
+const annualizedProfit = require('../helpers/annualizedProfit')
+const profit = require('../helpers/profit');
+const totalCost = require('../helpers/totalCost');
+const totalHoldingCost = require('../helpers/totalHoldingCost');
+const upfrontCost = require('../helpers/upfrontCost');
+const annualizedProfit = require('../helpers/annualizedProfit')
 const {
   rejectUnauthenticated,
 } = require('../modules/authentication-middleware');
@@ -245,6 +251,16 @@ router.post('/', async (req, res) => {
       const addHoldingItemResults = await pool.query(addHoldingItemText, addHoldingItemValues);
     }
 
+    // ================ SQL sum holding cost: HOLDING
+    const totalHoldingCostText = `
+    SELECT 
+      SUM("holding_items"."cost") AS "monthly_holding_total"
+      FROM "holding_items"
+      WHERE "property_id" = $1;
+    `;
+    const totalHoldingCostValues = [propertyId];
+    const totalHoldingCostResults = await pool.query(totalHoldingCostText, totalHoldingCostValues);
+
 
 
     // ================ SQL insert into table: REPAIR
@@ -265,6 +281,16 @@ router.post('/', async (req, res) => {
       const addRepairItemValues = [propertyId, repairItem.repair_name, repairItem.repair_cost];
       const addRepairItemResults = await pool.query(addRepairItemText, addRepairItemValues);
     }
+
+    // ================ SQL sum repair cost: REPAIR
+    const totalRepairCostText = `
+    SELECT 
+      SUM("repair_items"."cost") AS "total_repair_cost"
+      FROM "repair_items"
+      WHERE "property_id" = $1;
+    `;
+    const totalRepairCostValues = [propertyId];
+    const totalRepairCostResults = await pool.query(totalRepairCostText, totalRepairCostValues);
 
 
     console.log('Property posted/updated in database!');
