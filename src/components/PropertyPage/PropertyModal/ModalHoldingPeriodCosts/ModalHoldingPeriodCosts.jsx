@@ -7,7 +7,7 @@ import monthlyHoldingCost from '../../../../helpers/monthlyHoldingCost'
 
 function ModalHoldingPeriodCosts() {
 
-  import {useSelector, useDispatch} from 'react-redux';
+  const dispatch = useDispatch();
 
   const propertyOfInterest = useSelector((store) => store.propertyOfInterest);
   const [holdingName, setHoldingName] = useState("");

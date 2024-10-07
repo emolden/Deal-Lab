@@ -1,20 +1,18 @@
 
 import React from 'react';
-<<<<<<< HEAD
-import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-=======
 import { useSelector, useDispatch } from 'react-redux';
-import { useEffect } from 'react';
->>>>>>> main
 import ModalUpfrontCosts from './ModalUpfrontCosts/ModalUpfrontCosts'; // Import your specific components
 import ModalHoldingPeriodCosts from './ModalHoldingPeriodCosts/ModalHoldingPeriodCosts';
 import ModalProfitEstimation from './ModalProfitEstimation/ModalProfitEstimation';
 
 
 const PropertyModal = ({ isOpen, onClose, propertyCard }) => {
-  const propertyOfInterest = useSelector((store) => store.propertyOfInterest);
+
   const dispatch = useDispatch();
+
+  const propertyOfInterest = useSelector((store) => store.propertyOfInterest);
+  
 
   useEffect(() => {
     if (isOpen) {
@@ -27,9 +25,7 @@ const PropertyModal = ({ isOpen, onClose, propertyCard }) => {
     }
   }, [isOpen]);
 
-  
-
-
+  if (!isOpen) return null;
 
   const handleBackToDefault = () => {
     dispatch({
@@ -38,8 +34,20 @@ const PropertyModal = ({ isOpen, onClose, propertyCard }) => {
     })
   }
 
-  console.log('propertyOfInterest data is:', propertyOfInterest);
+  //sends a dispatch to the properties saga
+  const saveUpdatedPropertyInfo = () => {
+    dispatch({
+      type: 'UPDATE_PROPERTY',
+      payload: {
+        propertyId: propertyOfInterest.property[0].id,
+        holdingPeriod: propertyOfInterest.property[0].holding_period,
+        purchasePrice: propertyOfInterest.property[0].purchase_price,
+        afterRepairValue: propertyOfInterest.property[0].after_repair_value
+    }
+  })
   
+
+
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -61,9 +69,8 @@ const PropertyModal = ({ isOpen, onClose, propertyCard }) => {
               <ModalProfitEstimation />
             </div>
           </div>
-          {/* <button onClick={saveUpdatedPropertyInfo}>Save</button> */}
           <button onClick={handleBackToDefault}>Back To Default</button>
-
+          <button onClick={saveUpdatedPropertyInfo}>Save</button>
       </div>
     </div>
   );

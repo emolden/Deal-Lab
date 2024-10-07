@@ -60,8 +60,8 @@ const propertyOfInterestReducer = (state = {}, action) => {
               else if (char === ','){
               }
               else{
-                console.log('char should be a number: ', char, newPrice)
-                newPrice += char;
+                console.log('char should be a number: ', char, newValue)
+                newValue += char;
               }
             }
             let newProperty = [{
