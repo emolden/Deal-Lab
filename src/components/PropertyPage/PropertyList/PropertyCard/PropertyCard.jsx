@@ -3,11 +3,6 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import Swal from 'sweetalert2'
 import './PropertyCard.css';
-// import upfrontCost from '../../../../helpers/upfrontCost';
-// import totalHoldingCost from '../../../../helpers/totalHoldingCost'
-// import totalCost from '../../../../helpers/totalCost';
-// import profit from '../../../../helpers/profit';
-// import annualizedProfit from '../../../../helpers/annualizedProfit';
 
 function PropertyCard({ property, userId, onOpenModal, allRepairItems, allHoldingItems }) {
   const dispatch = useDispatch();
