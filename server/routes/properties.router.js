@@ -291,7 +291,7 @@ router.post('/', async (req, res) => {
     const totalHoldingCostValues = [propertyId];
     const totalHoldingCostResults = await pool.query(totalHoldingCostText, totalHoldingCostValues);
     console.log('sum of holding items. expected: 200', totalHoldingCostResults.rows);
-    const monthlyHoldingCost = totalHoldingCostResults.rows[0].monthly_holding_total
+    const monthlyHoldingCost = Number(totalHoldingCostResults.rows[0].monthly_holding_total) + (taxYear / 12);
 
 
 
@@ -891,7 +891,7 @@ router.delete('/holdingItem/:id', (req, res) => {
 router.post('/holdingItem', async (req, res) => {
   const propertyId = req.body.propertyId;
   const holdingName = req.body.holdingName;
-  const holdingCost = req.body.holdingCost;
+  const itemHoldingCost = req.body.holdingCost;
 
   let connection;
   try {
@@ -904,7 +904,7 @@ router.post('/holdingItem', async (req, res) => {
       VALUES
       ($1, $2, $3);
   `; 
-  const response = await connection.query(sqlText, [propertyId, holdingName, holdingCost])
+  const response = await connection.query(sqlText, [propertyId, holdingName, itemHoldingCost])
 
      //update all the calculations based on this update to the reparir item table
 
@@ -924,7 +924,7 @@ router.post('/holdingItem', async (req, res) => {
     const propertyInfoResults = await connection.query(propertyInfoText, propertyInfoValues);
     console.log('propertyInfoResults: ', propertyInfoResults.rows[0])
     const totalRepairs = Number(propertyInfoResults.rows[0].total_repair_cost);
-    const monthlyHoldingCost = Number(propertyInfoResults.rows[0].monthly_holding_cost) + Number(holdingCost);
+    const monthlyHoldingCost = Number(propertyInfoResults.rows[0].monthly_holding_cost) + Number(itemHoldingCost);
     const purchasePrice = Number(propertyInfoResults.rows[0].purchase_price);
     const holdingPeriod = Number(propertyInfoResults.rows[0].holding_period);
     const monthlyTaxes = Number(propertyInfoResults.rows[0].taxes_yearly) / 12;

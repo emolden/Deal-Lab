@@ -69,7 +69,7 @@ const updateTaxes = (propertyId) => {
               return (
                 <div key = {item.id}>
                   <li >{item.holding_name}: {formattedCurrency(item.holding_cost)} </li>
-                  <button onClick={() => {deleteHoldingItem(item.holding_items_id)}}>X</button>
+                  <button onClick={() => {deleteHoldingItem(item.id)}}>X</button>
                 </div>
               )
             })}
