@@ -1,8 +1,7 @@
 import React from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import { useState } from 'react';
-// import upfrontCost from '../../../../helpers/upfrontCost';
-// import repairCost from '../../../../helpers/repairCost';
+
 
 
 function ModalUpfrontCosts() {
@@ -38,7 +37,6 @@ function ModalUpfrontCosts() {
     <div className="container">
       {Object.keys(propertyOfInterest).length && 
       <>
-      {/* <p>Upfront Costs:</p> */}
       <p> Purchase Price:</p> 
       <input
         value= {formattedCurrency(Number(propertyOfInterest.property[0].purchase_price))}
@@ -70,10 +68,10 @@ function ModalUpfrontCosts() {
           )
         })}
       </ul>
-      {/* <p>Total Repair Cost: {formattedCurrency(repairCost(propertyOfInterest.repairItems))}</p> */}
+      <p>Total Repair Cost: {formattedCurrency(propertyOfInterest.property[0].total_repair_cost)}</p>
       
         <p>
-          {/* <span className="bold-text">Total Upfront Cost: {formattedCurrency(upfrontCost(propertyOfInterest.repairItems, propertyOfInterest.property[0].purchase_price))}</span> */}
+          <span className="bold-text">Total Upfront Cost: {formattedCurrency(propertyOfInterest.property[0].total_upfront_cost)}</span>
         </p>
       </>
       }
