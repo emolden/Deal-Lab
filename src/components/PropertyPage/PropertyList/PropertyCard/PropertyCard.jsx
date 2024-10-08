@@ -12,29 +12,6 @@ import './PropertyCard.css';
 function PropertyCard({ property, userId, onOpenModal, allRepairItems, allHoldingItems }) {
   const dispatch = useDispatch();
 
-  const getRepairItems = (propId, allRepairItems) => {
-    let repairItems = []
-    for(let item of allRepairItems) {
-      if(item.id === propId) {
-        repairItems.push({repairName: item.repair_name, repair_cost: item.repair_cost})
-      } 
-    }
-    // console.log('repair items: ', propId, repairItems)
-    return repairItems;
-  }
-
-  const getHoldingItems = (propId, allHoldingItems) => {
-    let holdingItems = []
-    for(let item of allHoldingItems) {
-      
-      if(item.id === propId) {
-      holdingItems.push({holdingName: item.holding_name, holding_cost: item.holding_cost})
-      }
-    }
-    // console.log('holding items: ', propId, holdingItems)
-    return holdingItems;
-  }
-
   //getPropertyOfInterest function runs when the user clicks "edit" or
   //on the address card. This function sends a a dispatch to the properties.saga.js
   //with the property id as the payload.
