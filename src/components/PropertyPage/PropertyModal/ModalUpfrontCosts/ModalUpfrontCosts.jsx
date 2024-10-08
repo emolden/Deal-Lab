@@ -3,7 +3,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import { useState } from 'react';
 import upfrontCost from '../../../../helpers/upfrontCost';
 import repairCost from '../../../../helpers/repairCost';
-
+// import '../PropertyPage/PropertyModal/PropertyModal.css';
 
 function ModalUpfrontCosts() {
 
@@ -59,14 +59,14 @@ function ModalUpfrontCosts() {
         value={repairItemCost}
         onChange={e => setRepairItemCost(e.target.value)}
       />
-      <button onClick={addRepairItem}>Add</button>
+      <button className="modal-btn-2"onClick={addRepairItem}>Add</button>
       <ul>
         {propertyOfInterest.repairItems.map((item) => {
           return (
-            <>
-            <li key = {item.repair_items_id}>{item.repair_name}: {formattedCurrency(item.repair_cost)} </li>
-            <img onClick={() => {deleteRepairItem(item.repair_items_id)}} className="deleteDefaultRepairBtn" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" />
-            </>
+            <div className="unordered-list">
+            <ul key = {item.repair_items_id}>{item.repair_name}: {formattedCurrency(item.repair_cost)} </ul>
+            <img className="deleteBtn" onClick={() => {deleteRepairItem(item.repair_items_id)}} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" />
+            </div>
           )
         })}
       </ul>

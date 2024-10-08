@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom/cjs/react-router-dom.min';
 import Swal from 'sweetalert2';
-// import './PropertyModal/PropertyModal.css';
+import '../PropertyPage/PropertyModal/PropertyModal.css';
 
 
 function DefaultSettings() {
@@ -61,13 +61,15 @@ function DefaultSettings() {
               value={holdingPeriod}
               onChange={e => setHoldingPeriod(e.target.value)}
               />
+              <button className='defaultSaveBtn'
+                      onClick={updateHoldingPeriod}>Save</button>
+              
+              
       </div>
       <div className=" section grid-container">
       <DefaultHoldingCost defaultHoldings={defaultHoldings} />
       <DefaultRepairItems defaultRepairs={defaultRepairs} />
 
-      <button className='defaultSaveBtn'
-              onClick={updateHoldingPeriod}>Save</button>
     </div>
     </div>
     </div>

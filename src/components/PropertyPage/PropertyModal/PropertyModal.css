@@ -83,10 +83,11 @@
     border-radius: 4px;
     background-color: #343078;
     color: #f8f8f8;
-    font-size: 1.1rem;
+    font-size: 12px;
+    font-weight: bold;
     outline: 0;
     cursor: pointer;
-    margin: .5rem;
+    /* margin: .5rem; */
     position: relative;
     /* right: -550px; */
   }
@@ -118,6 +119,13 @@
     box-sizing: border-box;
   }
 
+  .unordered-list {
+    margin: 20px auto;
+    /* margin-left: 60px; */
+    display: flex;
+    justify-content: space-between;
+  }
+
   .upfront-costs {
     grid-column: 1; /* First column */
     grid-row: 1; /* First row */
@@ -137,4 +145,12 @@
     font-weight: bold; /* Make text bold */
     text-decoration: underline; /* Underline text */
     margin-bottom: 10px; /* Space below the header */
+  }
+
+  .deleteBtn {
+    width: 15px;
+    height: auto;
+    justify-content: space-between;
+    margin: auto;
+    display: flex;
   }
