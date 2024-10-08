@@ -44,25 +44,43 @@ function DefaultRepairItems({defaultRepairs}) {
               onClick={addDefaultRepairItem}>Add</span>
       </form>
 
+
       <div className='defaultRepairItems'>
         {!defaultRepairs ? '' : defaultRepairs.map((item) => {
             return (
-              <div className='defaultRepairItem'
-                    key={item.id}>
-                <span className='defaultRepairItemName'>{item.repair_name}:</span>
-                <span className='defaultRepairItemCost'>{formattedCurrency(item.repair_cost)}</span>
-                <span className='deleteDefaultRepairBtn'
+              <table className='defaultRepairItemsTable'>
+                <tr className='defaultRepairItem' key={item.id}>
+                  <td className='defaultRepairItemName'>{item.repair_name}:</td>
+                  <td className='defaultRepairItemCost'>{formattedCurrency(item.repair_cost)}</td>
+                  <td className='deleteDefaultRepairBtn'
                       onClick={e => {
                         e.preventDefault();
                         dispatch({
                           type: 'DELETE_DEFAULT_REPAIR_ITEM',
                           payload: item.id
                         })
-                      }}>❌</span>
-              </div>
+                      }}>❌</td>
+                </tr>
+            </table>
+
+              // <div className='defaultRepairItem'
+              //       key={item.id}>
+              //   <span className='defaultRepairItemName'>{item.repair_name}:</span>
+              //   <span className='defaultRepairItemCost'>{formattedCurrency(item.repair_cost)}</span>
+              //   <span className='deleteDefaultRepairBtn'
+              //         onClick={e => {
+              //           e.preventDefault();
+              //           dispatch({
+              //             type: 'DELETE_DEFAULT_REPAIR_ITEM',
+              //             payload: item.id
+              //           })
+              //         }}>❌</span>
+              // </div>
             )
           })}
       </div>
+
+
       <h4>Total: $
         <span>
           {!defaultRepairs ? '' : defaultRepairs.reduce((total, item) => {
