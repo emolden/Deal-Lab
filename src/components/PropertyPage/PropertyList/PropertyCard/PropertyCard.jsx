@@ -98,7 +98,7 @@ function PropertyCard({ property, userId, onOpenModal, allRepairItems, allHoldin
   // ------------ NUMBERS RENDER AS DOLLARS ------------ //
   const formattedCurrency = (value) => {
     const number = parseFloat(value);
-    return `$${number.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    return `$${number.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
   };
 
   return (
@@ -117,23 +117,23 @@ function PropertyCard({ property, userId, onOpenModal, allRepairItems, allHoldin
         <tbody>
           <tr>
             <td>Upfront Cost</td>
-            {/* <td>{formattedCurrency(upfrontCost(getRepairItems(property.id, allRepairItems), property.purchase_price))}</td> */}
+            <td>{formattedCurrency(property.total_upfront_cost)}</td>
           </tr>
           <tr>
             <td>Holding Cost</td>
-            {/* <td>{formattedCurrency(totalHoldingCost(property.holding_period, property.taxes_yearly/12, getHoldingItems(property.id, allHoldingItems)))}</td> */}
+            <td>{formattedCurrency(property.total_holding_cost)}</td>
           </tr>
           <tr>
             <td>Total Cost</td>
-            {/* <td>{formattedCurrency(totalCost(getRepairItems(property.id, allRepairItems), property.purchase_price, property.holding_period, property.taxes_yearly/12, getHoldingItems(property.id, allHoldingItems)))}</td> */}
+            <td>{formattedCurrency(property.total_cost)}</td>
           </tr>
           <tr>
             <td>Profit</td>
-            {/* <td>{formattedCurrency(profit (property.after_repair_value, getRepairItems(property.id, allRepairItems), property.purchase_price, property.holding_period, property.taxes_yearly/12, getHoldingItems(property.id, allHoldingItems)))}</td> */}
+            <td>{formattedCurrency(property.profit)}</td>
           </tr>
           <tr>
-            <td>Annualized Profit</td>
-            {/* <td>{formattedCurrency(annualizedProfit(property.after_repair_value, getRepairItems(property.id, allRepairItems), property.purchase_price, property.holding_period, property.taxes_yearly/12, getHoldingItems(property.id, allHoldingItems)))}</td> */}
+            <td>Monthly Profit</td>
+            <td>{formattedCurrency(property.monthly_profit)}</td>
           </tr>
           <td colSpan="2">
             <div className="button-container">
