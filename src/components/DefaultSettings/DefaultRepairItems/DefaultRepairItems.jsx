@@ -28,7 +28,7 @@ function DefaultRepairItems({defaultRepairs}) {
   return (
     <div className='defaultRepair'>
       <form className='defaultRepairForm'>
-        <label className='defaultSettingsText'>Repair Items:</label>
+        <label className='defaultSettingsText'>Repair Items:</label><br />
         <input className='defaultRepairNameInput'
                 type='text'
                 placeholder='Repair Name'

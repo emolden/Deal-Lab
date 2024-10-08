@@ -38,22 +38,19 @@ function ModalUpfrontCosts() {
     <div className="container">
       {Object.keys(propertyOfInterest).length && 
       <>
-      {/* <p>Upfront Costs:</p> */}
       <p> Purchase Price:</p> 
       <input
         value= {formattedCurrency(Number(propertyOfInterest.property[0].purchase_price))}
         onChange={e => {e.preventDefault; dispatch({type: 'UPDATE_PROPERTY_PURCHASE_PRICE', payload: e.target.value})}}
       />
       <p>Repair Items:</p>
-      <input className='repiarItemInput'
-        name='repairItemInput'
+      <input 
         type='text'
         placeholder='Repair Name'
         value={repairName}
         onChange={e => setRepairName(e.target.value)}
       />
-      <input className='repiarCostInput'
-        name='repairCostInput'
+      <input
         type='text'
         placeholder='Repair Cost'
         value={repairItemCost}

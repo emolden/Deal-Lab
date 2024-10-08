@@ -102,9 +102,30 @@
     font-weight: bold;
     outline: 0;
     cursor: pointer;
-    /* margin: .5rem; */
+    margin: .5rem;
     position: relative;
-    right: -550px;
+    right: -250px;
+    width: 120px;
+    max-width: auto;
+  }
+
+  .modal-default-btn {
+    display: block;
+    padding: 5px 10px;
+    border-width: 1px 1px 3px;
+    border-radius: 4px;
+    background-color: #343078;
+    color: #f8f8f8;
+    font-size: 12px;
+    font-weight: bold;
+    outline: 0;
+    cursor: pointer;
+    margin: .5rem;
+    position: relative;
+    width: 120px;
+    max-width: auto;
+    /* max-height: auto; */
+    /* right: 550px; */
   }
 
   .modal-btn:hover {
@@ -118,6 +139,10 @@
   }
 
   .modal-save-btn:hover {
+    background-color: #7974d7; 
+    transform: scale(1.05); 
+  }
+  .modal-default-btn:hover {
     background-color: #7974d7; 
     transform: scale(1.05); 
   }
