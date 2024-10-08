@@ -1,10 +1,10 @@
 const express = require('express');
-const annualizedProfit = require('../helpers/annualizedProfit')
+const annualizedProfit = require('../helpers/monthlyProfit')
 const profit = require('../helpers/profit');
 const totalCost = require('../helpers/totalCost');
 const totalHoldingCost = require('../helpers/totalHoldingCost');
 const upfrontCost = require('../helpers/upfrontCost');
-const annualizedProfit = require('../helpers/annualizedProfit')
+const monthlyProfit = require('../helpers/monthlyProfit')
 const {
   rejectUnauthenticated,
 } = require('../modules/authentication-middleware');
@@ -260,6 +260,7 @@ router.post('/', async (req, res) => {
     `;
     const totalHoldingCostValues = [propertyId];
     const totalHoldingCostResults = await pool.query(totalHoldingCostText, totalHoldingCostValues);
+    const monthlyHoldingCost = totalHoldingCostResults.rows[0].monthly_holding_total
 
 
 
@@ -291,7 +292,41 @@ router.post('/', async (req, res) => {
     `;
     const totalRepairCostValues = [propertyId];
     const totalRepairCostResults = await pool.query(totalRepairCostText, totalRepairCostValues);
+    const totalRepairs = totalRepairCostResults.rows[0].total_repair_cost
 
+    // ================ SQL select default holding period: USER
+    const getDefaultHoldingPeriodText = `
+    SELECT 
+      "user"."holding_period_default" AS "defaultHoldingPeriod"
+      FROM "user"
+      WHERE "user_id" = $1;
+    `;
+    const getDefaultHoldingPeriodResults = await pool.query(getDefaultRepairsText, [userId]);
+    console.log('getDefaultHoldingPeriodResult: ', getDefaultHoldingPeriodResults.rows)
+    const defaultHoldingPeriod = getDefaultHoldingPeriodResults.rows[0].defaultHoldingPeriod
+
+    // ================ SQL update table: PROPERTIES
+    const totalUpfrontCost = upfrontCost(totalRepairs, listingResponse.data[0].price);
+    const cost = totalCost(totalRepairs, listingResponse.data[0].price, defaultHoldingPeriod, taxYear/12, monthlyHoldingCost);
+    const holdingCost = totalHoldingCost(defaultHoldingPeriod, taxYear/12, monthlyHoldingCost);
+    const totalProfit = profit(valueEstimateResponse.data.priceRangeHigh, totalRepairs, listingResponse.data[0].price, defaultHoldingPeriod, taxYear/12, monthlyHoldingCost);
+    const totalMonthlyProfit = monthlyProfit(valueEstimateResponse.data.priceRangeHigh, totalRepairs, listingResponse.data[0].price, defaultHoldingPeriod, taxYear/12, monthlyHoldingCost);
+    
+    const updatePropertiesText = `
+       UPDATE "properties"
+          SET "total_repair_cost" = $1,
+              "total_upfront_cost" = $2,
+              "monthly_holding_cost" = $3,
+              "total_holding_cost" = $4,
+              "total_cost" = $5,
+              "profit" = $6,
+              "monthly_profit" = $7
+          WHERE "id" = $8;
+    `;
+
+    const updatePropertiesValues = [totalRepairs, totalUpfrontCost, monthlyHoldingCost, holdingCost, cost, totalProfit, totalMonthlyProfit, propertyId];
+
+    const updatePropertiesResults = await pool.query(updatePropertiesText, updatePropertiesValues);
 
     console.log('Property posted/updated in database!');
     

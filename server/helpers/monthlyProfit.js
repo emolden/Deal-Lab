@@ -5,7 +5,7 @@ import profit from "./profit";
 //and returns one number of the form 64000
 
 function annualizedProfit (afterRepairValue, totalRepairCost, purchasePrice, holdingPeriod, monthlyTaxes, monthlyHoldingCost) {
-    let totalAnnualizedProfit = (profit(afterRepairValue, totalRepairCost, purchasePrice, holdingPeriod, monthlyTaxes, monthlyHoldingCost) / holdingPeriod) * 12;
+    let totalAnnualizedProfit = (profit(afterRepairValue, totalRepairCost, purchasePrice, holdingPeriod, monthlyTaxes, monthlyHoldingCost) / holdingPeriod);
     
     return totalAnnualizedProfit;
 }
