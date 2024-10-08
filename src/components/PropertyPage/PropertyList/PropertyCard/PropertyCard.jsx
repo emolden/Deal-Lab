@@ -3,11 +3,11 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import Swal from 'sweetalert2'
 import './PropertyCard.css';
-import upfrontCost from '../../../../helpers/upfrontCost';
-import totalHoldingCost from '../../../../helpers/totalHoldingCost'
-import totalCost from '../../../../helpers/totalCost';
-import profit from '../../../../helpers/profit';
-import annualizedProfit from '../../../../helpers/annualizedProfit';
+// import upfrontCost from '../../../../helpers/upfrontCost';
+// import totalHoldingCost from '../../../../helpers/totalHoldingCost'
+// import totalCost from '../../../../helpers/totalCost';
+// import profit from '../../../../helpers/profit';
+// import annualizedProfit from '../../../../helpers/annualizedProfit';
 
 function PropertyCard({ property, userId, onOpenModal, allRepairItems, allHoldingItems }) {
   const dispatch = useDispatch();
@@ -117,23 +117,23 @@ function PropertyCard({ property, userId, onOpenModal, allRepairItems, allHoldin
         <tbody>
           <tr>
             <td>Upfront Cost</td>
-            <td>{formattedCurrency(upfrontCost(getRepairItems(property.id, allRepairItems), property.purchase_price))}</td>
+            {/* <td>{formattedCurrency(upfrontCost(getRepairItems(property.id, allRepairItems), property.purchase_price))}</td> */}
           </tr>
           <tr>
             <td>Holding Cost</td>
-            <td>{formattedCurrency(totalHoldingCost(property.holding_period, property.taxes_yearly/12, getHoldingItems(property.id, allHoldingItems)))}</td>
+            {/* <td>{formattedCurrency(totalHoldingCost(property.holding_period, property.taxes_yearly/12, getHoldingItems(property.id, allHoldingItems)))}</td> */}
           </tr>
           <tr>
             <td>Total Cost</td>
-            <td>{formattedCurrency(totalCost(getRepairItems(property.id, allRepairItems), property.purchase_price, property.holding_period, property.taxes_yearly/12, getHoldingItems(property.id, allHoldingItems)))}</td>
+            {/* <td>{formattedCurrency(totalCost(getRepairItems(property.id, allRepairItems), property.purchase_price, property.holding_period, property.taxes_yearly/12, getHoldingItems(property.id, allHoldingItems)))}</td> */}
           </tr>
           <tr>
             <td>Profit</td>
-            <td>{formattedCurrency(profit (property.after_repair_value, getRepairItems(property.id, allRepairItems), property.purchase_price, property.holding_period, property.taxes_yearly/12, getHoldingItems(property.id, allHoldingItems)))}</td>
+            {/* <td>{formattedCurrency(profit (property.after_repair_value, getRepairItems(property.id, allRepairItems), property.purchase_price, property.holding_period, property.taxes_yearly/12, getHoldingItems(property.id, allHoldingItems)))}</td> */}
           </tr>
           <tr>
             <td>Annualized Profit</td>
-            <td>{formattedCurrency(annualizedProfit(property.after_repair_value, getRepairItems(property.id, allRepairItems), property.purchase_price, property.holding_period, property.taxes_yearly/12, getHoldingItems(property.id, allHoldingItems)))}</td>
+            {/* <td>{formattedCurrency(annualizedProfit(property.after_repair_value, getRepairItems(property.id, allRepairItems), property.purchase_price, property.holding_period, property.taxes_yearly/12, getHoldingItems(property.id, allHoldingItems)))}</td> */}
           </tr>
           <td colSpan="2">
             <div className="button-container">

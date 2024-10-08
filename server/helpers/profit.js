@@ -1,4 +1,4 @@
-import totalCost from "./totalCost";
+const totalCost = require('./totalCost);
 //profit takes in two parameters
     //afterRepairValue is a number of the form 410000
     //totalCost is a number of the form 378000
@@ -10,4 +10,4 @@ function profit (afterRepairValue, totalRepairCost, purchasePrice, holdingPeriod
     return totalProfit;
 }
 
-export default profit;
+module.exports = profit;

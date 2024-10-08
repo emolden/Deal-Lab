@@ -1,16 +1,46 @@
 const express = require('express');
-const annualizedProfit = require('../helpers/monthlyProfit')
-const profit = require('../helpers/profit');
-const totalCost = require('../helpers/totalCost');
-const totalHoldingCost = require('../helpers/totalHoldingCost');
-const upfrontCost = require('../helpers/upfrontCost');
-const monthlyProfit = require('../helpers/monthlyProfit')
+// const monthlyProfit = require('../helpers/monthlyProfit')
+// const profit = require('../helpers/profit');
+// const totalCost = require('../helpers/totalCost');
+// const totalHoldingCost = require('../helpers/totalHoldingCost');
+// const upfrontCost = require('../helpers/upfrontCost');
+// const monthlyProfit = require('../helpers/monthlyProfit')
 const {
   rejectUnauthenticated,
 } = require('../modules/authentication-middleware');
 const pool = require('../modules/pool');
 const router = express.Router();
 const axios = require('axios');
+
+function upfrontCost (totalRepairCost, purchasePrice) {
+  let totalUpfrontCost = Number(totalRepairCost) + Number(purchasePrice);
+  
+  return totalUpfrontCost;
+}
+
+function totalHoldingCost (holdingPeriod, monthlyTaxes, monthlyHoldingCost) {
+  let holdingCost = (monthlyTaxes + monthlyHoldingCost) * holdingPeriod;
+  
+  return holdingCost;
+}
+
+function totalCost (totalRepairCost, purchasePrice, holdingPeriod, monthlyTaxes, monthlyHoldingCost) {
+  let cost = upfrontCost(totalRepairCost, purchasePrice) + totalHoldingCost(holdingPeriod, monthlyTaxes, monthlyHoldingCost);
+  
+  return cost;
+}
+
+function profit (afterRepairValue, totalRepairCost, purchasePrice, holdingPeriod, monthlyTaxes, monthlyHoldingCost) {
+  let totalProfit = afterRepairValue - totalCost(totalRepairCost, purchasePrice, holdingPeriod, monthlyTaxes, monthlyHoldingCost);
+  
+  return totalProfit;
+}
+
+function monthlyProfit (afterRepairValue, totalRepairCost, purchasePrice, holdingPeriod, monthlyTaxes, monthlyHoldingCost) {
+  let totalAnnualizedProfit = (profit(afterRepairValue, totalRepairCost, purchasePrice, holdingPeriod, monthlyTaxes, monthlyHoldingCost) / holdingPeriod);
+  
+  return totalAnnualizedProfit;
+}
 
 // ===================== Properties =====================
 /**
@@ -260,6 +290,7 @@ router.post('/', async (req, res) => {
     `;
     const totalHoldingCostValues = [propertyId];
     const totalHoldingCostResults = await pool.query(totalHoldingCostText, totalHoldingCostValues);
+    console.log('sum of holding items. expected: 200', totalHoldingCostResults.rows);
     const monthlyHoldingCost = totalHoldingCostResults.rows[0].monthly_holding_total
 
 
@@ -292,6 +323,7 @@ router.post('/', async (req, res) => {
     `;
     const totalRepairCostValues = [propertyId];
     const totalRepairCostResults = await pool.query(totalRepairCostText, totalRepairCostValues);
+    console.log('sum of repair items. expected: 200', totalRepairCostResults.rows[0].total_repair_cost)
     const totalRepairs = totalRepairCostResults.rows[0].total_repair_cost
 
     // ================ SQL select default holding period: USER
@@ -299,9 +331,9 @@ router.post('/', async (req, res) => {
     SELECT 
       "user"."holding_period_default" AS "defaultHoldingPeriod"
       FROM "user"
-      WHERE "user_id" = $1;
+      WHERE "id" = $1;
     `;
-    const getDefaultHoldingPeriodResults = await pool.query(getDefaultRepairsText, [userId]);
+    const getDefaultHoldingPeriodResults = await pool.query(getDefaultHoldingPeriodText, [userId]);
     console.log('getDefaultHoldingPeriodResult: ', getDefaultHoldingPeriodResults.rows)
     const defaultHoldingPeriod = getDefaultHoldingPeriodResults.rows[0].defaultHoldingPeriod
 

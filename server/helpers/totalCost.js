@@ -1,3 +1,4 @@
+
 import upfrontCost from "./upfrontCost";
 import totalHoldingCost from "./totalHoldingCost";
 
@@ -12,4 +13,4 @@ function totalCost (totalRepairCost, purchasePrice, holdingPeriod, monthlyTaxes,
     return cost;
 }
 
-export default totalCost;
+module.exports = totalCost;
