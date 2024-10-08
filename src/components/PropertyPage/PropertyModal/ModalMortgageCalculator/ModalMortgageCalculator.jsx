@@ -34,58 +34,69 @@ function ModalMortgageCalculator() {
 
                 <div className="mortgageCalculatorFormDiv">
                     <form className="mortgageCalculatorForm">
-                        <TextField label="Down Payment"
+                        <label>Down Payment:</label>
+                        <br />
+                        <input label="Down Payment"
                                 id="standard-helperText"
-                                variant="standard"
-                                size='small'
+                                // variant="standard"
+                                // size='small'
                                 value={downPayment}
                                 onChange={e => setDownPayment(e.target.value)}
                                 sx={{width: '160px', margin: '5px 5px 5px 0px'}}  />
-                        <TextField 
+                        <br />
+                        <label>Down Payment Percentage:</label>
+                        <br />
+                        <input 
                                 id="standard-helperText"
-                                variant="standard"
-                                size='small'
+                                // variant="standard"
+                                // size='small'
                                 value={downPaymentPercentage}
                                 onChange={e => setDownPaymentPercentage(e.target.value)}
                                 sx={{width: '60px', }}  />
-                        <TextField label="Interest Rate" 
+                        <br />
+                        <label>Interest Rate:</label>
+                        <br />
+                        <input label="Interest Rate" 
                                 id="standard-helperText"
-                                variant="standard"
-                                size='small'
+                                // variant="standard"
+                                // size='small'
                                 value={interestRate}
                                 onChange={e => setInterestRate(e.target.value)}
                                 sx={{width: '160px', margin: '5px 5px 5px 0px'}}  />
-                        <TextField label="Closing Costs" 
+                        <br />
+                        <label>Closing Costs:</label>
+                        <br />
+                        <input label="Closing Costs" 
                                 id="standard-helperText"
-                                variant="standard"
-                                size='small' 
+                                // variant="standard"
+                                // size='small' 
                                 value={closingCosts}
                                 onChange={e => setClosingCosts(e.target.value)}
                                 sx={{width: '160px', margin: '5px 5px 5px 0px'}} />
-                        <TextField 
+                        <br />
+                        <label> Closing Cost Percentage:</label>
+                        <input 
                                 id="standard-helperText"
-                                variant="standard"
-                                size='small'
+                                // variant="standard"
+                                // size='small'
                                 value={closingCostsPercentage}
                                 onChange={e => setClosingCostsPercentage(e.target.value)}
                                 sx={{width: '60px'}}  />
 
-                        <FormControl size='small' variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                            <InputLabel id="demo-simple-select-standard-label">Loan Term</InputLabel>
-                            <Select labelId="demo-simple-select-standard-label"
+                        <form size='small' variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                            <label>Loan Term <br /></label>
+                            <select labelId="demo-simple-select-standard-label"
                                 id="demo-simple-select-standard"
                                 value={loanTerm}
-                                onChange={e => setLoanTerm(e.target.value)}
-                            >
-                                <MenuItem value={15}>15 Yr</MenuItem>
-                                <MenuItem value={20}>20 Yr</MenuItem>
-                                <MenuItem value={30}>30 Yr</MenuItem>
-                            </Select>
-                        </FormControl>
+                                onChange={e => setLoanTerm(e.target.value)}>
+                                <option value=""></option>
+                                <option value={15}>15 Yr</option>
+                                <option value={20}>20 Yr</option>
+                                <option value={30}>30 Yr</option>
+                            </select>
+                        </form>
 
-                        <Button variant="contained"
-                                sx={{width: '195px'}}
-                            >Calculate</Button>
+                        <button className="modal-btn-2">Calculate</button>
                     </form>
                 </div>
 
