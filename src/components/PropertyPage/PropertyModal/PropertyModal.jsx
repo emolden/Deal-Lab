@@ -75,7 +75,7 @@ const PropertyModal = ({ isOpen, onClose, propertyCard, userId }) => {
             </div>
             <div className='section profit-estimation'>
             <h3 className='section-header'>Profit Estimation:</h3>
-              {/* <ModalProfitEstimation /> */}
+              <ModalProfitEstimation />
             </div>
           </div>
           <button onClick={handleBackToDefault}>Back To Default</button>

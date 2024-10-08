@@ -458,7 +458,7 @@ router.get('/propertyOfInterest/:id', rejectUnauthenticated, async (req, res) =>
     //request repair items for specific property
     const repairItemText = `
       SELECT 
-        "repair_items"."id" AS "repair_items_id",
+        "repair_items"."id" AS "id",
         "properties"."id" AS "property_id",
         "repair_items"."name" AS "repair_name",
         "repair_items"."cost" AS "repair_cost" 
@@ -475,7 +475,7 @@ router.get('/propertyOfInterest/:id', rejectUnauthenticated, async (req, res) =>
       //request holding items for specific property
       const holdingItemText = `
         SELECT 
-          "holding_items"."id" AS "holding_items_id",
+          "holding_items"."id" AS "id",
           "properties"."id" AS "property_id",
           "holding_items"."name" AS "holding_name",
           "holding_items"."cost" AS "holding_cost" 

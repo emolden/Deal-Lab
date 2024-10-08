@@ -67,10 +67,10 @@ const updateTaxes = (propertyId) => {
             </> : ''}
             {propertyOfInterest.holdingItems.map((item) => {
               return (
-                <>
-                <li key = {item.holding_items_id}>{item.holding_name}: {formattedCurrency(item.holding_cost)} </li>
-                <button onClick={() => {deleteHoldingItem(item.holding_items_id)}}>X</button>
-                </>
+                <div key = {item.id}>
+                  <li >{item.holding_name}: {formattedCurrency(item.holding_cost)} </li>
+                  <button onClick={() => {deleteHoldingItem(item.holding_items_id)}}>X</button>
+                </div>
               )
             })}
           </ul>
