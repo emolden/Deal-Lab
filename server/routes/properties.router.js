@@ -85,10 +85,15 @@ router.post('/', async (req, res) => {
   const address = req.body.address;
   const userId = req.user.id;
   let propertyApiId;
+  let propertyId;
+  let formattedAddress;
+  let purchasePrice;
+  let afterRepairValue;
   let listingResponse = {};
   let recordsResponse = {};
   let valueEstimateResponse = {};
   let taxYear;
+  
   console.log('ADDRESS:', address, userId);
   
   let connection;
@@ -96,6 +101,7 @@ router.post('/', async (req, res) => {
     connection = await pool.connect()
     await connection.query('BEGIN;')
 
+    // ========================== CALLING API && CHECKING TIMESTAMP ==========================
     const checkTimeStampSqlText = `
         SELECT * FROM "property_api_data"
             WHERE "inserted_at" >= CURRENT_TIMESTAMP - INTERVAL '24 hours'
@@ -104,9 +110,9 @@ router.post('/', async (req, res) => {
     const checkTimeStampResults = await pool.query(checkTimeStampSqlText, [address]);
     const checkTimeStampData = checkTimeStampResults.rows;
     console.log('checkTimeStampData is:', checkTimeStampData);
-    
-
-
+      
+  
+  
     if (checkTimeStampData.length === 0) {
       // ================ Axios for VALUE ESTIMATE (afterRepairValue)
       const theValueEstimateResponse = await axios({
@@ -118,6 +124,8 @@ router.post('/', async (req, res) => {
         }
       })
       valueEstimateResponse = theValueEstimateResponse;
+      purchasePrice = valueEstimateResponse.data.price;
+      afterRepairValue = valueEstimateResponse.data.priceRangeHigh;
       console.log("Data from valueEstimateResponse:", valueEstimateResponse.data);
 
 
@@ -136,12 +144,12 @@ router.post('/', async (req, res) => {
 
 
       // ================ Axios for LISTING
-      const newFormattedAddress = recordsResponse.data[0].formattedAddress;
+      formattedAddress = recordsResponse.data[0].formattedAddress;
 
       try {
         const theListingResponse = await axios({
           method: 'GET',
-          url: `https://api.rentcast.io/v1/listings/sale?address=${newFormattedAddress}&limit=1`,
+          url: `https://api.rentcast.io/v1/listings/sale?address=${formattedAddress}&limit=1`,
           headers: {
               'accept': 'application/json',
               'X-Api-Key': `${api_key}`
@@ -153,8 +161,8 @@ router.post('/', async (req, res) => {
         console.log('Address cannot be found in listing.');
 
         listingResponse = {data: [{
-          formattedAddress: newFormattedAddress,
-          price: valueEstimateResponse.data.price,
+          formattedAddress: formattedAddress,
+          price: purchasePrice,
           propertyType: (recordsResponse.data[0].propertyType ? recordsResponse.data[0].propertyType : 'Single Family'),
           bedrooms: (recordsResponse.data[0].bedrooms ? recordsResponse.data[0].bedrooms : 3),
           bathrooms: (recordsResponse.data[0].bathrooms ? recordsResponse.data[0].bathrooms : 2),
@@ -198,9 +206,14 @@ router.post('/', async (req, res) => {
       propertyApiId = propertyApiDataResults.rows[0].id;
 
     } else if (checkTimeStampData.length > 0) {
-
       console.log('Property already exists in database!');
-      propertyApiId = checkTimeStampData[0].id;
+      const mostRecentCheck = checkTimeStampData.length - 1;
+
+      propertyApiId = checkTimeStampData[mostRecentCheck].id;
+      formattedAddress = checkTimeStampData[mostRecentCheck].address;
+      purchasePrice = checkTimeStampData[mostRecentCheck].purchase_price;
+      afterRepairValue = checkTimeStampData[mostRecentCheck].after_repair_value;
+      
     }
 
 
@@ -209,10 +222,10 @@ router.post('/', async (req, res) => {
     const propertiesData = [
         userId,
         propertyApiId,
-        listingResponse.data[0].formattedAddress,
-        listingResponse.data[0].price,
+        formattedAddress,
+        purchasePrice,
         taxYear,
-        valueEstimateResponse.data.priceRangeHigh
+        afterRepairValue
     ]
 
     const propertiesSqlText = `
@@ -222,8 +235,9 @@ router.post('/', async (req, res) => {
         ($1, $2, $3, $4, $5, $6) RETURNING id;
     `;
     const propertiesResults = await pool.query(propertiesSqlText, propertiesData);
-    const propertyId = propertiesResults.rows[0].id
-
+    propertyId = propertiesResults.rows[0].id;
+    console.log('This is propertyId:', propertyId);
+    
 
 
     // ================ SQL insert into table: HOLDING
@@ -269,13 +283,13 @@ router.post('/', async (req, res) => {
 
     console.log('Property posted/updated in database!');
     
-    await connection.query('Commit;')
-    res.sendStatus(201)
+    await connection.query('Commit;');
+    res.sendStatus(201);
 
   } catch(err) {
-      console.log('Add property failed: ', err);
-      await connection.query('Rollback;')
-      res.sendStatus(500);
+    console.log('Add property failed: ', err);
+    await connection.query('Rollback;');
+    res.sendStatus(500);
   } finally {
     await connection.release()
   }
@@ -661,6 +675,31 @@ router.put('/backToDefault/:id', async (req, res) => {
   }
 })
 
+
+/**
+ * ----- PUT property taxes: updatePropertyTaxes
+ */
+router.put('/taxes', (req, res) => {
+  const propertyId = req.body.propertyId;
+
+  const sqlText = `
+    UPDATE "properties"
+      SET "taxes_yearly" = 0
+      WHERE "id" = $1;
+  `; 
+  pool.query(sqlText, [propertyId])
+
+      .then((results) => {
+        res.sendStatus(201)
+      }) 
+      .catch((error) => {
+        console.log('Error in updating property taxes:', error);
+        res.sendStatus(500);
+      })
+});
+
+
+
 // ===================== Repair Item =====================
 /**
  * DELETE property repair item
@@ -708,7 +747,6 @@ router.post('/repairItem/', (req, res) => {
         res.sendStatus(500);
       })
 });
-
 
 
 
@@ -760,24 +798,8 @@ router.post('/holdingItem', (req, res) => {
       })
 });
 
-router.put('/taxes', (req, res) => {
-  const propertyId = req.body.propertyId;
 
-  const sqlText = `
-    UPDATE "properties"
-      SET "taxes_yearly" = 0
-      WHERE "id" = $1;
-  `; 
-  pool.query(sqlText, [propertyId])
 
-      .then((results) => {
-        res.sendStatus(201)
-      }) 
-      .catch((error) => {
-        console.log('Error in updating property taxes:', error);
-        res.sendStatus(500);
-      })
-});
 
 
 

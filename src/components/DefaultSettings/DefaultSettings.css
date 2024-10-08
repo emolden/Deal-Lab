@@ -20,6 +20,7 @@
     font-weight: bold;
 }
 
+
 /* ======== Default Holding Period ======== */
 .holdingPeriodDefault {
     margin-left: 60px;
@@ -36,7 +37,8 @@
     text-align: center;
 }
 
-/* ======== Default Holding ======== */
+
+/* ======== Default Holding && Form ======== */
 .defaultHolding {
     margin-bottom: 20px;
     border: 1.5px solid rgb(202, 202, 202);
@@ -44,10 +46,6 @@
     padding: 15px;
     box-shadow: 1px 1px 1px rgba(116, 116, 116, 0.3),
                 1px 1px 1px rgba(116, 116, 116, 0.3);
-}
-
-.defaultHoldingForm {
-
 }
 
 .defaultHoldingNameInput, .defaultHoldingCostInput {
@@ -88,19 +86,24 @@
     background-color: rgb(163, 196, 250);
 }
 
+
+/* ======== Default Holding Items ======== */
 .defaultHoldingItems {
-    margin: 20px auto;
+    margin: 10px auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-.defaultHoldingItem {
-    margin-left: 60px;
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
+.defaultHoldingItemsTable {
+    margin-left: 280px;
+    width: 490px;
+    /* border: 1px solid black; */
 }
 
 .defaultHoldingItemName, .defaultHoldingItemCost, .deleteDefaultHoldingBtn {
-
+    /* border: 1px solid black; */
+    width: 163px;
 }
 
 .deleteDefaultHoldingBtn {
@@ -121,10 +124,6 @@
     padding: 15px;
     box-shadow: 1px 1px 1px rgba(116, 116, 116, 0.3),
                 1px 1px 1px rgba(116, 116, 116, 0.3);
-}
-
-.defaultRepairForm {
-
 }
 
 .defaultRepairNameInput, .defaultRepairCostInput {
@@ -165,18 +164,25 @@
     background-color: rgb(163, 196, 250);
 }
 
+
+/* ======== Default Repair Items ======== */
 .defaultRepairItems {
-    margin: 20px auto;
+    margin: 10px auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* border: 1px solid black; */
 }
 
-.defaultRepairItem {
-    margin-left: 60px;
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
+.defaultRepairItemsTable {
+    margin-left: 280px;
+    width: 490px;
+    /* border: 1px solid black; */
 }
 
 .defaultRepairItemName, .defaultRepairItemCost, .deleteDefaultRepairBtn {
+    /* border: 1px solid black; */
+    width: 163px;
 
 }
 
@@ -189,6 +195,8 @@
     font-size: 11px;
 }
 
+
+/* ======== Default Save Button ======== */
 .defaultSaveBtn {
     position: absolute;
     bottom: 0;
