@@ -47,14 +47,15 @@ function DefaultHoldingCost({defaultHoldings}) {
                 onClick={addDefaultHoldingItem}>Add</span>
       </form>
 
+
       <div className='defaultHoldingItems'>
         {!defaultHoldings ? '' : defaultHoldings.map((item) => {
           return (
-            <div className='defaultHoldingItem'
-                  key={item.id}>
-              <span className='defaultHoldingItemName'>{item.holding_name}:</span>
-              <span className='defaultHoldingItemCost'>{formattedCurrency(item.holding_cost)}</span>
-              <span className='deleteDefaultHoldingBtn'
+            <table className='defaultHoldingItemsTable'>
+              <tr className='defaultHoldingItem' key={item.id}>
+                <td className='defaultHoldingItemName'>{item.holding_name}:</td>
+                <td className='defaultHoldingItemCost'>{formattedCurrency(item.holding_cost)}</td>
+                <td className='deleteDefaultHoldingBtn'
                     onClick={e => {
                       e.preventDefault();
                       dispatch({

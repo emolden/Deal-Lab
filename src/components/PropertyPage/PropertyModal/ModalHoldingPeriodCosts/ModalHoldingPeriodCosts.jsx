@@ -49,14 +49,14 @@ const updateTaxes = (propertyId) => {
           <input className='holdingItemInput'
             name='holdingItemInput'
             type='text'
-            placeholder='holding Name'
+            placeholder='Holding Name'
             value={holdingName}
             onChange={e => setHoldingName(e.target.value)}
           />
           <input className='holdingCostInput'
             name='holdingCostInput'
             type='text'
-            placeholder='holding Cost'
+            placeholder='Holding Cost'
             value={holdingItemCost}
             onChange={e => setHoldingItemCost(e.target.value)}
           />

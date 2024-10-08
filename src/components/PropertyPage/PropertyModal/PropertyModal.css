@@ -108,7 +108,7 @@
     grid-template-rows: repeat(2, auto); /* Two rows */
     gap: 8px; /* Space between items */
     margin-top: 20px; /* Space from address strip */
-    padding: 0 0 10px 0;
+    padding: 0 10px 10px 10px;
   }
   
   .section {
@@ -138,7 +138,12 @@
 
   .profit-estimation {
     grid-column: 2; /* Second column */
-    grid-row: 1 / span 2; /* Span both rows */
+    grid-row: 1; /* Span both rows */
+  }
+
+  .mortgage-calculator {
+    grid-column: 2; /* Second column */
+    grid-row: 2; /* Span both rows */
   }
 
   .section-header {
