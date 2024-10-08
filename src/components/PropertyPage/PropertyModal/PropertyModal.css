@@ -76,7 +76,28 @@
     right: -550px;
   }
 
+  .modal-btn-2 {
+    display: block;
+    padding: 5px 10px;
+    border-width: 1px 1px 3px;
+    border-radius: 4px;
+    background-color: #343078;
+    color: #f8f8f8;
+    font-size: 12px;
+    font-weight: bold;
+    outline: 0;
+    cursor: pointer;
+    /* margin: .5rem; */
+    position: relative;
+    /* right: -550px; */
+  }
+
   .modal-btn:hover {
+    background-color: #7974d7; 
+    transform: scale(1.05); 
+  }
+
+  .modal-btn-2:hover {
     background-color: #7974d7; 
     transform: scale(1.05); 
   }
@@ -96,6 +117,13 @@
     padding: 15px; /* Padding inside sections */
     background: white; /* Background for the sections */
     box-sizing: border-box;
+  }
+
+  .unordered-list {
+    margin: 20px auto;
+    /* margin-left: 60px; */
+    display: flex;
+    justify-content: space-between;
   }
 
   .upfront-costs {
@@ -122,4 +150,12 @@
     font-weight: bold; /* Make text bold */
     text-decoration: underline; /* Underline text */
     margin-bottom: 10px; /* Space below the header */
+  }
+
+  .deleteBtn {
+    width: 15px;
+    height: auto;
+    justify-content: space-between;
+    margin: auto;
+    display: flex;
   }

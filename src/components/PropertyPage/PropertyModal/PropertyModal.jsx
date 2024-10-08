@@ -87,10 +87,11 @@ const PropertyModal = ({ isOpen, onClose, propertyCard, userId }) => {
             <h3 className='section-header'>Mortgage Calculator:</h3>
             <ModalMortgageCalculator />
           </div>
-        </div>
+          <div className="">
+          <button className="modal-btn-2" onClick={handleBackToDefault}>Back To Default</button>
+          <button className="modal-btn" onClick={saveUpdatedPropertyInfo}>Save</button>
+          </div>
 
-        <button onClick={handleBackToDefault}>Back To Default</button>
-        <button onClick={saveUpdatedPropertyInfo}>Save</button>
       </div>
     </div>
   );

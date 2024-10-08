@@ -22,9 +22,8 @@ function DefaultRepairItems({defaultRepairs}) {
 
   const formattedCurrency = (value) => {
     const number = parseFloat(value);
-    const truncated = Math.floor(number * 100) / 100;
-    return `$${truncated.toFixed(2)}`;
-  }
+    return ` $${number.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+  };
 
   return (
     <div className='defaultRepair'>
@@ -40,7 +39,7 @@ function DefaultRepairItems({defaultRepairs}) {
                 placeholder='Repair Cost'
                 value={repairCost}
                 onChange={e => setRepairCost(e.target.value)}/>
-        <span className='addDefaultRepairBtn'
+        <span className='addBtn'
               onClick={addDefaultRepairItem}>Add</span>
       </form>
 
@@ -59,34 +58,19 @@ function DefaultRepairItems({defaultRepairs}) {
                           type: 'DELETE_DEFAULT_REPAIR_ITEM',
                           payload: item.id
                         })
-                      }}>❌</td>
-                </tr>
-            </table>
-
-              // <div className='defaultRepairItem'
-              //       key={item.id}>
-              //   <span className='defaultRepairItemName'>{item.repair_name}:</span>
-              //   <span className='defaultRepairItemCost'>{formattedCurrency(item.repair_cost)}</span>
-              //   <span className='deleteDefaultRepairBtn'
-              //         onClick={e => {
-              //           e.preventDefault();
-              //           dispatch({
-              //             type: 'DELETE_DEFAULT_REPAIR_ITEM',
-              //             payload: item.id
-              //           })
-              //         }}>❌</span>
-              // </div>
+                      }}>
+                        <img className="deleteDefaultRepairBtn" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" />
+                        </span>
+              </div>
             )
           })}
       </div>
-
-
-      <h4>Total: $
+      <h4 className="total">Total: 
         <span>
-          {!defaultRepairs ? '' : defaultRepairs.reduce((total, item) => {
+          {formattedCurrency(!defaultRepairs ? '' : defaultRepairs.reduce((total, item) => {
             total = total + Number(item.repair_cost)
             return total
-          }, 0)}
+          }, 0))}
         </span>
       </h4>
     </div>

@@ -135,13 +135,13 @@ function PropertyCard({ property, userId, onOpenModal, allRepairItems, allHoldin
             <td>Annualized Profit</td>
             <td>{formattedCurrency(annualizedProfit(property.after_repair_value, getRepairItems(property.id, allRepairItems), property.purchase_price, property.holding_period, property.taxes_yearly/12, getHoldingItems(property.id, allHoldingItems)))}</td>
           </tr>
-          <td colSpan="2">
+          {/* <td colSpan="2"> */}
             <div className="button-container">
             <button className='delete-button' onClick={() => {deleteProperty(property.id)}}>
               Delete
             </button>
             </div>
-          </td>
+          {/* </td> */}
         </tbody>
       </table>
     </div>
