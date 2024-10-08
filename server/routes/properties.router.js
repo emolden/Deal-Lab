@@ -18,26 +18,26 @@ function upfrontCost (totalRepairCost, purchasePrice) {
   return totalUpfrontCost;
 }
 
-function totalHoldingCost (holdingPeriod, monthlyTaxes, monthlyHoldingCost) {
-  let holdingCost = (monthlyTaxes + monthlyHoldingCost) * holdingPeriod;
+function totalHoldingCost (holdingPeriod, monthlyHoldingCost) {
+  let holdingCost = (monthlyHoldingCost) * holdingPeriod;
   
   return holdingCost;
 }
 
-function totalCost (totalRepairCost, purchasePrice, holdingPeriod, monthlyTaxes, monthlyHoldingCost) {
-  let cost = upfrontCost(totalRepairCost, purchasePrice) + totalHoldingCost(holdingPeriod, monthlyTaxes, monthlyHoldingCost);
+function totalCost (totalRepairCost, purchasePrice, holdingPeriod, monthlyHoldingCost) {
+  let cost = upfrontCost(totalRepairCost, purchasePrice) + totalHoldingCost(holdingPeriod, monthlyHoldingCost);
   
   return cost;
 }
 
-function profit (afterRepairValue, totalRepairCost, purchasePrice, holdingPeriod, monthlyTaxes, monthlyHoldingCost) {
-  let totalProfit = afterRepairValue - totalCost(totalRepairCost, purchasePrice, holdingPeriod, monthlyTaxes, monthlyHoldingCost);
+function profit (afterRepairValue, totalRepairCost, purchasePrice, holdingPeriod, monthlyHoldingCost) {
+  let totalProfit = afterRepairValue - totalCost(totalRepairCost, purchasePrice, holdingPeriod, monthlyHoldingCost);
   
   return totalProfit;
 }
 
-function monthlyProfit (afterRepairValue, totalRepairCost, purchasePrice, holdingPeriod, monthlyTaxes, monthlyHoldingCost) {
-  let totalAnnualizedProfit = (profit(afterRepairValue, totalRepairCost, purchasePrice, holdingPeriod, monthlyTaxes, monthlyHoldingCost) / holdingPeriod);
+function monthlyProfit (afterRepairValue, totalRepairCost, purchasePrice, holdingPeriod, monthlyHoldingCost) {
+  let totalAnnualizedProfit = (profit(afterRepairValue, totalRepairCost, purchasePrice, holdingPeriod, monthlyHoldingCost) / holdingPeriod);
   
   return totalAnnualizedProfit;
 }
@@ -137,7 +137,7 @@ router.post('/', async (req, res) => {
             WHERE "inserted_at" >= CURRENT_TIMESTAMP - INTERVAL '24 hours'
             AND "address" = $1;
     `
-    const checkTimeStampResults = await pool.query(checkTimeStampSqlText, [address]);
+    const checkTimeStampResults = await connection.query(checkTimeStampSqlText, [address]);
     const checkTimeStampData = checkTimeStampResults.rows;
     console.log('checkTimeStampData is:', checkTimeStampData);
     
@@ -230,7 +230,7 @@ router.post('/', async (req, res) => {
           ($1, $2, $3, $4, $5, $6, $7, $8)
           RETURNING "id";
       `
-      const propertyApiDataResults = await pool.query(propertyApiDataSqlText, propertyApiData);
+      const propertyApiDataResults = await connection.query(propertyApiDataSqlText, propertyApiData);
       propertyApiId = propertyApiDataResults.rows[0].id;
 
     } else if (checkTimeStampData.length > 0) {
@@ -257,7 +257,7 @@ router.post('/', async (req, res) => {
         VALUES
         ($1, $2, $3, $4, $5, $6) RETURNING id;
     `;
-    const propertiesResults = await pool.query(propertiesSqlText, propertiesData);
+    const propertiesResults = await connection.query(propertiesSqlText, propertiesData);
     const propertyId = propertiesResults.rows[0].id
 
 
@@ -267,7 +267,7 @@ router.post('/', async (req, res) => {
       SELECT * FROM "default_holdings"
         WHERE "user_id" = $1;
     `;
-    const getDefaultHoldingsResults = await pool.query(getDefaultHoldingsText, [userId]);
+    const getDefaultHoldingsResults = await connection.query(getDefaultHoldingsText, [userId]);
     console.log('getDefaultHoldingsResult: ', getDefaultHoldingsResults.rows)
 
     for(let holdingItem of getDefaultHoldingsResults.rows) {
@@ -278,7 +278,7 @@ router.post('/', async (req, res) => {
           ($1, $2, $3);
       `;
       const addHoldingItemValues = [propertyId, holdingItem.holding_name, holdingItem.holding_cost];
-      const addHoldingItemResults = await pool.query(addHoldingItemText, addHoldingItemValues);
+      const addHoldingItemResults = await connection.query(addHoldingItemText, addHoldingItemValues);
     }
 
     // ================ SQL sum holding cost: HOLDING
@@ -289,7 +289,7 @@ router.post('/', async (req, res) => {
       WHERE "property_id" = $1;
     `;
     const totalHoldingCostValues = [propertyId];
-    const totalHoldingCostResults = await pool.query(totalHoldingCostText, totalHoldingCostValues);
+    const totalHoldingCostResults = await connection.query(totalHoldingCostText, totalHoldingCostValues);
     console.log('sum of holding items. expected: 200', totalHoldingCostResults.rows);
     const monthlyHoldingCost = Number(totalHoldingCostResults.rows[0].monthly_holding_total) + (taxYear / 12);
 
@@ -300,7 +300,7 @@ router.post('/', async (req, res) => {
     SELECT * FROM "default_repairs"
       WHERE "user_id" = $1;
     `;
-    const getDefaultRepairsResults = await pool.query(getDefaultRepairsText, [userId]);
+    const getDefaultRepairsResults = await connection.query(getDefaultRepairsText, [userId]);
     console.log('getDefaultRepairsResult: ', getDefaultRepairsResults.rows)
 
     for(let repairItem of getDefaultRepairsResults.rows) {
@@ -311,7 +311,7 @@ router.post('/', async (req, res) => {
           ($1, $2, $3);
       `;
       const addRepairItemValues = [propertyId, repairItem.repair_name, repairItem.repair_cost];
-      const addRepairItemResults = await pool.query(addRepairItemText, addRepairItemValues);
+      const addRepairItemResults = await connection.query(addRepairItemText, addRepairItemValues);
     }
 
     // ================ SQL sum repair cost: REPAIR
@@ -322,7 +322,7 @@ router.post('/', async (req, res) => {
       WHERE "property_id" = $1;
     `;
     const totalRepairCostValues = [propertyId];
-    const totalRepairCostResults = await pool.query(totalRepairCostText, totalRepairCostValues);
+    const totalRepairCostResults = await connection.query(totalRepairCostText, totalRepairCostValues);
     console.log('sum of repair items. expected: 200', totalRepairCostResults.rows[0].total_repair_cost)
     const totalRepairs = totalRepairCostResults.rows[0].total_repair_cost
 
@@ -333,16 +333,16 @@ router.post('/', async (req, res) => {
       FROM "user"
       WHERE "id" = $1;
     `;
-    const getDefaultHoldingPeriodResults = await pool.query(getDefaultHoldingPeriodText, [userId]);
+    const getDefaultHoldingPeriodResults = await connection.query(getDefaultHoldingPeriodText, [userId]);
     console.log('getDefaultHoldingPeriodResult: ', getDefaultHoldingPeriodResults.rows)
     const defaultHoldingPeriod = getDefaultHoldingPeriodResults.rows[0].defaultHoldingPeriod
 
     // ================ SQL update table: PROPERTIES
     const totalUpfrontCost = upfrontCost(totalRepairs, listingResponse.data[0].price);
-    const cost = totalCost(totalRepairs, listingResponse.data[0].price, defaultHoldingPeriod, taxYear/12, monthlyHoldingCost);
-    const holdingCost = totalHoldingCost(defaultHoldingPeriod, taxYear/12, monthlyHoldingCost);
-    const totalProfit = profit(valueEstimateResponse.data.priceRangeHigh, totalRepairs, listingResponse.data[0].price, defaultHoldingPeriod, taxYear/12, monthlyHoldingCost);
-    const totalMonthlyProfit = monthlyProfit(valueEstimateResponse.data.priceRangeHigh, totalRepairs, listingResponse.data[0].price, defaultHoldingPeriod, taxYear/12, monthlyHoldingCost);
+    const cost = totalCost(totalRepairs, listingResponse.data[0].price, defaultHoldingPeriod, monthlyHoldingCost);
+    const holdingCost = totalHoldingCost(defaultHoldingPeriod, monthlyHoldingCost);
+    const totalProfit = profit(valueEstimateResponse.data.priceRangeHigh, totalRepairs, listingResponse.data[0].price, defaultHoldingPeriod, monthlyHoldingCost);
+    const totalMonthlyProfit = monthlyProfit(valueEstimateResponse.data.priceRangeHigh, totalRepairs, listingResponse.data[0].price, defaultHoldingPeriod, monthlyHoldingCost);
     
     const updatePropertiesText = `
        UPDATE "properties"
@@ -358,7 +358,7 @@ router.post('/', async (req, res) => {
 
     const updatePropertiesValues = [totalRepairs, totalUpfrontCost, monthlyHoldingCost, holdingCost, cost, totalProfit, totalMonthlyProfit, propertyId];
 
-    const updatePropertiesResults = await pool.query(updatePropertiesText, updatePropertiesValues);
+    const updatePropertiesResults = await connection.query(updatePropertiesText, updatePropertiesValues);
 
     console.log('Property posted/updated in database!');
     
@@ -758,22 +758,89 @@ router.put('/backToDefault/:id', async (req, res) => {
 /**
  * DELETE property repair item
  */
-router.delete('/repairItem/:id', (req, res) => {
+router.delete('/repairItem/:id', async (req, res) => {
   const itemId = req.params.id;
+  console.log('item id: ', itemId)
 
-  const sqlText = `
-    DELETE FROM "repair_items"
+  let connection;
+  try {
+    connection = await pool.connect()
+    await connection.query('BEGIN;')
+
+    //select item to be deleted to retrieve item cost
+    const selectRepairItemText = `
+    SELECT * FROM "repair_items"
       WHERE "id" = $1;
   `; 
-  pool.query(sqlText, [itemId])
+  const selectRepairItemResponse = await connection.query(selectRepairItemText, [itemId])
+  console.log('repair item: ', selectRepairItemResponse)
+  const repairItemCost = selectRepairItemResponse.rows[0].cost;
+  const propertyId = selectRepairItemResponse.rows[0].property_id
 
-      .then((results) => {
-        res.sendStatus(201)
-      }) 
-      .catch((error) => {
-        console.log('Error in deleting property repair item:', error);
-        res.sendStatus(500);
-      })
+  //delete repair item from database
+    const removeRepairItemText = `
+      DELETE FROM "repair_items"
+        WHERE "id" = $1;
+    `; 
+    const removeHoldingItemResponse = await connection.query(removeRepairItemText, [itemId])
+
+     //update all the calculations based on this update to the reparir item table
+
+    //get the values needed for the calculation functions
+    const propertyInfoText = `
+    SELECT 
+      "total_repair_cost",
+      "monthly_holding_cost",
+      "purchase_price",
+      "holding_period",
+      "taxes_yearly",
+      "after_repair_value"
+      FROM "properties"
+      WHERE "id" = $1;
+    `;
+    const propertyInfoValues = [propertyId];
+    const propertyInfoResults = await connection.query(propertyInfoText, propertyInfoValues);
+    console.log('propertyInfoResults: ', propertyInfoResults.rows[0])
+    const totalRepairs = Number(propertyInfoResults.rows[0].total_repair_cost) - Number(repairItemCost);
+    const monthlyHoldingCost = Number(propertyInfoResults.rows[0].monthly_holding_cost);
+    const purchasePrice = Number(propertyInfoResults.rows[0].purchase_price);
+    const holdingPeriod = Number(propertyInfoResults.rows[0].holding_period);
+    const afterRepairValue = Number(propertyInfoResults.rows[0].after_repair_value);
+
+    // ================ SQL update table: PROPERTIES
+    const totalUpfrontCost = upfrontCost(totalRepairs, purchasePrice);
+    const cost = totalCost(totalRepairs, purchasePrice, holdingPeriod, monthlyHoldingCost);
+    const holdingCost = totalHoldingCost(holdingPeriod, monthlyHoldingCost);
+    const totalProfit = profit(afterRepairValue, totalRepairs, purchasePrice, holdingPeriod, monthlyHoldingCost);
+    const totalMonthlyProfit = monthlyProfit(afterRepairValue, totalRepairs, purchasePrice, holdingPeriod, monthlyHoldingCost);
+    
+
+    const updatePropertiesText = `
+    UPDATE "properties"
+       SET "total_repair_cost" = $1,
+           "total_upfront_cost" = $2,
+           "monthly_holding_cost" = $3,
+           "total_holding_cost" = $4,
+           "total_cost" = $5,
+           "profit" = $6,
+           "monthly_profit" = $7
+       WHERE "id" = $8;
+ `;
+
+ const updatePropertiesValues = [totalRepairs, totalUpfrontCost, monthlyHoldingCost, holdingCost, cost, totalProfit, totalMonthlyProfit, propertyId];
+
+ const updatePropertiesResults = await connection.query(updatePropertiesText, updatePropertiesValues);
+
+    await connection.query('Commit;')
+    res.sendStatus(201)
+
+  } catch(err) {
+      console.log('Delete repair item failed: ', err);
+      await connection.query('Rollback;')
+      res.sendStatus(500);
+    } finally {
+      await connection.release()
+    }
 });
 
 
@@ -866,22 +933,88 @@ router.post('/repairItem/', async (req, res) => {
 /**
  * DELETE property holding item
  */
-router.delete('/holdingItem/:id', (req, res) => {
+router.delete('/holdingItem/:id', async (req, res) => {
   const itemId = req.params.id;
 
-  const sqlText = `
-    DELETE FROM "holding_items"
-      WHERE "id" = $1;
-  `; 
-  pool.query(sqlText, [itemId])
+  let connection;
+  try {
+    connection = await pool.connect()
+    await connection.query('BEGIN;')
 
-      .then((results) => {
-        res.sendStatus(201)
-      }) 
-      .catch((error) => {
-        console.log('Error in deleting property holding item:', error);
-        res.sendStatus(500);
-      })
+    //select item to be deleted to retrieve item cost
+    const selectHoldingItemText = `
+       SELECT * FROM "holding_items"
+         WHERE "id" = $1;
+     `; 
+     const selectHoldingItemResponse = await connection.query(selectHoldingItemText, [itemId])
+     console.log('repair item: ', selectHoldingItemResponse)
+     const holdingItemCost = selectHoldingItemResponse.rows[0].cost;
+     const propertyId = selectHoldingItemResponse.rows[0].property_id
+
+    const removeHoldingItemText = `
+      DELETE FROM "holding_items"
+        WHERE "id" = $1;
+    `; 
+   const removeHoldingItemResult = connection.query(removeHoldingItemText, [itemId])
+
+    //update all the calculations based on this update to the reparir item table
+
+    //get the values needed for the calculation functions
+    const propertyInfoText = `
+    SELECT 
+      "total_repair_cost",
+      "monthly_holding_cost",
+      "purchase_price",
+      "holding_period",
+      "taxes_yearly",
+      "after_repair_value"
+      FROM "properties"
+      WHERE "id" = $1;
+    `;
+    const propertyInfoValues = [propertyId];
+    const propertyInfoResults = await connection.query(propertyInfoText, propertyInfoValues);
+    console.log('propertyInfoResults: ', propertyInfoResults.rows[0])
+    const totalRepairs = Number(propertyInfoResults.rows[0].total_repair_cost);
+    const monthlyHoldingCost = Number(propertyInfoResults.rows[0].monthly_holding_cost) - Number(holdingItemCost);
+    const purchasePrice = Number(propertyInfoResults.rows[0].purchase_price);
+    const holdingPeriod = Number(propertyInfoResults.rows[0].holding_period);
+    const monthlyTaxes = Number(propertyInfoResults.rows[0].taxes_yearly) / 12;
+    const afterRepairValue = Number(propertyInfoResults.rows[0].after_repair_value);
+
+    // ================ SQL update table: PROPERTIES
+    const totalUpfrontCost = upfrontCost(totalRepairs, purchasePrice);
+    const cost = totalCost(totalRepairs, purchasePrice, holdingPeriod, monthlyHoldingCost);
+    const holdingCost = totalHoldingCost(holdingPeriod, monthlyHoldingCost);
+    const totalProfit = profit(afterRepairValue, totalRepairs, purchasePrice, holdingPeriod, monthlyHoldingCost);
+    const totalMonthlyProfit = monthlyProfit(afterRepairValue, totalRepairs, purchasePrice, holdingPeriod, monthlyHoldingCost);
+    
+
+    const updatePropertiesText = `
+    UPDATE "properties"
+       SET "total_repair_cost" = $1,
+           "total_upfront_cost" = $2,
+           "monthly_holding_cost" = $3,
+           "total_holding_cost" = $4,
+           "total_cost" = $5,
+           "profit" = $6,
+           "monthly_profit" = $7
+       WHERE "id" = $8;
+ `;
+
+ const updatePropertiesValues = [totalRepairs, totalUpfrontCost, monthlyHoldingCost, holdingCost, cost, totalProfit, totalMonthlyProfit, propertyId];
+
+ const updatePropertiesResults = await connection.query(updatePropertiesText, updatePropertiesValues);
+
+    await connection.query('Commit;')
+    res.sendStatus(201)
+
+  } catch(err) {
+      console.log('delete holding item failed: ', err);
+      await connection.query('Rollback;')
+      res.sendStatus(500);
+    } finally {
+      await connection.release()
+  }
 });
 
 
@@ -932,10 +1065,10 @@ router.post('/holdingItem', async (req, res) => {
 
     // ================ SQL update table: PROPERTIES
     const totalUpfrontCost = upfrontCost(totalRepairs, purchasePrice);
-    const cost = totalCost(totalRepairs, purchasePrice, holdingPeriod, monthlyTaxes, monthlyHoldingCost);
-    const holdingCost = totalHoldingCost(holdingPeriod, monthlyTaxes, monthlyHoldingCost);
-    const totalProfit = profit(afterRepairValue, totalRepairs, purchasePrice, holdingPeriod, monthlyTaxes, monthlyHoldingCost);
-    const totalMonthlyProfit = monthlyProfit(afterRepairValue, totalRepairs, purchasePrice, holdingPeriod, monthlyTaxes, monthlyHoldingCost);
+    const cost = totalCost(totalRepairs, purchasePrice, holdingPeriod, monthlyHoldingCost);
+    const holdingCost = totalHoldingCost(holdingPeriod, monthlyHoldingCost);
+    const totalProfit = profit(afterRepairValue, totalRepairs, purchasePrice, holdingPeriod, monthlyHoldingCost);
+    const totalMonthlyProfit = monthlyProfit(afterRepairValue, totalRepairs, purchasePrice, holdingPeriod, monthlyHoldingCost);
     
 
     const updatePropertiesText = `
@@ -958,7 +1091,7 @@ router.post('/holdingItem', async (req, res) => {
     res.sendStatus(201)
 
   } catch(err) {
-      console.log('Add repair item failed: ', err);
+      console.log('Add holding item failed: ', err);
       await connection.query('Rollback;')
       res.sendStatus(500);
     } finally {
