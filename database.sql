@@ -75,3 +75,34 @@ CREATE TABLE "repair_items" (
 	"name" VARCHAR (1000),
 	"cost" DECIMAL
 );
+
+CREATE TABLE "default_mortgage_calculations" (
+	"id" SERIAL PRIMARY KEY,
+	"property_id" INT REFERENCES "properties" ON DELETE CASCADE,
+	"interest_rate" DECIMAL (15,3),
+	"interest_rate_inserted_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	"interest_rate_updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	"loan_term" INT DEFAULT 30,
+	"down_payment_percentage" DECIMAL (15,3) DEFAULT 0.2,
+	"closing_costs_percentage" DECIMAL (15,3) DEFAULT 0.03,
+	"base_loan_amount" DECIMAL (15,2),
+	"interest_rate_annual" DECIMAL (15,3)
+);
+
+CREATE TABLE "mortgage_calculations" (
+	"id" SERIAL PRIMARY KEY,
+	"property_id" INT REFERENCES "properties" ON DELETE CASCADE,
+	"interest_rate" DECIMAL (15,3),
+	"interest_rate_inserted_at" DATE DEFAULT CURRENT_DATE,
+	"interest_rate_updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	"loan_term" INT DEFAULT 30,
+	"down_payment" DECIMAL (15,2),
+	"down_payment_percentage" DECIMAL (15,3) DEFAULT 0.2,
+	"base_loan_amount" DECIMAL (15,2),
+	"closing_costs" DECIMAL (15,2),
+	"closing_costs_percentage" DECIMAL (15,3) DEFAULT 0.03,
+	"interest_rate_annual" DECIMAL (15,3),
+	"interest_rate_monthly" DECIMAL (15,3),
+	"interest_decimal_monthly" DECIMAL (15,4),
+	"interest_payment_monthly" DECIMAL (15,2)
+);

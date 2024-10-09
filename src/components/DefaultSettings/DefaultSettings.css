@@ -6,6 +6,7 @@
     flex-direction: column;
     position: relative;
     padding: 50px 0px;
+    
 }
 
 .defaultSettingsTitle {
@@ -19,6 +20,30 @@
     margin-left: 10px;
     font-weight: bold;
 }
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two columns */
+    grid-template-rows: repeat(2, auto); /* Two rows */
+    gap: 8px; /* Space between items */
+    margin-top: 20px; /* Space from address strip */
+    padding: 0 0 10px 0;
+  }
+
+  .section {
+    border: 1px solid #ccc; /* Border color */
+    border-radius: 5px; /* Rounded corners for the sections */
+    padding: 15px; /* Padding inside sections */
+    background: white; /* Background for the sections */
+    box-sizing: border-box;
+  }
+
+  .upfront-costs {
+    grid-column: 1; /* First column */
+    grid-row: 1; /* First row */
+  }
+
+/* ----- HOLDING PERIOD COSTS ----- */
 
 /* ======== Default Holding Period ======== */
 .holdingPeriodDefault {
@@ -36,7 +61,8 @@
     text-align: center;
 }
 
-/* ======== Default Holding ======== */
+
+/* ======== Default Holding && Form ======== */
 .defaultHolding {
     margin-bottom: 20px;
     border: 1.5px solid rgb(202, 202, 202);
@@ -46,61 +72,18 @@
                 1px 1px 1px rgba(116, 116, 116, 0.3);
 }
 
-.defaultHoldingForm {
-
-}
-
 .defaultHoldingNameInput, .defaultHoldingCostInput {
     border: 1px solid rgb(207, 207, 207);
     border-radius: 3px;
     background-color: rgb(247, 247, 247);
 }
 
-.defaultHoldingNameInput::placeholder {
-    padding: 4px;
-    color: rgb(147, 147, 147);
-    font-size: 12px;
-}
-
-.defaultHoldingCostInput::placeholder {
-    padding: 4px;
-    color: rgb(147, 147, 147);
-    font-size: 12px;
-}
-
-.addDefaultHoldingBtn {
-    border: 1px solid rgb(19, 86, 255);
-    border-radius: 4.5px;
-    padding: 4px 8px;
-    background-color: rgb(14, 106, 255);
-    color: rgb(255, 255, 255);
-    font-size: 11px;
-    font-weight: bold;
-    text-transform: uppercase;
-    box-shadow: 1px 1px 1px rgba(169, 169, 169, 0.8),
-                1px 1px 1px rgba(169, 169, 169, 0.8);
-}
-
-.addDefaultHoldingBtn:hover {
-    cursor: pointer;
-    border: 1px solid rgb(149, 178, 251);
-    color: rgb(42, 123, 255);
-    background-color: rgb(163, 196, 250);
-}
-
-.defaultHoldingItems {
-    margin: 20px auto;
-}
-
 .defaultHoldingItem {
-    margin-left: 60px;
+    margin: 20px auto;
+    /* margin-left: 60px; */
     display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-}
-
-.defaultHoldingItemName, .defaultHoldingItemCost, .deleteDefaultHoldingBtn {
-
+    justify-content: space-between;
+    /* align-items: left; */
 }
 
 .deleteDefaultHoldingBtn {
@@ -111,9 +94,29 @@
     cursor: pointer;
     font-size: 11px;
 }
+/* ----- END HOLDING PERIOD COSTS ----- */
 
 
-/* ======== Default Repair ======== */
+/* ----- SECTION BUTTONS ----- */
+.addBtn {
+    border: 1px solid #343078;
+    border-radius: 4.5px;
+    padding: 4px 8px;
+    background-color: #343078;
+    color: #f8f8f8;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+.addBtn:hover {
+    cursor: pointer;
+    background-color: #7974d7; 
+    transform: scale(1.05); 
+}
+/* ----- END SECTION BUTTONS ----- */
+
 .defaultRepair {
     margin-bottom: 20px;
     border: 1.5px solid rgb(202, 202, 202);
@@ -123,94 +126,57 @@
                 1px 1px 1px rgba(116, 116, 116, 0.3);
 }
 
-.defaultRepairForm {
-
-}
-
 .defaultRepairNameInput, .defaultRepairCostInput {
     border: 1px solid rgb(207, 207, 207);
     border-radius: 3px;
     background-color: rgb(247, 247, 247);
 }
 
-.defaultRepairNameInput::placeholder {
-    padding: 4px;
-    color: rgb(147, 147, 147);
-    font-size: 12px;
-}
-
-.defaultRepairCostInput::placeholder {
-    padding: 4px;
-    color: rgb(147, 147, 147);
-    font-size: 12px;
-}
-
-.addDefaultRepairBtn {
-    border: 1px solid rgb(19, 86, 255);
-    border-radius: 4.5px;
-    padding: 4px 8px;
-    background-color: rgb(14, 106, 255);
-    color: rgb(255, 255, 255);
-    font-size: 11px;
-    font-weight: bold;
-    text-transform: uppercase;
-    box-shadow: 1px 1px 1px rgba(169, 169, 169, 0.8),
-                1px 1px 1px rgba(169, 169, 169, 0.8);
-}
-
-.addDefaultRepairBtn:hover {
-    cursor: pointer;
-    border: 1px solid rgb(149, 178, 251);
-    color: rgb(42, 123, 255);
-    background-color: rgb(163, 196, 250);
-}
-
-.defaultRepairItems {
-    margin: 20px auto;
-}
-
 .defaultRepairItem {
-    margin-left: 60px;
+    margin: 20px auto;
+    /* margin-left: 60px; */
     display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-}
-
-.defaultRepairItemName, .defaultRepairItemCost, .deleteDefaultRepairBtn {
-
+    justify-content: space-between;
+    /* align-items: left; */
 }
 
 .deleteDefaultRepairBtn {
-    font-size: 9px;
+    width: 15px;
+    height: auto;
+    justify-content: space-between;
 }
 
 .deleteDefaultRepairBtn:hover {
     cursor: pointer;
     font-size: 11px;
 }
+/* -----END REPAIR ITEM SECTION ----- */
 
+.total {
+    justify-content: space-between;
+    margin-top: auto;
+    
+}
+
+
+/* ======== Default Save Button ======== */
 .defaultSaveBtn {
-    position: absolute;
+    position: relative;
     bottom: 0;
     right: 0;
     margin-right: 10px;
-    border: 1px solid rgb(19, 86, 255);
+    border: 1px solid #343078;
     border-radius: 4.5px;
     padding: 4px 8px;
-    height: 30px;
-    width: 80px;
-    background-color: rgb(14, 106, 255);
-    color: rgb(255, 255, 255);
+    background-color: #343078;
+    color: #f8f8f8;
     font-size: 11px;
     font-weight: bold;
     text-transform: uppercase;
-    box-shadow: 1px 1px 1px rgba(169, 169, 169, 0.8),
-                1px 1px 1px rgba(169, 169, 169, 0.8);
 }
 
 .defaultSaveBtn:hover {
     cursor: pointer;
-    border: 1px solid rgb(149, 178, 251);
-    color: rgb(42, 123, 255);
-    background-color: rgb(163, 196, 250);
+    background-color: #7974d7;
+    transform: scale(1.05); 
 }

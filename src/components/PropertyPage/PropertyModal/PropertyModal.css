@@ -25,14 +25,21 @@
 .modal-content {
     background: rgb(238, 238, 224);
     position: relative;
-    min-width: 400px;
-    max-width: 800px;
-    height: 800px;
-    width: auto;
+    min-width: 10%;
+    max-width: 80%;
+    height: 90%;
     padding: 5px;
     box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.75);
     border-radius: 8px;
+    display: flex;
+    flex-direction: column; /* Stack header and body vertically */
     overflow: scroll;
+  }
+
+  .modal-body {
+    overflow-y: auto; /* Enable vertical scrolling */
+    flex: 1; /* Take remaining space below the header */
+    padding: 10px; /* Space inside the body */
   }
   
   .modal-close {
@@ -47,6 +54,7 @@
     border-width: 1px 1px 3px;
     border-radius: 2px;
     padding: 3px 7px;
+    margin: 10px;
   }
 
   .modal-close:hover {
@@ -54,13 +62,16 @@
     transform: scale(1.05); 
   }
   
-  .modalRight {
+  /* .modalRight {
     width: 100%;
-  }
+  } */
+
   .bold-text {
     font-weight: bold; /* Make text bold */
   }
 
+
+  /* BUTTONS INSIDE SECTIONS */
   .modal-btn {
     display: block;
     padding: 5px 10px;
@@ -68,7 +79,7 @@
     border-radius: 4px;
     background-color: #343078;
     color: #f8f8f8;
-    font-size: 1.1rem;
+    font-size: 12px;
     outline: 0;
     cursor: pointer;
     margin: .5rem;
@@ -81,13 +92,81 @@
     transform: scale(1.05); 
   }
 
+  .modal-btn-2 {
+    display: block;
+    padding: 5px 10px;
+    border-width: 1px 1px 3px;
+    border-radius: 4px;
+    background-color: #343078;
+    color: #f8f8f8;
+    font-size: 12px;
+    font-weight: bold;
+    outline: 0;
+    cursor: pointer;
+    margin: .5rem;
+    position: relative;
+    /* right: -550px; */
+  }
+
+  .modal-btn-2:hover {
+    background-color: #7974d7; 
+    transform: scale(1.05); 
+  }
+
+  /* BUTTONS AT BOTTOM OF MODAL */
+  .modal-save-btn {
+    display: block;
+    padding: 5px 10px;
+    border-width: 1px 1px 3px;
+    border-radius: 4px;
+    background-color: #343078;
+    color: #f8f8f8;
+    font-size: 12px;
+    font-weight: bold;
+    outline: 0;
+    cursor: pointer;
+    margin: .5rem;
+    position: relative;
+    right: -250px;
+    width: 120px;
+    max-width: auto;
+  }
+
+  .modal-save-btn:hover {
+    background-color: #7974d7; 
+    transform: scale(1.05); 
+  }
+
+  .modal-default-btn {
+    display: block;
+    padding: 5px 10px;
+    border-width: 1px 1px 3px;
+    border-radius: 4px;
+    background-color: #343078;
+    color: #f8f8f8;
+    font-size: 12px;
+    font-weight: bold;
+    outline: 0;
+    cursor: pointer;
+    margin: .5rem;
+    position: relative;
+    width: 120px;
+    max-width: auto;
+  }
+
+  .modal-default-btn:hover {
+    background-color: #7974d7; 
+    transform: scale(1.05); 
+  }
+
+  /* INSIDE GRID/SECTIONS IN MODAL */
   .grid-container {
     display: grid;
     grid-template-columns: 1fr 1fr; /* Two columns */
     grid-template-rows: repeat(2, auto); /* Two rows */
     gap: 8px; /* Space between items */
     margin-top: 20px; /* Space from address strip */
-    padding: 0 0 10px 0;
+    padding: 0 10px 10px 10px;
   }
   
   .section {
@@ -96,25 +175,56 @@
     padding: 15px; /* Padding inside sections */
     background: white; /* Background for the sections */
     box-sizing: border-box;
-  }
-
-  .upfront-costs {
-    grid-column: 1; /* First column */
-    grid-row: 1; /* First row */
-  }
-  
-  .holding-period-costs {
-    grid-column: 1; /* First column */
-    grid-row: 2; /* Second row */
-  }
-
-  .profit-estimation {
-    grid-column: 2; /* Second column */
-    grid-row: 1 / span 2; /* Span both rows */
+    
   }
 
   .section-header {
     font-weight: bold; /* Make text bold */
     text-decoration: underline; /* Underline text */
     margin-bottom: 10px; /* Space below the header */
+  }
+
+  .unordered-list {
+    margin: 20px 0;
+    display: flex;
+    justify-content: flex-start; /* Align items to the left */
+    align-items: center;
+  }
+
+  .list-items {
+    margin: 0; /* Remove margin */
+    padding: 0; /* Remove padding */
+  }
+
+  /* UPFRONT COSTS SECTION */
+  .upfront-costs {
+    grid-column: 1; /* First column */
+    grid-row: 1; /* First row */
+  }
+  
+  /* HOLDING PERIOD SECTION */
+  /* .holding-period-costs {
+    grid-column: 1; /* First column */
+    /* grid-row: 2; Second row */
+  /* } */ 
+
+  /* PROFIT ESTIMATION SECTION */
+  /* .profit-estimation {
+    grid-column: 2; /* Second column */
+    /* grid-row: 1; Span both rows */
+  /* }  */
+
+  /* MORTGAGE CALC SECTION */
+  /* .mortgage-calculator {
+    grid-column: 2; /* Second column */
+    /* grid-row: 2; Span both rows */
+  /* } */
+
+/* DELETE BUTTONS WITHIN SECTIONS */
+  .deleteBtn {
+    width: 15px;
+    height: auto;
+    justify-content: space-between;
+    margin: auto;
+    display: flex;
   }

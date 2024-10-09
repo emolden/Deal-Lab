@@ -22,14 +22,13 @@ function DefaultRepairItems({defaultRepairs}) {
 
   const formattedCurrency = (value) => {
     const number = parseFloat(value);
-    const truncated = Math.floor(number * 100) / 100;
-    return `$${truncated.toFixed(2)}`;
-  }
+    return ` $${number.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+  };
 
   return (
     <div className='defaultRepair'>
       <form className='defaultRepairForm'>
-        <label className='defaultSettingsText'>Repair Items:</label>
+        <label className='defaultSettingsText'>Repair Items:</label><br />
         <input className='defaultRepairNameInput'
                 type='text'
                 placeholder='Repair Name'
@@ -40,35 +39,41 @@ function DefaultRepairItems({defaultRepairs}) {
                 placeholder='Repair Cost'
                 value={repairCost}
                 onChange={e => setRepairCost(e.target.value)}/>
-        <span className='addDefaultRepairBtn'
+        <span className='addBtn'
               onClick={addDefaultRepairItem}>Add</span>
       </form>
+
 
       <div className='defaultRepairItems'>
         {!defaultRepairs ? '' : defaultRepairs.map((item) => {
             return (
-              <div className='defaultRepairItem'
-                    key={item.id}>
-                <span className='defaultRepairItemName'>{item.repair_name}:</span>
-                <span className='defaultRepairItemCost'>{formattedCurrency(item.repair_cost)}</span>
-                <span className='deleteDefaultRepairBtn'
+              <table className='defaultRepairItemsTable'>
+                <tr className='defaultRepairItem' key={item.id}>
+                  <td className='defaultRepairItemName'>{item.repair_name}:</td>
+                  <td className='defaultRepairItemCost'>{formattedCurrency(item.repair_cost)}</td>
+                  <td className='deleteDefaultRepairBtn'
                       onClick={e => {
                         e.preventDefault();
                         dispatch({
                           type: 'DELETE_DEFAULT_REPAIR_ITEM',
                           payload: item.id
                         })
-                      }}>❌</span>
-              </div>
+                      }}>
+
+                        <img className="deleteDefaultRepairBtn" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" />
+                        </td>
+                  </tr>
+                        
+              </table>
             )
           })}
       </div>
-      <h4>Total: $
+      <h4 className="total">Total: 
         <span>
-          {!defaultRepairs ? '' : defaultRepairs.reduce((total, item) => {
+          {formattedCurrency(!defaultRepairs ? '' : defaultRepairs.reduce((total, item) => {
             total = total + Number(item.repair_cost)
             return total
-          }, 0)}
+          }, 0))}
         </span>
       </h4>
     </div>

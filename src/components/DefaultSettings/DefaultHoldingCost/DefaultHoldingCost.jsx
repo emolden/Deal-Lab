@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+// import '../PropertyPage/PropertyModal/PropertyModal.css';
 
 function DefaultHoldingCost({defaultHoldings}) {
   const dispatch = useDispatch();
@@ -22,9 +23,8 @@ function DefaultHoldingCost({defaultHoldings}) {
 
   const formattedCurrency = (value) => {
     const number = parseFloat(value);
-    const truncated = Math.floor(number * 100) / 100;
-    return `$${truncated.toFixed(2)}`;
-  }
+    return ` $${number.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+  };
 
 
 // Getting error for not having an unique key prop.
@@ -43,35 +43,41 @@ function DefaultHoldingCost({defaultHoldings}) {
                 placeholder='Expense Cost'
                 value={holdingCost}
                 onChange={e => setHoldingCost(e.target.value)} />
-        <span className='addDefaultHoldingBtn'
+        <span className='addBtn'
                 onClick={addDefaultHoldingItem}>Add</span>
       </form>
+
 
       <div className='defaultHoldingItems'>
         {!defaultHoldings ? '' : defaultHoldings.map((item) => {
           return (
-            <div className='defaultHoldingItem'
-                  key={item.id}>
-              <span className='defaultHoldingItemName'>{item.holding_name}:</span>
-              <span className='defaultHoldingItemCost'>{formattedCurrency(item.holding_cost)}</span>
-              <span className='deleteDefaultHoldingBtn'
+            <table className='defaultHoldingItemsTable'>
+              <tr className='defaultHoldingItem' key={item.id}>
+                <td className='defaultHoldingItemName'>{item.holding_name}:</td>
+                <td className='defaultHoldingItemCost'>{formattedCurrency(item.holding_cost)}</td>
+                <td className='deleteDefaultHoldingBtn'
                     onClick={e => {
                       e.preventDefault();
                       dispatch({
                         type: 'DELETE_DEFAULT_HOLDING_ITEM',
                         payload: item.id
                       })
-                    }}>❌</span>
-            </div>
+                    }}>
+                      <span>
+                      <img className="deleteDefaultRepairBtn" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" />
+                    </span>
+                  </td>
+                </tr>
+            </table>
           )
         })}
       </div>
-      <h4>Total: $
+      <h4 className="total">Total: 
         <span>
-          {!defaultHoldings ? '' : defaultHoldings.reduce((total, item) => {
+          {formattedCurrency(!defaultHoldings ? '' : defaultHoldings.reduce((total, item) => {
             total = total + Number(item.holding_cost)
             return total
-          }, 0)}
+          }, 0))}
         </span>
       </h4>
     </div>
