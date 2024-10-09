@@ -1,8 +1,6 @@
 import React from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import { useState } from 'react';
-import totalHoldingCost from '../../../../helpers/totalHoldingCost';
-import monthlyHoldingCost from '../../../../helpers/monthlyHoldingCost'
 
 
 function ModalHoldingPeriodCosts() {
@@ -30,6 +28,7 @@ const deleteHoldingItem = (itemId) => {
 }
 
 const updateTaxes = (propertyId) => {
+  console.log('updateTaxes in holding period costs modal')
   dispatch ({
       type: 'UPDATE_PROPERTY_TAXES',
       payload: propertyId
@@ -67,14 +66,14 @@ const updateTaxes = (propertyId) => {
             </div> : ''}
             {propertyOfInterest.holdingItems.map((item) => {
               return (
-                <div className="unordered-list">
-                <ul className="list-items" key = {item.holding_items_id}>{item.holding_name}: {formattedCurrency(item.holding_cost)} </ul>
-                <img className="deleteBtn" onClick={() => {deleteHoldingItem(item.holding_items_id)}}  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" />
+                <div key = {item.id} className="unordered-list">
+                  <ul className="list-items">{item.holding_name}: {formattedCurrency(item.holding_cost)} </ul>
+                  <img className="deleteBtn" onClick={() => {deleteHoldingItem(item.id)}} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" />
                 </div>
               )
             })}
           </ul>
-          <p>Monthly Total: {formattedCurrency(monthlyHoldingCost(propertyOfInterest.property[0].taxes_yearly/12, propertyOfInterest.holdingItems))}</p>
+          <p>Monthly Total: {formattedCurrency(propertyOfInterest.property[0].monthly_holding_cost)}</p>
           <p>Holding Period:
             <input
               value= {Number(propertyOfInterest.property[0].holding_period)}
@@ -82,7 +81,7 @@ const updateTaxes = (propertyId) => {
             />
             Months</p>
         <p>
-          <span className="bold-text">Total Holding Cost: {formattedCurrency(totalHoldingCost(propertyOfInterest.property[0].holding_period, propertyOfInterest.property[0].taxes_yearly/12, propertyOfInterest.holdingItems))}</span>
+          <span className="bold-text">Total Holding Cost: {formattedCurrency(propertyOfInterest.property[0].total_holding_cost)}</span>
           </p>
         </>
       }

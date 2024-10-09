@@ -19,10 +19,10 @@ function Header() {
     <div>
       <div>
         <header className="header">
-          <container className="container">
+          <div className="container">
             <img className="logo" src="./deal-lab-logo.png" />
             <h2 className="fix-flip">Fix & Flipper</h2>
-          </container>
+          </div>
 
           <div ref={node}>
             <Hamburger open={open} setOpen={setOpen} />

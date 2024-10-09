@@ -80,7 +80,7 @@ const PropertyModal = ({ isOpen, onClose, propertyCard, userId }) => {
 
           <div className='section mortgage-calculator'>
             <h3 className='section-header'>Mortgage Calculator:</h3>
-            <ModalMortgageCalculator />
+            {/* <ModalMortgageCalculator /> */}
           </div>
 
           <div className='section profit-estimation'>

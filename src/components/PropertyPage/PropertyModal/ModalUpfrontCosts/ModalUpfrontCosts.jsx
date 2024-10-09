@@ -1,9 +1,6 @@
 import React from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import { useState } from 'react';
-import upfrontCost from '../../../../helpers/upfrontCost';
-import repairCost from '../../../../helpers/repairCost';
-// import '../PropertyPage/PropertyModal/PropertyModal.css';
 
 function ModalUpfrontCosts() {
 
@@ -60,17 +57,17 @@ function ModalUpfrontCosts() {
       <ul>
         {propertyOfInterest.repairItems.map((item) => {
           return (
-            <div className="unordered-list">
-            <ul className="list-items" key = {item.repair_items_id}>{item.repair_name}: {formattedCurrency(item.repair_cost)} </ul>
-            <img className="deleteBtn" onClick={() => {deleteRepairItem(item.repair_items_id)}} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" />
+            <div key = {item.id} className="unordered-list">
+              <ul className="list-items">{item.repair_name}: {formattedCurrency(item.repair_cost)} </ul>
+              <img className="deleteBtn" onClick={() => {deleteRepairItem(item.id)}} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" />
             </div>
           )
         })}
       </ul>
-      <p>Total Repair Cost: {formattedCurrency(repairCost(propertyOfInterest.repairItems))}</p>
+      <p>Total Repair Cost: {formattedCurrency(propertyOfInterest.property[0].total_repair_cost)}</p>
       
         <p>
-          <span className="bold-text">Total Upfront Cost: {formattedCurrency(upfrontCost(propertyOfInterest.repairItems, propertyOfInterest.property[0].purchase_price))}</span>
+          <span className="bold-text">Total Upfront Cost: {formattedCurrency(propertyOfInterest.property[0].total_upfront_cost)}</span>
         </p>
       </>
       }

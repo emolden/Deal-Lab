@@ -9,7 +9,7 @@ function PropertySearchForm({userId}) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [searchBarAddress, setSearchBarAddress] = useState("");
   const [formattedAddress, setFormattedAddress] = useState("");
-  const [address, setAddress] = useState("");
+  const [addressId, setAddressId] = useState("");
   const dispatch = useDispatch();
 
   //forces GooglePlacesAutocomplete dom render to wait till Google script is loaded
@@ -37,7 +37,7 @@ function PropertySearchForm({userId}) {
     
     dispatch ({
         type: 'ADD_PROPERTY',
-        payload: {address: formattedAddress , userId: userId}
+        payload: {address: formattedAddress , userId: userId, addressId: addressId}
     })
     setSearchBarAddress("");
   } 
@@ -52,6 +52,7 @@ function PropertySearchForm({userId}) {
     //runs when the user clicks on an address from the dropdown menu
     const handleChange = (address) => {
       setSearchBarAddress(address);
+      setAddressId(address.value.place_id);
       geocodeByPlaceId(address.value.place_id)
         .then(results => setFormattedAddress(results[0].formatted_address))
         .catch(error => console.error('error getting geocodeByPlaceId', error));

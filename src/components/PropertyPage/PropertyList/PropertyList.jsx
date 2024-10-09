@@ -2,11 +2,11 @@ import React from 'react';
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import PropertyCard from './PropertyCard/PropertyCard';
-// import { useEffect } from 'react';
+
 
 function PropertyList({ userId, onOpenModal }) {
   const dispatch = useDispatch();
-  // const user = useSelector(store => store.user)
+  
   const allProperties = useSelector(store => store.allProperties)
 
   useEffect(() => {
@@ -27,16 +27,15 @@ function PropertyList({ userId, onOpenModal }) {
       <div className='property-cards-container'>
       {Array.isArray(allProperties.properties) && allProperties.properties.length > 0 ? (
         allProperties.properties.map((property) => (
-          // <div >
+          <div key={property.id}>
             <PropertyCard 
-              key={property.id}
               property={property} 
               userId={userId} 
               onOpenModal={onOpenModal}
               allRepairItems={allProperties.repairItems}
               allHoldingItems = {allProperties.holdingItems} 
             />
-          // </div>
+          </div>
         ))
       ) : (
         <p>No properties found.</p> // Optionally show a message if no properties are found
@@ -45,21 +44,6 @@ function PropertyList({ userId, onOpenModal }) {
     </div>
   );
 }
-
-  // return (
-  //   <div className="container">
-  //     <p>Property List:</p>
-
-  //     {Object.keys(allProperties).length && allProperties.map((property) => {
-  //       return (
-  //         <div key={property.id}>
-  //           <PropertyCard property={property} userId={userId} onOpenModal={onOpenModal} />
-  //         </div>
-  //       )
-  //     })}
-      
-  //   </div>
-  // );
 
 
 export default PropertyList;
