@@ -20,8 +20,9 @@ function* addProperty(action) {
   console.log('Payload data:', action.payload);
   const address = action.payload.address;
   const userId = action.payload.userId
+  const addressId = action.payload.addressId
   try {
-    const response = yield axios.post(`api/properties`, {address})
+    const response = yield axios.post(`api/properties`, {address:address, addressId: addressId})
     console.log('addProperty data:', response.data);
     
     yield put({

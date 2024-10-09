@@ -119,11 +119,15 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
   const api_key = process.env.RENTCAST_API_KEY;
   const address = req.body.address;
+  const addressId = req.body.addressId
   const userId = req.user.id;
   let propertyApiId;
-  let listingResponse = {};
-  let recordsResponse = {};
-  let valueEstimateResponse = {};
+  let formattedAddress;
+  let purchasePrice;
+  let afterRepairValue;
+  // let listingResponse = {};
+  // let recordsResponse = {};
+  // let valueEstimateResponse = {};
   let taxYear;
   console.log('ADDRESS:', address, userId);
   
@@ -135,9 +139,9 @@ router.post('/', async (req, res) => {
     const checkTimeStampSqlText = `
         SELECT * FROM "property_api_data"
             WHERE "inserted_at" >= CURRENT_TIMESTAMP - INTERVAL '24 hours'
-            AND "address" = $1;
+            AND "google_address_id" = $1;
     `
-    const checkTimeStampResults = await connection.query(checkTimeStampSqlText, [address]);
+    const checkTimeStampResults = await connection.query(checkTimeStampSqlText, [addressId]);
     const checkTimeStampData = checkTimeStampResults.rows;
     console.log('checkTimeStampData is:', checkTimeStampData);
     
@@ -153,7 +157,8 @@ router.post('/', async (req, res) => {
             'X-Api-Key': `${api_key}`
         }
       })
-      valueEstimateResponse = theValueEstimateResponse;
+      const valueEstimateResponse = theValueEstimateResponse;
+      afterRepairValue = valueEstimateResponse.data.priceRangeHigh;
       console.log("Data from valueEstimateResponse:", valueEstimateResponse.data);
 
 
@@ -167,7 +172,7 @@ router.post('/', async (req, res) => {
             'X-Api-Key': `${api_key}`
         }
       })
-      recordsResponse = theRecordsResponse;
+      const recordsResponse = theRecordsResponse;
       console.log("Data from recordsResponse:", recordsResponse.data);
 
 
@@ -183,7 +188,9 @@ router.post('/', async (req, res) => {
               'X-Api-Key': `${api_key}`
           }
         })
-        listingResponse = theListingResponse;
+        const listingResponse = theListingResponse;
+        formattedAddress = listingResponse.data[0].formattedAddress;
+        purchasePrice = listingResponse.data[0].price
 
       } catch(error) {
         console.log('Address cannot be found in listing.');
@@ -212,6 +219,7 @@ router.post('/', async (req, res) => {
       }
           
       const propertyApiData = [
+          addressId,
           listingResponse.data[0].formattedAddress,
           listingResponse.data[0].price,
           taxYear,
@@ -224,10 +232,10 @@ router.post('/', async (req, res) => {
 
       const propertyApiDataSqlText = `
           INSERT INTO "property_api_data"
-          ("address", "purchase_price", "taxes_yearly", "after_repair_value", 
+          ("google_address_id", "address", "purchase_price", "taxes_yearly", "after_repair_value", 
           "property_type", "bedrooms", "bathrooms", "square_footage")
           VALUES
-          ($1, $2, $3, $4, $5, $6, $7, $8)
+          ($1, $2, $3, $4, $5, $6, $7, $8, $9)
           RETURNING "id";
       `
       const propertyApiDataResults = await connection.query(propertyApiDataSqlText, propertyApiData);
@@ -237,7 +245,25 @@ router.post('/', async (req, res) => {
 
       console.log('Property already exists in database!');
       propertyApiId = checkTimeStampData[0].id;
+
+      //get property details from the properties api data table
+      const getPropertyInfoText = `
+        SELECT
+          "address",
+          "purchase_price",
+          "taxes_yearly",
+          "after_repair_value"
+          FROM "property_api_data"
+          WHERE "id" = $1;
+        `;
+      const getPropertyInfoResponse = await connection.query(getPropertyInfoText, [propertyApiId]);
+      formattedAddress = getPropertyInfoResponse.rows[0].address;
+      purchasePrice = getPropertyInfoResponse.rows[0].purchase_price;
+      taxYear = getPropertyInfoResponse.rows[0].taxes_yearly;
+      afterRepairValue = getPropertyInfoResponse.rows[0].after_repair_value;
     }
+
+
 
 
 
@@ -245,10 +271,10 @@ router.post('/', async (req, res) => {
     const propertiesData = [
         userId,
         propertyApiId,
-        listingResponse.data[0].formattedAddress,
-        listingResponse.data[0].price,
+        formattedAddress,
+        purchasePrice,
         taxYear,
-        valueEstimateResponse.data.priceRangeHigh
+        afterRepairValue
     ]
 
     const propertiesSqlText = `
@@ -338,11 +364,11 @@ router.post('/', async (req, res) => {
     const defaultHoldingPeriod = getDefaultHoldingPeriodResults.rows[0].defaultHoldingPeriod
 
     // ================ SQL update table: PROPERTIES
-    const totalUpfrontCost = upfrontCost(totalRepairs, listingResponse.data[0].price);
-    const cost = totalCost(totalRepairs, listingResponse.data[0].price, defaultHoldingPeriod, monthlyHoldingCost);
+    const totalUpfrontCost = upfrontCost(totalRepairs, purchasePrice);
+    const cost = totalCost(totalRepairs, purchasePrice, defaultHoldingPeriod, monthlyHoldingCost);
     const holdingCost = totalHoldingCost(defaultHoldingPeriod, monthlyHoldingCost);
-    const totalProfit = profit(valueEstimateResponse.data.priceRangeHigh, totalRepairs, listingResponse.data[0].price, defaultHoldingPeriod, monthlyHoldingCost);
-    const totalMonthlyProfit = monthlyProfit(valueEstimateResponse.data.priceRangeHigh, totalRepairs, listingResponse.data[0].price, defaultHoldingPeriod, monthlyHoldingCost);
+    const totalProfit = profit(afterRepairValue, totalRepairs, purchasePrice, defaultHoldingPeriod, monthlyHoldingCost);
+    const totalMonthlyProfit = monthlyProfit(afterRepairValue, totalRepairs, purchasePrice, defaultHoldingPeriod, monthlyHoldingCost);
     
     const updatePropertiesText = `
        UPDATE "properties"
@@ -402,31 +428,77 @@ router.delete('/:id', (req, res) => {
  */
 //put route updates the holding period, purchase price, and after repair 
 //value for a specific property in the database
-router.put('/', (req, res) => {
-       console.log('/api/properties put route received a request! ', req.body)
-       const propertyId = req.body.propertyId;
-       const holdingPeriod = req.body.holdingPeriod;
-       const purchasePrice = req.body.purchasePrice;
-       const afterRepairValue = req.body.afterRepairValue;
+router.put('/', async (req, res) => {
+  console.log('/api/properties put route received a request! ', req.body)
+  const propertyId = Number(req.body.propertyId);
+  const holdingPeriod = Number(req.body.holdingPeriod);
+  const purchasePrice = Number(req.body.purchasePrice);
+  const afterRepairValue = Number(req.body.afterRepairValue);
 
-       const sqlText = `
-         UPDATE "properties"
+  let connection;
+  try {
+    connection = await pool.connect()
+    await connection.query('BEGIN;')
+
+    //get the values needed for the calculation functions
+    const propertyInfoText = `
+      SELECT 
+          "total_repair_cost",
+          "monthly_holding_cost",
+          FROM "properties"
+          WHERE "id" = $1;
+    `;
+    const propertyInfoValues = [propertyId];
+    const propertyInfoResults = await connection.query(propertyInfoText, propertyInfoValues);
+
+    const totalRepairs = Number(propertyInfoResults.rows[0].total_repair_cost);
+    const monthlyHoldingCost = Number(propertyInfoResults.rows[0].monthly_holding_cost);
+
+    //update the properties table with the inputs the user saved
+    const updatePropertyText = `
+      UPDATE "properties"
           SET holding_period = $1,
               purchase_price = $2,
               after_repair_value = $3,
               "updated_at" = CURRENT_TIMESTAMP
           WHERE "id" = $4;
-       `;
+    `;
+    const updatePropertyValues = [holdingPeriod, purchasePrice, afterRepairValue, propertyId]
+    const updatePropertyResult = await connection.query(updatePropertyText, updatePropertyValues)
 
-       const sqlValues = [holdingPeriod, purchasePrice, afterRepairValue, propertyId]
-     
-         pool.query(sqlText, sqlValues)
-         .then((results) => {
-             res.sendStatus(201);
-         }) .catch((error) => {
-             console.log('Error in updating property:', error);
-             res.sendStatus(500);
-         })
+    // ================ SQL update table: PROPERTIES
+    const totalUpfrontCost = upfrontCost(totalRepairs, purchasePrice);
+    const cost = totalCost(totalRepairs, purchasePrice, holdingPeriod, monthlyHoldingCost);
+    const holdingCost = totalHoldingCost(holdingPeriod, monthlyHoldingCost);
+    const totalProfit = profit(afterRepairValue, totalRepairs, purchasePrice, holdingPeriod, monthlyHoldingCost);
+    const totalMonthlyProfit = monthlyProfit(afterRepairValue, totalRepairs, purchasePrice, holdingPeriod, monthlyHoldingCost);
+    
+
+    const updatePropertiesText = `
+    UPDATE "properties"
+       SET "total_repair_cost" = $1,
+           "total_upfront_cost" = $2,
+           "monthly_holding_cost" = $3,
+           "total_holding_cost" = $4,
+           "total_cost" = $5,
+           "profit" = $6,
+           "monthly_profit" = $7
+       WHERE "id" = $8;
+ `;
+ const updatePropertiesValues = [totalRepairs, totalUpfrontCost, monthlyHoldingCost, holdingCost, cost, totalProfit, totalMonthlyProfit, propertyId];
+ const updatePropertiesResults = await connection.query(updatePropertiesText, updatePropertiesValues);
+
+
+    await connection.query('Commit;')
+    res.sendStatus(201)
+
+  } catch(err) {
+      console.log('Update property failed: ', err);
+      await connection.query('Rollback;')
+      res.sendStatus(500);
+    } finally {
+      await connection.release()
+    }
   });
 
 
@@ -771,13 +843,13 @@ router.delete('/repairItem/:id', async (req, res) => {
     const selectRepairItemText = `
     SELECT * FROM "repair_items"
       WHERE "id" = $1;
-  `; 
-  const selectRepairItemResponse = await connection.query(selectRepairItemText, [itemId])
-  console.log('repair item: ', selectRepairItemResponse)
-  const repairItemCost = selectRepairItemResponse.rows[0].cost;
-  const propertyId = selectRepairItemResponse.rows[0].property_id
+    `; 
+    const selectRepairItemResponse = await connection.query(selectRepairItemText, [itemId])
+    console.log('repair item: ', selectRepairItemResponse)
+    const repairItemCost = selectRepairItemResponse.rows[0].cost;
+    const propertyId = selectRepairItemResponse.rows[0].property_id
 
-  //delete repair item from database
+    //delete repair item from database
     const removeRepairItemText = `
       DELETE FROM "repair_items"
         WHERE "id" = $1;
@@ -1097,6 +1169,7 @@ router.post('/holdingItem', async (req, res) => {
     }
 });
 
+//changes the taxes value to 0 in the properties table
 router.put('/taxes', async (req, res) => {
   const propertyId = req.body.propertyId;
 
