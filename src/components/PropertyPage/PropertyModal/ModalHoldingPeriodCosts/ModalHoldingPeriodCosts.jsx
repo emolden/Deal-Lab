@@ -63,7 +63,7 @@ const updateTaxes = (propertyId) => {
             {propertyOfInterest.property[0].taxes_yearly && propertyOfInterest.property[0].taxes_yearly > 0 ? 
             
             <div className="unordered-list">
-              <thead></thead>
+              {/* <thead></thead> */}
               <tr>
                 <td>Taxes: {formattedCurrency(propertyOfInterest.property[0].taxes_yearly/12)}</td>
                 <td><img onClick={() => {updateTaxes(propertyOfInterest.property[0].id)}} className="deleteBtn" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" /></td>
@@ -85,11 +85,11 @@ const updateTaxes = (propertyId) => {
           </table>
           <p className="bold-text">Monthly Total: {formattedCurrency(propertyOfInterest.property[0].monthly_holding_cost )}</p>
           <p>Holding Period:
-            <input
+            <input className="months-input"
               value= {Number(propertyOfInterest.property[0].holding_period)}
               onChange={e => {e.preventDefault; dispatch({type: 'UPDATE_PROPERTY_HOLDING_PERIOD', payload: e.target.value})}}
-            />
-            Months</p>
+            /> 
+            months</p>
         <p>
           <span className="bold-text">Total Holding Cost: {formattedCurrency(propertyOfInterest.property[0].total_holding_cost)}</span>
           </p>

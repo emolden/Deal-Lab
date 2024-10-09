@@ -36,7 +36,7 @@ function ModalUpfrontCosts() {
       {Object.keys(propertyOfInterest).length && 
       <>
       <p> Purchase Price:</p> 
-      <input
+      <input placeholder="Purchase Price"
         value= {formattedCurrency(Number(propertyOfInterest.property[0].purchase_price))}
         onChange={e => {e.preventDefault; dispatch({type: 'UPDATE_PROPERTY_PURCHASE_PRICE', payload: e.target.value})}}
       />
@@ -57,7 +57,7 @@ function ModalUpfrontCosts() {
         {propertyOfInterest.repairItems.map((item) => {
           return (
             <div className="unordered-list">
-              <thead></thead>
+              {/* <thead></thead> */}
               <tr>
                 <td className="list-items" key = {item.repair_items_id}>{item.repair_name}: {formattedCurrency(item.repair_cost)} </td>
                 <td><img className="deleteBtn" onClick={() => {deleteRepairItem(item.repair_items_id)}} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" /></td>
@@ -67,7 +67,7 @@ function ModalUpfrontCosts() {
         })}
       {/* this should be .total_repair_cost */}
       <p>Total Repair Cost: {formattedCurrency(propertyOfInterest.property[0].total_repair_cost)}</p>
-        <p>
+        <p className="section-totals">
           <span className="bold-text">Total Upfront Cost: {formattedCurrency(propertyOfInterest.property[0].total_upfront_cost)}</span>
         </p>
       </>

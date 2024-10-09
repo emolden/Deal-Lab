@@ -8,7 +8,7 @@ import { useState } from 'react';
 
 function ModalMortgageCalculator() {
     const dispatch = useDispatch();
-    // const propertyOfInterest = useSelector((store) => store.propertyOfInterest);
+    const propertyOfInterest = useSelector((store) => store.propertyOfInterest);
     const mortgageCalculator = useSelector(store => store.mortgageCalculator);
     const [downPayment, setDownPayment] = useState(Object.keys(mortgageCalculator) && `$${mortgageCalculator.down_payment}`);
     const [downPaymentPercentage, setDownPaymentPercentage] = useState(Object.keys(mortgageCalculator) && `${(mortgageCalculator.down_payment_percentage * 100)}%`);
@@ -36,56 +36,35 @@ function ModalMortgageCalculator() {
                     <form className="mortgageCalculatorForm">
                         <label>Down Payment:</label>
                         <br />
-                        <input label="Down Payment"
-                                id="standard-helperText"
-                                // variant="standard"
-                                // size='small'
+                        <input placeholder="Down Payment"
                                 value={downPayment}
-                                onChange={e => setDownPayment(e.target.value)}
-                                sx={{width: '160px', margin: '5px 5px 5px 0px'}}  />
+                                onChange={e => setDownPayment(e.target.value)} />
                         <br />
                         <label>Down Payment Percentage:</label>
                         <br />
-                        <input 
-                                id="standard-helperText"
-                                // variant="standard"
-                                // size='small'
+                        <input placeholder="Down Payment %"
                                 value={downPaymentPercentage}
-                                onChange={e => setDownPaymentPercentage(e.target.value)}
-                                sx={{width: '60px', }}  />
+                                onChange={e => setDownPaymentPercentage(e.target.value)} />
                         <br />
                         <label>Interest Rate:</label>
                         <br />
-                        <input label="Interest Rate" 
-                                id="standard-helperText"
-                                // variant="standard"
-                                // size='small'
+                        <input placeholder="Interest Rate" 
                                 value={interestRate}
-                                onChange={e => setInterestRate(e.target.value)}
-                                sx={{width: '160px', margin: '5px 5px 5px 0px'}}  />
+                                onChange={e => setInterestRate(e.target.value)} />
                         <br />
                         <label>Closing Costs:</label>
                         <br />
-                        <input label="Closing Costs" 
-                                id="standard-helperText"
-                                // variant="standard"
-                                // size='small' 
+                        <input placeholder="Closing Costs" 
                                 value={closingCosts}
-                                onChange={e => setClosingCosts(e.target.value)}
-                                sx={{width: '160px', margin: '5px 5px 5px 0px'}} />
+                                onChange={e => setClosingCosts(e.target.value)} />
                         <br />
                         <label> Closing Cost Percentage:</label>
-                        <input 
-                                id="standard-helperText"
-                                // variant="standard"
-                                // size='small'
-                                value={closingCostsPercentage}
-                                onChange={e => setClosingCostsPercentage(e.target.value)}
-                                sx={{width: '60px'}}  />
-
-                        <form size='small' variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                            <label>Loan Term <br /></label>
-                            <select labelId="demo-simple-select-standard-label"
+                        <br />
+                        <input value={closingCostsPercentage}
+                                onChange={e => setClosingCostsPercentage(e.target.value)} />
+                                <br />
+                            <label>Loan Term </label>
+                            <select
                                 id="demo-simple-select-standard"
                                 value={loanTerm}
                                 onChange={e => setLoanTerm(e.target.value)}>
@@ -94,8 +73,6 @@ function ModalMortgageCalculator() {
                                 <option value={20}>20 Yr</option>
                                 <option value={30}>30 Yr</option>
                             </select>
-                        </form>
-
                         <button className="modal-btn-2">Calculate</button>
                     </form>
                 </div>

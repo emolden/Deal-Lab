@@ -201,24 +201,6 @@
     grid-column: 1; /* First column */
     grid-row: 1; /* First row */
   }
-  
-  /* HOLDING PERIOD SECTION */
-  /* .holding-period-costs {
-    grid-column: 1; /* First column */
-    /* grid-row: 2; Second row */
-  /* } */ 
-
-  /* PROFIT ESTIMATION SECTION */
-  /* .profit-estimation {
-    grid-column: 2; /* Second column */
-    /* grid-row: 1; Span both rows */
-  /* }  */
-
-  /* MORTGAGE CALC SECTION */
-  /* .mortgage-calculator {
-    grid-column: 2; /* Second column */
-    /* grid-row: 2; Span both rows */
-  /* } */
 
 /* DELETE BUTTONS WITHIN SECTIONS */
   .deleteBtn {
@@ -229,4 +211,10 @@
     display: flex;
   }
 
-  
+  .months-input {
+    width: 30px;
+  }
+
+  .section-totals {
+    margin-top: auto;
+  }
