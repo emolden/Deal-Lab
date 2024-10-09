@@ -150,7 +150,7 @@ function PropertySearchForm({userId}) {
                   />
       </form> */}
       {/* ***************DELETE TO HERE **************************************** */}
-          <button onClick={addAddress}>Add</button>
+          <button className="modal-btn-2" onClick={addAddress}>Add</button>
     </div>
   );
 }

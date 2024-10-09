@@ -21,8 +21,9 @@ function PropertyList({ userId, onOpenModal }) {
   console.log('allProperties data:', allProperties);
   
   return (
-
+    
     <div className="container">
+      
       <p>Property List:</p>
       <div className='property-cards-container'>
       {Array.isArray(allProperties.properties) && allProperties.properties.length > 0 ? (
