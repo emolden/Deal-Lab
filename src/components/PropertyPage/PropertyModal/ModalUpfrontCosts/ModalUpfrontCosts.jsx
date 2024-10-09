@@ -1,14 +1,6 @@
 import React from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import { useState } from 'react';
-<<<<<<< HEAD
-
-
-=======
-import upfrontCost from '../../../../helpers/upfrontCost';
-import repairCost from '../../../../helpers/repairCost';
-// import '../PropertyPage/PropertyModal/PropertyModal.css';
->>>>>>> main
 
 function ModalUpfrontCosts() {
 
