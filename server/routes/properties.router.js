@@ -246,6 +246,7 @@ router.post('/', async (req, res) => {
       `
       const propertyApiDataResults = await connection.query(propertyApiDataSqlText, propertyApiData);
       propertyApiId = propertyApiDataResults.rows[0].id;
+      console.log('propertyApiId: ', propertyApiId)
 
     } else if (checkTimeStampData.length > 0) {
       console.log('Property already exists in database!');
@@ -1260,6 +1261,7 @@ router.post('/holdingItem', async (req, res) => {
 
 //changes the taxes value to 0 in the properties table
 router.put('/taxes', async (req, res) => {
+  console.log('/api/properties/taxes RECEIVED A REQUEST!!!!!!!!!!!!!!!!!!!!')
   const propertyId = req.body.propertyId;
 
   let connection;
@@ -1276,6 +1278,7 @@ router.put('/taxes', async (req, res) => {
     `;
     const getTaxesResult = await connection.query(getTaxesText, [propertyId]);
     const taxes = getTaxesResult.rows[0].taxes_yearly
+    console.log('taxes: ', getTaxesResult.rows[0]);
 
     //update the taxes value to zero
     const updateTaxesText = `
@@ -1304,6 +1307,7 @@ router.put('/taxes', async (req, res) => {
 
     const totalRepairs = Number(propertyInfoResults.rows[0].total_repair_cost);
     const monthlyHoldingCost = Number(propertyInfoResults.rows[0].monthly_holding_cost) - (Number(taxes) / 12);
+    console.log('monthly holding cost: ', monthlyHoldingCost)
     const purchasePrice = Number(propertyInfoResults.rows[0].purchase_price);
     const holdingPeriod = Number(propertyInfoResults.rows[0].holding_period);
     const monthlyTaxes = Number(propertyInfoResults.rows[0].taxes_yearly) / 12;

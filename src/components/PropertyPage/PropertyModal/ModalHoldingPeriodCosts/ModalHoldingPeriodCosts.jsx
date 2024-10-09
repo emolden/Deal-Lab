@@ -28,6 +28,7 @@ const deleteHoldingItem = (itemId) => {
 }
 
 const updateTaxes = (propertyId) => {
+  console.log('updateTaxes in holding period costs modal')
   dispatch ({
       type: 'UPDATE_PROPERTY_TAXES',
       payload: propertyId

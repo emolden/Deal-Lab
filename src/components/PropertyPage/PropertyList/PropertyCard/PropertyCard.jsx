@@ -107,16 +107,6 @@ function PropertyCard({ property, userId, onOpenModal, allRepairItems, allHoldin
             <td>Monthly Profit</td>
             <td>{formattedCurrency(property.monthly_profit)}</td>
           </tr>
-<<<<<<< HEAD
-=======
-          {/* <td colSpan="2"> */}
-            <div className="button-container">
-            <button className='delete-button' onClick={() => {deleteProperty(property.id)}}>
-              Delete
-            </button>
-            </div>
-          {/* </td> */}
->>>>>>> main
         </tbody>
       </table>  
       <div className="button-container">
