@@ -198,8 +198,8 @@
   }
 
   .table {
-    border: #080808 solid 1px;
-    border-radius: 1px;
+    border-top:2px solid #d3d3d3;
+    border-bottom: 2px solid #d3d3d3;
     width: 100%;
   }
 
