@@ -38,22 +38,19 @@ function ModalUpfrontCosts() {
     <div className="container">
       {Object.keys(propertyOfInterest).length && 
       <>
-      {/* <p>Upfront Costs:</p> */}
       <p> Purchase Price:</p> 
       <input
         value= {formattedCurrency(Number(propertyOfInterest.property[0].purchase_price))}
         onChange={e => {e.preventDefault; dispatch({type: 'UPDATE_PROPERTY_PURCHASE_PRICE', payload: e.target.value})}}
       />
       <p>Repair Items:</p>
-      <input className='repiarItemInput'
-        name='repairItemInput'
+      <input 
         type='text'
         placeholder='Repair Name'
         value={repairName}
         onChange={e => setRepairName(e.target.value)}
       />
-      <input className='repiarCostInput'
-        name='repairCostInput'
+      <input
         type='text'
         placeholder='Repair Cost'
         value={repairItemCost}
@@ -64,7 +61,7 @@ function ModalUpfrontCosts() {
         {propertyOfInterest.repairItems.map((item) => {
           return (
             <div className="unordered-list">
-            <ul key = {item.repair_items_id}>{item.repair_name}: {formattedCurrency(item.repair_cost)} </ul>
+            <ul className="list-items" key = {item.repair_items_id}>{item.repair_name}: {formattedCurrency(item.repair_cost)} </ul>
             <img className="deleteBtn" onClick={() => {deleteRepairItem(item.repair_items_id)}} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" />
             </div>
           )

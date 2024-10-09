@@ -28,7 +28,7 @@ function DefaultRepairItems({defaultRepairs}) {
   return (
     <div className='defaultRepair'>
       <form className='defaultRepairForm'>
-        <label className='defaultSettingsText'>Repair Items:</label>
+        <label className='defaultSettingsText'>Repair Items:</label><br />
         <input className='defaultRepairNameInput'
                 type='text'
                 placeholder='Repair Name'
@@ -59,9 +59,12 @@ function DefaultRepairItems({defaultRepairs}) {
                           payload: item.id
                         })
                       }}>
+
                         <img className="deleteDefaultRepairBtn" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" />
-                        </span>
-              </div>
+                        </td>
+                  </tr>
+                        
+              </table>
             )
           })}
       </div>

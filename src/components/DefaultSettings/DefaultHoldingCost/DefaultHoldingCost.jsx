@@ -63,9 +63,12 @@ function DefaultHoldingCost({defaultHoldings}) {
                         payload: item.id
                       })
                     }}>
+                      <span>
                       <img className="deleteDefaultRepairBtn" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" />
                     </span>
-            </div>
+                  </td>
+                </tr>
+            </table>
           )
         })}
       </div>

@@ -46,15 +46,13 @@ const updateTaxes = (propertyId) => {
       {Object.keys(propertyOfInterest).length && 
         <>
           <p>Holding Items:</p>
-          <input className='holdingItemInput'
-            name='holdingItemInput'
+          <input 
             type='text'
             placeholder='Holding Name'
             value={holdingName}
             onChange={e => setHoldingName(e.target.value)}
           />
-          <input className='holdingCostInput'
-            name='holdingCostInput'
+          <input 
             type='text'
             placeholder='Holding Cost'
             value={holdingItemCost}
@@ -63,17 +61,16 @@ const updateTaxes = (propertyId) => {
           <button className="modal-btn-2" onClick={addHoldingItem}>Add</button>
           <ul>
             {propertyOfInterest.property[0].taxes_yearly && propertyOfInterest.property[0].taxes_yearly > 0 ? 
-            <>
-              <li> Taxes: {formattedCurrency(propertyOfInterest.property[0].taxes_yearly/12)}</li>
+            <div className="unordered-list">
+              <ul>Taxes: {formattedCurrency(propertyOfInterest.property[0].taxes_yearly/12)}</ul>
               <img onClick={() => {updateTaxes(propertyOfInterest.property[0].id)}} className="deleteBtn" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" />
-            </> : ''}
+            </div> : ''}
             {propertyOfInterest.holdingItems.map((item) => {
               return (
-                <>
-                <li key = {item.holding_items_id}>{item.holding_name}: {formattedCurrency(item.holding_cost)} </li>
+                <div className="unordered-list">
+                <ul className="list-items" key = {item.holding_items_id}>{item.holding_name}: {formattedCurrency(item.holding_cost)} </ul>
                 <img className="deleteBtn" onClick={() => {deleteHoldingItem(item.holding_items_id)}}  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" />
-                
-                </>
+                </div>
               )
             })}
           </ul>
