@@ -273,8 +273,9 @@ router.post('/', async (req, res) => {
 
       propertyApiId = checkTimeStampData[mostRecentCheck].id;
       formattedAddress = checkTimeStampData[mostRecentCheck].address;
-      purchasePrice = checkTimeStampData[mostRecentCheck].purchase_price;
-      afterRepairValue = checkTimeStampData[mostRecentCheck].after_repair_value;
+      purchasePrice = Number(checkTimeStampData[mostRecentCheck].purchase_price);
+      afterRepairValue = Number(checkTimeStampData[mostRecentCheck].after_repair_value);
+      taxYear = Number(checkTimeStampData[mostRecentCheck].taxes_yearly);
       
     }
 
@@ -298,7 +299,7 @@ router.post('/', async (req, res) => {
         VALUES
         ($1, $2, $3, $4, $5, $6) RETURNING id;
     `;
-    const propertiesResults = await pool.query(propertiesSqlText, propertiesData);
+    const propertiesResults = await connection.query(propertiesSqlText, propertiesData);
     propertyId = propertiesResults.rows[0].id;
     console.log('This is propertyId:', propertyId);
     
@@ -891,29 +892,6 @@ router.put('/backToDefault/:id', async (req, res) => {
     await connection.release()
   }
 })
-
-
-/**
- * ----- PUT property taxes: updatePropertyTaxes
- */
-router.put('/taxes', (req, res) => {
-  const propertyId = req.body.propertyId;
-
-  const sqlText = `
-    UPDATE "properties"
-      SET "taxes_yearly" = 0
-      WHERE "id" = $1;
-  `; 
-  pool.query(sqlText, [propertyId])
-
-      .then((results) => {
-        res.sendStatus(201)
-      }) 
-      .catch((error) => {
-        console.log('Error in updating property taxes:', error);
-        res.sendStatus(500);
-      })
-});
 
 
 
