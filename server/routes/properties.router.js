@@ -444,7 +444,7 @@ router.put('/', async (req, res) => {
     const propertyInfoText = `
       SELECT 
           "total_repair_cost",
-          "monthly_holding_cost",
+          "monthly_holding_cost"
           FROM "properties"
           WHERE "id" = $1;
     `;
