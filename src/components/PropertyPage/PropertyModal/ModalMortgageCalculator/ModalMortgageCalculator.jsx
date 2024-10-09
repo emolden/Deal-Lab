@@ -8,7 +8,7 @@ import { useState } from 'react';
 
 function ModalMortgageCalculator() {
     const dispatch = useDispatch();
-    const propertyOfInterest = useSelector((store) => store.propertyOfInterest);
+    // const propertyOfInterest = useSelector((store) => store.propertyOfInterest);
     const mortgageCalculator = useSelector(store => store.mortgageCalculator);
     const [downPayment, setDownPayment] = useState(Object.keys(mortgageCalculator) && `$${mortgageCalculator.down_payment}`);
     const [downPaymentPercentage, setDownPaymentPercentage] = useState(Object.keys(mortgageCalculator) && `${(mortgageCalculator.down_payment_percentage * 100)}%`);

@@ -20,8 +20,9 @@ function* addProperty(action) {
   console.log('Payload data:', action.payload);
   const address = action.payload.address;
   const userId = action.payload.userId
+  const addressId = action.payload.addressId
   try {
-    const response = yield axios.post(`api/properties`, {address})
+    const response = yield axios.post(`api/properties`, {address:address, addressId: addressId})
     console.log('addProperty data:', response.data);
     
     yield put({
@@ -104,9 +105,9 @@ function* getPropertyOfInterest(action) {
 }
 
 function* updatePropertyTaxes(action) {
-  // console.log('in update property taxes: ', action.payload)
+  console.log('in update property taxes: ', action.payload)
   try {
-    yield axios.put(`api/properties/taxes/`, {propertyId: action.payload})
+    yield axios.put(`/api/properties/taxes`, {propertyId: action.payload})
     yield put({
         type: 'GET_PROPERTY_OF_INTEREST',
         payload: action.payload

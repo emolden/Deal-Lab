@@ -1,8 +1,6 @@
 import React from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import { useState } from 'react';
-import totalHoldingCost from '../../../../helpers/totalHoldingCost';
-import monthlyHoldingCost from '../../../../helpers/monthlyHoldingCost'
 
 
 function ModalHoldingPeriodCosts() {
@@ -30,6 +28,7 @@ const deleteHoldingItem = (itemId) => {
 }
 
 const updateTaxes = (propertyId) => {
+  console.log('updateTaxes in holding period costs modal')
   dispatch ({
       type: 'UPDATE_PROPERTY_TAXES',
       payload: propertyId
@@ -92,7 +91,7 @@ const updateTaxes = (propertyId) => {
             />
             Months</p>
         <p>
-          <span className="bold-text">Total Holding Cost: {formattedCurrency(totalHoldingCost(propertyOfInterest.property[0].holding_period, propertyOfInterest.property[0].taxes_yearly/12, propertyOfInterest.holdingItems))}</span>
+          <span className="bold-text">Total Holding Cost: {formattedCurrency(propertyOfInterest.property[0].total_holding_cost)}</span>
           </p>
         </>
       }

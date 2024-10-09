@@ -13,13 +13,13 @@ function* getCalculations(action) {
 function* addCalculations(action) {
     const propertyId = action.payload;
     try {
-        const response = yield axios.post(`/api/mortgageCalculator/${propertyId}`)
+        // const response = yield axios.post(`/api/mortgageCalculator/${propertyId}`)
         console.log('Mortgage Calculations data:', response.data);
         
-        yield put({
-            type: 'SET_CALCULATIONS',
-            payload: response.data
-        })
+        // yield put({
+        //     type: 'SET_CALCULATIONS',
+        //     payload: response.data
+        // })
     } catch (error) {
         console.log('Error posting calculations for property:', error);
     }
