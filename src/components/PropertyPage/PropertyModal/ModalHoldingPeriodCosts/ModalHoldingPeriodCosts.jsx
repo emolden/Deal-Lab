@@ -59,7 +59,7 @@ const updateTaxes = (propertyId) => {
           />
           <button className="modal-btn-2" onClick={addHoldingItem}>Add</button>
           {/* <ul> */}
-          <table>
+          <table className="table">
             {propertyOfInterest.property[0].taxes_yearly && propertyOfInterest.property[0].taxes_yearly > 0 ? 
             
             <div className="unordered-list">
@@ -83,7 +83,7 @@ const updateTaxes = (propertyId) => {
           {/* </ul> */}
           
           </table>
-          <p className="bold-text">Monthly Total: {formattedCurrency(propertyOfInterest.property[0].monthly_holding_cost )}</p>
+          <p>Monthly Total: {formattedCurrency(propertyOfInterest.property[0].monthly_holding_cost )}</p>
           <p>Holding Period:
             <input className="months-input"
               value= {Number(propertyOfInterest.property[0].holding_period)}
