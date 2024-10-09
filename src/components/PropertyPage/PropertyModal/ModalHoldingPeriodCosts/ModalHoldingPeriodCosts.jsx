@@ -58,22 +58,32 @@ const updateTaxes = (propertyId) => {
             onChange={e => setHoldingItemCost(e.target.value)}
           />
           <button className="modal-btn-2" onClick={addHoldingItem}>Add</button>
-          <ul>
+          {/* <ul> */}
+          <table>
             {propertyOfInterest.property[0].taxes_yearly && propertyOfInterest.property[0].taxes_yearly > 0 ? 
+            
             <div className="unordered-list">
-              <ul>Taxes: {formattedCurrency(propertyOfInterest.property[0].taxes_yearly/12)}</ul>
-              <img onClick={() => {updateTaxes(propertyOfInterest.property[0].id)}} className="deleteBtn" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" />
+              <thead></thead>
+              <tr>
+                <td>Taxes: {formattedCurrency(propertyOfInterest.property[0].taxes_yearly/12)}</td>
+                <td><img onClick={() => {updateTaxes(propertyOfInterest.property[0].id)}} className="deleteBtn" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" /></td>
+              </tr>
             </div> : ''}
             {propertyOfInterest.holdingItems.map((item) => {
               return (
-                <div key = {item.id} className="unordered-list">
-                  <ul className="list-items">{item.holding_name}: {formattedCurrency(item.holding_cost)} </ul>
-                  <img className="deleteBtn" onClick={() => {deleteHoldingItem(item.id)}} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" />
+                <div className="unordered-list">
+                  <tr>
+                <td className="list-items" key = {item.holding_items_id}>{item.holding_name}: {formattedCurrency(item.holding_cost)} </td>
+                <td><img className="deleteBtn" onClick={() => {deleteHoldingItem(item.holding_items_id)}}  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" /></td>
+                </tr>
                 </div>
+                
               )
             })}
-          </ul>
-          <p>Monthly Total: {formattedCurrency(propertyOfInterest.property[0].monthly_holding_cost)}</p>
+          {/* </ul> */}
+          
+          </table>
+          <p className="bold-text">Monthly Total: {formattedCurrency(monthlyHoldingCost(propertyOfInterest.property[0].taxes_yearly/12, propertyOfInterest.holdingItems))}</p>
           <p>Holding Period:
             <input
               value= {Number(propertyOfInterest.property[0].holding_period)}
