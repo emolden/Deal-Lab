@@ -54,18 +54,20 @@ function ModalUpfrontCosts() {
         onChange={e => setRepairItemCost(e.target.value)}
       />
       <button className="modal-btn-2"onClick={addRepairItem}>Add</button>
-      <ul>
+      {/* <ul> */}
         {propertyOfInterest.repairItems.map((item) => {
           return (
-            <div key = {item.id} className="unordered-list">
-              <ul className="list-items">{item.repair_name}: {formattedCurrency(item.repair_cost)} </ul>
-              <img className="deleteBtn" onClick={() => {deleteRepairItem(item.id)}} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" />
+            <div className="unordered-list">
+              <thead></thead>
+              <tr>
+                <td className="list-items" key = {item.repair_items_id}>{item.repair_name}: {formattedCurrency(item.repair_cost)} </td>
+                <td><img className="deleteBtn" onClick={() => {deleteRepairItem(item.repair_items_id)}} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" /></td>
+              </tr>
             </div>
           )
         })}
-      </ul>
-      <p>Total Repair Cost: {formattedCurrency(propertyOfInterest.property[0].total_repair_cost)}</p>
-      
+      {/* </ul> */}
+      <p className="bold-text">Total Repair Cost: {formattedCurrency(repairCost(propertyOfInterest.repairItems))}</p>
         <p>
           <span className="bold-text">Total Upfront Cost: {formattedCurrency(propertyOfInterest.property[0].total_upfront_cost)}</span>
         </p>

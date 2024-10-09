@@ -185,10 +185,10 @@
   }
 
   .unordered-list {
-    margin: 20px 0;
+    /* margin: 20px 0; */
     display: flex;
     justify-content: flex-start; /* Align items to the left */
-    align-items: center;
+    align-items: left;
   }
 
   .list-items {
@@ -228,3 +228,5 @@
     margin: auto;
     display: flex;
   }
+
+  
