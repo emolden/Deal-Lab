@@ -68,7 +68,7 @@ const updateTaxes = (propertyId) => {
             {propertyOfInterest.holdingItems.map((item) => {
               return (
                 <div className="unordered-list">
-                <ul key = {item.holding_items_id}>{item.holding_name}: {formattedCurrency(item.holding_cost)} </ul>
+                <ul className="list-items" key = {item.holding_items_id}>{item.holding_name}: {formattedCurrency(item.holding_cost)} </ul>
                 <img className="deleteBtn" onClick={() => {deleteHoldingItem(item.holding_items_id)}}  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" />
                 </div>
               )

@@ -61,7 +61,7 @@ function ModalUpfrontCosts() {
         {propertyOfInterest.repairItems.map((item) => {
           return (
             <div className="unordered-list">
-            <ul key = {item.repair_items_id}>{item.repair_name}: {formattedCurrency(item.repair_cost)} </ul>
+            <ul className="list-items" key = {item.repair_items_id}>{item.repair_name}: {formattedCurrency(item.repair_cost)} </ul>
             <img className="deleteBtn" onClick={() => {deleteRepairItem(item.repair_items_id)}} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" />
             </div>
           )

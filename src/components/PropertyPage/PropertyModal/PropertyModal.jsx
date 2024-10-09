@@ -66,7 +66,7 @@ const PropertyModal = ({ isOpen, onClose, propertyCard, userId }) => {
           <button onClick={onClose} className="modal-close">X</button>
           <h2 className="modal-header">{propertyCard.address}</h2>
         </div>
-
+        <div className="modal-body">
         <div className="modalRight grid-container">
           <div className='section upfront-costs'>
             <h3 className='section-header'>Upfront Costs:</h3>
@@ -78,18 +78,21 @@ const PropertyModal = ({ isOpen, onClose, propertyCard, userId }) => {
             <ModalHoldingPeriodCosts />
           </div>
 
-          <div className='section profit-estimation'>
-            <h3 className='section-header'>Profit Estimation:</h3>
-            <ModalProfitEstimation />
-          </div>
           <div className='section mortgage-calculator'>
             <h3 className='section-header'>Mortgage Calculator:</h3>
             <ModalMortgageCalculator />
           </div>
+
+          <div className='section profit-estimation'>
+            <h3 className='section-header'>Profit Estimation:</h3>
+            <ModalProfitEstimation />
+          </div>
+
+          
           {/* <div className="grid-container"> */}
           <button className="modal-default-btn" onClick={handleBackToDefault}>Back To Default</button>
           <button className="modal-save-btn" onClick={saveUpdatedPropertyInfo}>Save</button>
-          {/* </div> */}
+          </div>
       </div>
     </div>
     </div>
