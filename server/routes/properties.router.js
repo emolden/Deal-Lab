@@ -1037,7 +1037,7 @@ router.post('/holdingItem', async (req, res) => {
       VALUES
       ($1, $2, $3);
   `; 
-  const response = await connection.query(sqlText, [propertyId, holdingName, itemHoldingCost])
+  const sqlResponse = await connection.query(sqlText, [propertyId, holdingName, itemHoldingCost])
 
      //update all the calculations based on this update to the reparir item table
 
@@ -1082,9 +1082,7 @@ router.post('/holdingItem', async (req, res) => {
            "monthly_profit" = $7
        WHERE "id" = $8;
  `;
-
  const updatePropertiesValues = [totalRepairs, totalUpfrontCost, monthlyHoldingCost, holdingCost, cost, totalProfit, totalMonthlyProfit, propertyId];
-
  const updatePropertiesResults = await connection.query(updatePropertiesText, updatePropertiesValues);
 
     await connection.query('Commit;')
@@ -1099,23 +1097,89 @@ router.post('/holdingItem', async (req, res) => {
     }
 });
 
-router.put('/taxes', (req, res) => {
+router.put('/taxes', async (req, res) => {
   const propertyId = req.body.propertyId;
 
-  const sqlText = `
-    UPDATE "properties"
-      SET "taxes_yearly" = 0
-      WHERE "id" = $1;
-  `; 
-  pool.query(sqlText, [propertyId])
+  let connection;
+  try {
+    connection = await pool.connect()
+    await connection.query('BEGIN;')
 
-      .then((results) => {
-        res.sendStatus(201)
-      }) 
-      .catch((error) => {
-        console.log('Error in updating property taxes:', error);
-        res.sendStatus(500);
-      })
+    //get the value of the yearly taxes from the properties table
+    const getTaxesText = `
+      SELECT
+        "taxes_yearly"
+        FROM "properties"
+        WHERE "id" = $1  
+    `;
+    const getTaxesResult = await connection.query(getTaxesText, [propertyId]);
+    const taxes = getTaxesResult.rows[0].taxes_yearly
+
+    //update the taxes value to zero
+    const updateTaxesText = `
+      UPDATE "properties"
+        SET "taxes_yearly" = 0
+        WHERE "id" = $1;
+    `; 
+    const updateTaxesResponse = await connection.query(updateTaxesText, [propertyId])
+    
+    //update all the calculations based on this update to the reparir item table
+
+    //get the values needed for the calculation functions
+    const propertyInfoText = `
+    SELECT 
+      "total_repair_cost",
+      "monthly_holding_cost",
+      "purchase_price",
+      "holding_period",
+      "taxes_yearly",
+      "after_repair_value"
+      FROM "properties"
+      WHERE "id" = $1;
+    `;
+    const propertyInfoValues = [propertyId];
+    const propertyInfoResults = await connection.query(propertyInfoText, propertyInfoValues);
+
+    const totalRepairs = Number(propertyInfoResults.rows[0].total_repair_cost);
+    const monthlyHoldingCost = Number(propertyInfoResults.rows[0].monthly_holding_cost) - (Number(taxes) / 12);
+    const purchasePrice = Number(propertyInfoResults.rows[0].purchase_price);
+    const holdingPeriod = Number(propertyInfoResults.rows[0].holding_period);
+    const monthlyTaxes = Number(propertyInfoResults.rows[0].taxes_yearly) / 12;
+    const afterRepairValue = Number(propertyInfoResults.rows[0].after_repair_value);
+
+    // ================ SQL update table: PROPERTIES
+    const totalUpfrontCost = upfrontCost(totalRepairs, purchasePrice);
+    const cost = totalCost(totalRepairs, purchasePrice, holdingPeriod, monthlyHoldingCost);
+    const holdingCost = totalHoldingCost(holdingPeriod, monthlyHoldingCost);
+    const totalProfit = profit(afterRepairValue, totalRepairs, purchasePrice, holdingPeriod, monthlyHoldingCost);
+    const totalMonthlyProfit = monthlyProfit(afterRepairValue, totalRepairs, purchasePrice, holdingPeriod, monthlyHoldingCost);
+    
+
+    const updatePropertiesText = `
+    UPDATE "properties"
+       SET "total_repair_cost" = $1,
+           "total_upfront_cost" = $2,
+           "monthly_holding_cost" = $3,
+           "total_holding_cost" = $4,
+           "total_cost" = $5,
+           "profit" = $6,
+           "monthly_profit" = $7
+       WHERE "id" = $8;
+    `;
+    const updatePropertiesValues = [totalRepairs, totalUpfrontCost, monthlyHoldingCost, holdingCost, cost, totalProfit, totalMonthlyProfit, propertyId];
+    const updatePropertiesResults = await connection.query(updatePropertiesText, updatePropertiesValues);
+
+
+    await connection.query('Commit;')
+    res.sendStatus(201)
+
+  } catch(err) {
+      console.log('Update taxes failed: ', err);
+      await connection.query('Rollback;')
+      res.sendStatus(500);
+    } finally {
+      await connection.release()
+    }
 });
 
 
