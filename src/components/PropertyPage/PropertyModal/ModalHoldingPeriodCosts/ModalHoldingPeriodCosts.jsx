@@ -83,7 +83,7 @@ const updateTaxes = (propertyId) => {
           {/* </ul> */}
           
           </table>
-          <p className="bold-text">Monthly Total: {formattedCurrency(monthlyHoldingCost(propertyOfInterest.property[0].taxes_yearly/12, propertyOfInterest.holdingItems))}</p>
+          <p className="bold-text">Monthly Total: {formattedCurrency(propertyOfInterest.property[0].monthly_holding_cost )}</p>
           <p>Holding Period:
             <input
               value= {Number(propertyOfInterest.property[0].holding_period)}
