@@ -55,7 +55,7 @@ function DefaultHoldingCost({defaultHoldings}) {
               <tr className='defaultHoldingItem' key={item.id}>
                 <td className='defaultHoldingItemName'>{item.holding_name}:</td>
                 <td className='defaultHoldingItemCost'>{formattedCurrency(item.holding_cost)}</td>
-                <td className='deleteDefaultHoldingBtn'
+                <td className='deleteDefaultRepairBtn'
                     onClick={e => {
                       e.preventDefault();
                       dispatch({

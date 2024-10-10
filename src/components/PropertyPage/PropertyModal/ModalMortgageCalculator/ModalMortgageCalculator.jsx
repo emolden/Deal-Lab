@@ -64,7 +64,8 @@ function ModalMortgageCalculator() {
                         <br />
                         <label> Closing Cost Percentage:</label>
                         <br />
-                        <input value={closingCostsPercentage}
+                        <input placeholder="Closing Costs %"
+                                value={closingCostsPercentage}
                                 onChange={e => setClosingCostsPercentage(e.target.value)} />
                                 <br />
                             <label>Loan Term </label>
