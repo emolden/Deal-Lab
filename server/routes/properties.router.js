@@ -120,7 +120,7 @@ router.post('/', async (req, res) => {
         url: `https://api.rentcast.io/v1/avm/value?address=${address}&limit=1&compCount=5`,
         headers: {
             'accept': 'application/json',
-            'X-Api-Key': `${api_key}`
+            'X-Api-Key': api_key
         }
       })
       valueEstimateResponse = theValueEstimateResponse;
@@ -136,7 +136,7 @@ router.post('/', async (req, res) => {
         url: `https://api.rentcast.io/v1/properties?address=${address}&limit=1`,
         headers: {
             'accept': 'application/json',
-            'X-Api-Key': `${api_key}`
+            'X-Api-Key': api_key
         }
       })
       recordsResponse = theRecordsResponse;
@@ -152,7 +152,7 @@ router.post('/', async (req, res) => {
           url: `https://api.rentcast.io/v1/listings/sale?address=${formattedAddress}&limit=1`,
           headers: {
               'accept': 'application/json',
-              'X-Api-Key': `${api_key}`
+              'X-Api-Key': api_key
           }
         })
         listingResponse = theListingResponse;
@@ -392,7 +392,7 @@ router.get('/propertyOfInterest/:id', rejectUnauthenticated, async (req, res) =>
     const repairItemResult = await connection.query(repairItemText, repairItemValue);
     // console.log('database reponse to repairItem: ', repairItemResult.rows)
 
-   
+  
       //request holding items for specific property
       const holdingItemText = `
         SELECT 
@@ -499,7 +499,7 @@ router.put('/backToDefault/:id', async (req, res) => {
         url: `https://api.rentcast.io/v1/avm/value?address=${address}&limit=1&compCount=5`,
         headers: {
             'accept': 'application/json',
-            'X-Api-Key': `${api_key}`
+            'X-Api-Key': api_key
         }
       })
       valueEstimateResponse = theValueEstimateResponse;
@@ -515,7 +515,7 @@ router.put('/backToDefault/:id', async (req, res) => {
         url: `https://api.rentcast.io/v1/properties?address=${address}&limit=1`,
         headers: {
             'accept': 'application/json',
-            'X-Api-Key': `${api_key}`
+            'X-Api-Key': api_key
         }
       })
       recordsResponse = theRecordsResponse;
@@ -531,7 +531,7 @@ router.put('/backToDefault/:id', async (req, res) => {
           url: `https://api.rentcast.io/v1/listings/sale?address=${formattedAddress}&limit=1`,
           headers: {
               'accept': 'application/json',
-              'X-Api-Key': `${api_key}`
+              'X-Api-Key': api_key
           }
         })
         listingResponse = theListingResponse;
