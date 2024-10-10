@@ -10,6 +10,7 @@ function PropertySearchForm({userId}) {
   const [searchBarAddress, setSearchBarAddress] = useState("");
   const [formattedAddress, setFormattedAddress] = useState("");
   const [addressId, setAddressId] = useState("");
+  const [filterOption, setFilterOption] = useState('add_order')
   const dispatch = useDispatch();
 
   //forces GooglePlacesAutocomplete dom render to wait till Google script is loaded
@@ -58,6 +59,38 @@ function PropertySearchForm({userId}) {
         .catch(error => console.error('error getting geocodeByPlaceId', error));
     }
 
+    const handleFilterChange = (event) => {
+      let filter = event.target.value
+      setFilterOption(filter);
+      switch (filter) {
+        case 'add_order':
+          dispatch ({
+            type: 'GET_PROPERTIES_FILTERED',
+            payload: {orderBy: "inserted_at" , arrange: 'DESC' }
+          })
+        case 'total_cost_lowtohigh':
+          dispatch ({
+            type: 'GET_PROPERTIES_FILTERED',
+            payload: {orderBy: "total_cost" , arrange: 'ASC' }
+          })
+        case 'total_cost_hightolow':
+          dispatch ({
+            type: 'GET_PROPERTIES_FILTERED',
+            payload: {orderBy: "total_cost" , arrange: 'DESC' }
+          })
+        case 'monthly_profit_lowtohigh':
+          dispatch ({
+            type: 'GET_PROPERTIES_FILTERED',
+            payload: {orderBy: "monthly_profit" , arrange: 'ASC'}
+          })
+        case 'monthly_profit_hightolow':
+          dispatch ({
+            type: 'GET_PROPERTIES_FILTERED',
+            payload: {orderBy: "monthly_profit" , arrange: 'DESC'}
+          })
+      }
+    }
+
 
   return (
     <div className="container">
@@ -96,12 +129,12 @@ function PropertySearchForm({userId}) {
       <button className="modal-btn-2" onClick={addAddress}>Add</button>
       <div>
         <label htmlFor='filter'>Sort By </label>
-        <select name='filter' id='filter'>
+        <select name='filter' id='filter' onChange={() => handleFilterChange(event)}>
           <option value='add_order'>Add Order</option>
           <option value='total_cost_lowtohigh'>Total Cost: Low to High</option>
           <option value='total_cost_hightolow'>Total Cost: High to Low</option>
           <option value='monthly_profit_lowtohigh'>Monthly Profit: Low to High</option>
-          <option value='monthly_profit'>Monthly Profit: High to Low</option>
+          <option value='monthly_profit_hightolow'>Monthly Profit: High to Low</option>
         </select>
       </div>
     </div>
