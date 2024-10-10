@@ -22,6 +22,7 @@ CREATE TABLE "user" (
 
 CREATE TABLE "property_api_data" (
   "id" SERIAL PRIMARY KEY,
+  "google_address_id" VARCHAR (200),
   "address" VARCHAR (1000) NOT NULL,
   "inserted_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   "updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -45,7 +46,14 @@ CREATE TABLE "properties" (
   "holding_period" INT DEFAULT 6,
   "taxes_yearly" DECIMAL (15,2),
   "after_repair_value" DECIMAL (15,2),
-  "is_selected" BOOLEAN DEFAULT FALSE
+  "total_repair_cost" DECIMAL (15,2),
+  "total_upfront_cost" DECIMAL (15,2),
+  "monthly_holding_cost" DECIMAL (15,2),
+  "total_holding_cost" DECIMAL (15,2),
+  "total_cost" DECIMAL (15,2),
+  "profit" DECIMAL (15,2),
+  "monthly_profit" DECIMAL (15,2),
+  "is_archived" BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE "default_holdings" (

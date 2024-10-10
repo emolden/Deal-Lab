@@ -6,7 +6,7 @@ export const StyledMenu = styled.nav`
   justify-content: center;
 
   background: ${({ theme }) => theme.primaryLight};
-  height: 50vh;
+  height: 40vh;
   width: 250px; /* Set the desired width */
   max-width: 300px; /* Optional max-width */
   text-align: left;
@@ -14,6 +14,9 @@ export const StyledMenu = styled.nav`
   padding: 2rem;
   position: fixed;
   top: 0;
+  z-index: 1;
+  border: 5px;
+  border-radius: 10px;
   right: 0; /* Position the menu on the right */
   transition: transform 0.3s ease-in-out;
   
@@ -28,7 +31,7 @@ export const StyledMenu = styled.nav`
   a {
     font-size: 1.2rem;
     text-transform: uppercase;
-    padding: 2rem 0;
+    padding: 1rem 0;
     font-weight: bold;
     letter-spacing: 0.5rem;
     color: ${({ theme }) => theme.primaryDark};

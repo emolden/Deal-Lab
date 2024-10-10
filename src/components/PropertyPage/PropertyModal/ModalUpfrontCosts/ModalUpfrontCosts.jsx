@@ -1,9 +1,6 @@
 import React from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import { useState } from 'react';
-import upfrontCost from '../../../../helpers/upfrontCost';
-import repairCost from '../../../../helpers/repairCost';
-
 
 function ModalUpfrontCosts() {
 
@@ -38,42 +35,39 @@ function ModalUpfrontCosts() {
     <div className="container">
       {Object.keys(propertyOfInterest).length && 
       <>
-      {/* <p>Upfront Costs:</p> */}
       <p> Purchase Price:</p> 
       <input
         value= {formattedCurrency(Number(propertyOfInterest.property[0].purchase_price))}
         onChange={e => {e.preventDefault; dispatch({type: 'UPDATE_PROPERTY_PURCHASE_PRICE', payload: e.target.value})}}
       />
       <p>Repair Items:</p>
-      <input className='repiarItemInput'
-        name='repairItemInput'
+      <input 
         type='text'
         placeholder='Repair Name'
         value={repairName}
         onChange={e => setRepairName(e.target.value)}
       />
-      <input className='repiarCostInput'
-        name='repairCostInput'
+      <input
         type='text'
         placeholder='Repair Cost'
         value={repairItemCost}
         onChange={e => setRepairItemCost(e.target.value)}
       />
-      <button onClick={addRepairItem}>Add</button>
-      <ul>
+      <button className="modal-btn-2"onClick={addRepairItem}>Add</button>
         {propertyOfInterest.repairItems.map((item) => {
           return (
-            <>
-            <li key = {item.repair_items_id}>{item.repair_name}: {formattedCurrency(item.repair_cost)} </li>
-            <button onClick={() => {deleteRepairItem(item.repair_items_id)}}>X</button>
-            </>
+            <div key = {item.id} className="unordered-list">
+              <tr>
+                <td className="list-items" >{item.repair_name}: {formattedCurrency(item.repair_cost)} </td>
+                <td><img className="deleteBtn" onClick={() => {deleteRepairItem(item.id)}} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" /></td>
+              </tr>
+            </div>
           )
         })}
-      </ul>
-      <p>Total Repair Cost: {formattedCurrency(repairCost(propertyOfInterest.repairItems))}</p>
-      
+      {/* this should be .total_repair_cost */}
+      <p>Total Repair Cost: {formattedCurrency(propertyOfInterest.property[0].total_repair_cost)}</p>
         <p>
-          <span className="bold-text">Total Upfront Cost: {formattedCurrency(upfrontCost(propertyOfInterest.repairItems, propertyOfInterest.property[0].purchase_price))}</span>
+          <span className="bold-text">Total Upfront Cost: {formattedCurrency(propertyOfInterest.property[0].total_upfront_cost)}</span>
         </p>
       </>
       }

@@ -1,8 +1,6 @@
 import React from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import { useState } from 'react';
-import totalHoldingCost from '../../../../helpers/totalHoldingCost';
-import monthlyHoldingCost from '../../../../helpers/monthlyHoldingCost'
 
 
 function ModalHoldingPeriodCosts() {
@@ -30,6 +28,7 @@ const deleteHoldingItem = (itemId) => {
 }
 
 const updateTaxes = (propertyId) => {
+  console.log('updateTaxes in holding period costs modal')
   dispatch ({
       type: 'UPDATE_PROPERTY_TAXES',
       payload: propertyId
@@ -46,37 +45,45 @@ const updateTaxes = (propertyId) => {
       {Object.keys(propertyOfInterest).length && 
         <>
           <p>Holding Items:</p>
-          <input className='holdingItemInput'
-            name='holdingItemInput'
+          <input 
             type='text'
             placeholder='Holding Name'
             value={holdingName}
             onChange={e => setHoldingName(e.target.value)}
           />
-          <input className='holdingCostInput'
-            name='holdingCostInput'
+          <input 
             type='text'
             placeholder='Holding Cost'
             value={holdingItemCost}
             onChange={e => setHoldingItemCost(e.target.value)}
           />
-          <button onClick={addHoldingItem}>Add</button>
-          <ul>
+          <button className="modal-btn-2" onClick={addHoldingItem}>Add</button>
+          {/* <ul> */}
+          <table>
             {propertyOfInterest.property[0].taxes_yearly && propertyOfInterest.property[0].taxes_yearly > 0 ? 
-            <>
-              <li> Taxes: {formattedCurrency(propertyOfInterest.property[0].taxes_yearly/12)}</li>
-              <button onClick={() => {updateTaxes(propertyOfInterest.property[0].id)}}>X</button>
-            </> : ''}
+            
+            <div className="unordered-list">
+              <thead></thead>
+              <tr>
+                <td>Taxes: {formattedCurrency(propertyOfInterest.property[0].taxes_yearly/12)}</td>
+                <td><img onClick={() => {updateTaxes(propertyOfInterest.property[0].id)}} className="deleteBtn" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" /></td>
+              </tr>
+            </div> : ''}
             {propertyOfInterest.holdingItems.map((item) => {
               return (
-                <>
-                <li key = {item.holding_items_id}>{item.holding_name}: {formattedCurrency(item.holding_cost)} </li>
-                <button onClick={() => {deleteHoldingItem(item.holding_items_id)}}>X</button>
-                </>
+                <div className="unordered-list" key = {item.id}>
+                  <tr>
+                    <td className="list-items" >{item.holding_name}: {formattedCurrency(item.holding_cost)} </td>
+                    <td><img className="deleteBtn" onClick={() => {deleteHoldingItem(item.id)}}  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" /></td>
+                  </tr>
+                </div>
+                
               )
             })}
-          </ul>
-          <p>Monthly Total: {formattedCurrency(monthlyHoldingCost(propertyOfInterest.property[0].taxes_yearly/12, propertyOfInterest.holdingItems))}</p>
+          {/* </ul> */}
+          
+          </table>
+          <p className="bold-text">Monthly Total: {formattedCurrency(propertyOfInterest.property[0].monthly_holding_cost )}</p>
           <p>Holding Period:
             <input
               value= {Number(propertyOfInterest.property[0].holding_period)}
@@ -84,7 +91,7 @@ const updateTaxes = (propertyId) => {
             />
             Months</p>
         <p>
-          <span className="bold-text">Total Holding Cost: {formattedCurrency(totalHoldingCost(propertyOfInterest.property[0].holding_period, propertyOfInterest.property[0].taxes_yearly/12, propertyOfInterest.holdingItems))}</span>
+          <span className="bold-text">Total Holding Cost: {formattedCurrency(propertyOfInterest.property[0].total_holding_cost)}</span>
           </p>
         </>
       }

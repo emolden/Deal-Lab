@@ -1,9 +1,5 @@
 import React from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import totalCost from '../../../../helpers/totalCost';
-import profit from '../../../../helpers/profit';
-import annualizedProfit from '../../../../helpers/annualizedProfit';
-
 
 
 function ModalProfitEstimation() {
@@ -29,10 +25,9 @@ function ModalProfitEstimation() {
               onChange={e => {e.preventDefault; dispatch({type: 'UPDATE_PROPERTY_AFTER_REPAIR_VALUE', payload: e.target.value})}}
             />
           </p>
-          {/* ***********NEED TO LOOK AT THESE FUNCTIONS LATER************************* */}
-          <p>Total Cost: {formattedCurrency(totalCost(propertyOfInterest.repairItems, propertyOfInterest.property[0].purchase_price, propertyOfInterest.property[0].holding_period, propertyOfInterest.property[0].taxes_yearly/12, propertyOfInterest.holdingItems))}</p>
-          <p>Profit: {formattedCurrency(profit(propertyOfInterest.property[0].after_repair_value, propertyOfInterest.repairItems, propertyOfInterest.property[0].purchase_price, propertyOfInterest.property[0].holding_period, propertyOfInterest.property[0].taxes_yearly/12, propertyOfInterest.holdingItems))}</p>
-          <p>Annualized Profit: {formattedCurrency(annualizedProfit(propertyOfInterest.property[0].after_repair_value, propertyOfInterest.repairItems, propertyOfInterest.property[0].purchase_price, propertyOfInterest.property[0].holding_period, propertyOfInterest.property[0].taxes_yearly/12, propertyOfInterest.holdingItems))}</p>
+          <p>Total Cost: {formattedCurrency(propertyOfInterest.property[0].total_cost)}</p>
+          <p>Profit: {formattedCurrency(propertyOfInterest.property[0].profit)}</p>
+          <p>Monthly Profit: {formattedCurrency(propertyOfInterest.property[0].monthly_profit)}</p>
         </>
       }
     </div>

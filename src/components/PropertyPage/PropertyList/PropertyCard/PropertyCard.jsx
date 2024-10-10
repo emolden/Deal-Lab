@@ -3,37 +3,9 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import Swal from 'sweetalert2'
 import './PropertyCard.css';
-import upfrontCost from '../../../../helpers/upfrontCost';
-import totalHoldingCost from '../../../../helpers/totalHoldingCost'
-import totalCost from '../../../../helpers/totalCost';
-import profit from '../../../../helpers/profit';
-import annualizedProfit from '../../../../helpers/annualizedProfit';
 
 function PropertyCard({ property, userId, onOpenModal, allRepairItems, allHoldingItems }) {
   const dispatch = useDispatch();
-
-  const getRepairItems = (propId, allRepairItems) => {
-    let repairItems = []
-    for(let item of allRepairItems) {
-      if(item.id === propId) {
-        repairItems.push({repairName: item.repair_name, repair_cost: item.repair_cost})
-      } 
-    }
-    // console.log('repair items: ', propId, repairItems)
-    return repairItems;
-  }
-
-  const getHoldingItems = (propId, allHoldingItems) => {
-    let holdingItems = []
-    for(let item of allHoldingItems) {
-      
-      if(item.id === propId) {
-      holdingItems.push({holdingName: item.holding_name, holding_cost: item.holding_cost})
-      }
-    }
-    // console.log('holding items: ', propId, holdingItems)
-    return holdingItems;
-  }
 
   //getPropertyOfInterest function runs when the user clicks "edit" or
   //on the address card. This function sends a a dispatch to the properties.saga.js
@@ -98,7 +70,7 @@ function PropertyCard({ property, userId, onOpenModal, allRepairItems, allHoldin
   // ------------ NUMBERS RENDER AS DOLLARS ------------ //
   const formattedCurrency = (value) => {
     const number = parseFloat(value);
-    return `$${number.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    return `$${number.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
   };
 
   return (
@@ -117,33 +89,31 @@ function PropertyCard({ property, userId, onOpenModal, allRepairItems, allHoldin
         <tbody>
           <tr>
             <td>Upfront Cost</td>
-            <td>{formattedCurrency(upfrontCost(getRepairItems(property.id, allRepairItems), property.purchase_price))}</td>
+            <td>{formattedCurrency(property.total_upfront_cost)}</td>
           </tr>
           <tr>
             <td>Holding Cost</td>
-            <td>{formattedCurrency(totalHoldingCost(property.holding_period, property.taxes_yearly/12, getHoldingItems(property.id, allHoldingItems)))}</td>
+            <td>{formattedCurrency(property.total_holding_cost)}</td>
           </tr>
           <tr>
             <td>Total Cost</td>
-            <td>{formattedCurrency(totalCost(getRepairItems(property.id, allRepairItems), property.purchase_price, property.holding_period, property.taxes_yearly/12, getHoldingItems(property.id, allHoldingItems)))}</td>
+            <td>{formattedCurrency(property.total_cost)}</td>
           </tr>
           <tr>
             <td>Profit</td>
-            <td>{formattedCurrency(profit (property.after_repair_value, getRepairItems(property.id, allRepairItems), property.purchase_price, property.holding_period, property.taxes_yearly/12, getHoldingItems(property.id, allHoldingItems)))}</td>
+            <td>{formattedCurrency(property.profit)}</td>
           </tr>
           <tr>
-            <td>Annualized Profit</td>
-            <td>{formattedCurrency(annualizedProfit(property.after_repair_value, getRepairItems(property.id, allRepairItems), property.purchase_price, property.holding_period, property.taxes_yearly/12, getHoldingItems(property.id, allHoldingItems)))}</td>
+            <td>Monthly Profit</td>
+            <td>{formattedCurrency(property.monthly_profit)}</td>
           </tr>
-          <td colSpan="2">
-            <div className="button-container">
-            <button className='delete-button' onClick={() => {deleteProperty(property.id)}}>
-              Delete
-            </button>
-            </div>
-          </td>
         </tbody>
-      </table>
+      </table>  
+      <div className="button-container">
+        <button className='delete-button' onClick={() => {deleteProperty(property.id)}}>
+          Delete
+        </button>
+      </div>
     </div>
   );
 }
