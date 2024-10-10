@@ -33,6 +33,7 @@ function DefaultHoldingCost({defaultHoldings}) {
     <div className='defaultHolding'>
       <form className='defaultHoldingForm'>
         <label className='defaultSettingsText'> Holding Period Costs (per month):</label>
+        <br />
         <input className='defaultHoldingNameInput'
                 type='text'
                 placeholder='Expense Name'
