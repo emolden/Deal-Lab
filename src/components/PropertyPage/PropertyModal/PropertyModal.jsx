@@ -30,10 +30,39 @@ const PropertyModal = ({ isOpen, onClose, propertyCard, userId }) => {
   if (!isOpen) return null;
 
   const handleBackToDefault = () => {
+    Swal.fire({
+      title: "Are you sure you want to apply to Default Settings?",
+      text: "You can change the settings manually if you change your mind.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it",
+      cancelButtonText: "Cancel",
+      // reverseButtons: true
+    }).then((result) => {
+    if (result.isConfirmed) {
     dispatch({
       type: 'UPDATE_BACK_TO_DEFAULT',
       payload: propertyOfInterest.property[0].id
     })
+    Swal.fire({
+      icon: "success",
+      title: "Default Settings have been applied.",
+      showConfirmButton: false,
+      timer: 1500
+    });
+  }
+  else if (
+    /* Read more about handling dismissals below */
+    result.dismiss === Swal.DismissReason.cancel
+  ) {
+    Swal.fire({
+      icon: "error",
+      title: "Default Settings have NOT been applied.",
+      showConfirmButton: false,
+      timer: 1500
+    });
+  }
+});
   }
 
   //sends a dispatch to the properties saga
@@ -80,7 +109,7 @@ const PropertyModal = ({ isOpen, onClose, propertyCard, userId }) => {
 
           <div className='section mortgage-calculator'>
             <h3 className='section-header'>Mortgage Calculator:</h3>
-            {/* <ModalMortgageCalculator /> */}
+            <ModalMortgageCalculator />
           </div>
 
           <div className='section profit-estimation'>
@@ -90,7 +119,7 @@ const PropertyModal = ({ isOpen, onClose, propertyCard, userId }) => {
 
           
           {/* <div className="grid-container"> */}
-          <button className="modal-default-btn" onClick={handleBackToDefault}>Back To Default</button>
+          <button className="modal-default-btn" onClick={handleBackToDefault}>Set to Default Settings</button>
           <button className="modal-save-btn" onClick={saveUpdatedPropertyInfo}>Save</button>
           </div>
       </div>

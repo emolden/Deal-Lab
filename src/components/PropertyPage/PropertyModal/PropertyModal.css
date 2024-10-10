@@ -189,6 +189,7 @@
     display: flex;
     justify-content: flex-start; /* Align items to the left */
     align-items: left;
+
   }
 
   .list-items {
@@ -196,29 +197,17 @@
     padding: 0; /* Remove padding */
   }
 
+  .table {
+    border-top:2px solid #d3d3d3;
+    border-bottom: 2px solid #d3d3d3;
+    width: 100%;
+  }
+
   /* UPFRONT COSTS SECTION */
   .upfront-costs {
     grid-column: 1; /* First column */
     grid-row: 1; /* First row */
   }
-  
-  /* HOLDING PERIOD SECTION */
-  /* .holding-period-costs {
-    grid-column: 1; /* First column */
-    /* grid-row: 2; Second row */
-  /* } */ 
-
-  /* PROFIT ESTIMATION SECTION */
-  /* .profit-estimation {
-    grid-column: 2; /* Second column */
-    /* grid-row: 1; Span both rows */
-  /* }  */
-
-  /* MORTGAGE CALC SECTION */
-  /* .mortgage-calculator {
-    grid-column: 2; /* Second column */
-    /* grid-row: 2; Span both rows */
-  /* } */
 
 /* DELETE BUTTONS WITHIN SECTIONS */
   .deleteBtn {
@@ -229,4 +218,10 @@
     display: flex;
   }
 
-  
+  .months-input {
+    width: 30px;
+  }
+
+  .section-totals {
+    margin-top: auto;
+  }

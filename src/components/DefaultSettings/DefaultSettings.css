@@ -79,7 +79,7 @@
 }
 
 .defaultHoldingItem {
-    margin: 20px auto;
+    /* margin: 20px auto; */
     /* margin-left: 60px; */
     display: flex;
     justify-content: space-between;
@@ -117,6 +117,7 @@
 }
 /* ----- END SECTION BUTTONS ----- */
 
+/* ----- REPAIR ITEMS SECTION ----- */
 .defaultRepair {
     margin-bottom: 20px;
     border: 1.5px solid rgb(202, 202, 202);
@@ -133,7 +134,7 @@
 }
 
 .defaultRepairItem {
-    margin: 20px auto;
+    /* margin: 20px auto; */
     /* margin-left: 60px; */
     display: flex;
     justify-content: space-between;
@@ -150,13 +151,13 @@
     cursor: pointer;
     font-size: 11px;
 }
-/* -----END REPAIR ITEM SECTION ----- */
+/* -----END REPAIR ITEMS SECTION ----- */
 
-.total {
+/* .total {
     justify-content: space-between;
     margin-top: auto;
     
-}
+} */
 
 
 /* ======== Default Save Button ======== */

@@ -20,22 +20,15 @@ function PropertyCard({ property, userId, onOpenModal, allRepairItems, allHoldin
   //deleteProperty function runs when the user clicks "delete". 
 
   const deleteProperty = (propertyId) => {
-    const swalWithBootstrapButtons = Swal.mixin({
-      customClass: {
-        confirmButton: "btn btn-success",
-        cancelButton: "btn btn-danger mr-2"
-      },
-      buttonsStyling: false
-    });
     //This is the pop-up that appears when the user clicks "delete"
-    swalWithBootstrapButtons.fire({
+    Swal.fire({
       title: "Are you sure you want to delete this property?",
       text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Yes, delete it.",
-      cancelButtonText: "No, cancel.",
-      reverseButtons: true
+      confirmButtonText: "Yes, delete it",
+      cancelButtonText: "Cancel",
+      // reverseButtons: true
     }).then((result) => {
       //If the user confirms they wish to delete the property
       if (result.isConfirmed) {
