@@ -83,7 +83,7 @@ const updateTaxes = (propertyId) => {
           {/* </ul> */}
           
           </table>
-          <p>Monthly Total: {formattedCurrency(propertyOfInterest.property[0].monthly_holding_cost )}</p>
+          <p>Monthly Holding Cost: {formattedCurrency(propertyOfInterest.property[0].monthly_holding_cost )}</p>
           <p>Holding Period:
             <input className="months-input"
               value= {Number(propertyOfInterest.property[0].holding_period)}
@@ -93,6 +93,7 @@ const updateTaxes = (propertyId) => {
         <p>
           <span className="bold-text">Total Holding Cost: {formattedCurrency(propertyOfInterest.property[0].total_holding_cost)}</span>
           </p>
+          <p>(monthly holding cost x holding period)</p>
         </>
       }
     </div>
