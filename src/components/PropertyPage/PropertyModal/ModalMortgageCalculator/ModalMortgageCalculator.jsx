@@ -1,29 +1,32 @@
 import {useSelector, useDispatch} from 'react-redux';
-import { useState } from 'react';
-// import { TextField, Button, Input } from '@mui/material';
-// import InputLabel from '@mui/material/InputLabel';
-// import MenuItem from '@mui/material/MenuItem';
-// import FormControl from '@mui/material/FormControl';
-// import Select from '@mui/material/Select';
+import { useState, useEffect } from 'react';
+import { TextField, Button, Input } from '@mui/material';
+import InputLabel from '@mui/material/InputLabel';
+import InputAdornment from '@mui/material/InputAdornment';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 function ModalMortgageCalculator() {
     const dispatch = useDispatch();
     const propertyOfInterest = useSelector((store) => store.propertyOfInterest);
     const mortgageCalculator = useSelector(store => store.mortgageCalculator);
-    const [downPayment, setDownPayment] = useState(Object.keys(mortgageCalculator) && `$${mortgageCalculator.down_payment}`);
-    const [downPaymentPercentage, setDownPaymentPercentage] = useState(Object.keys(mortgageCalculator) && `${(mortgageCalculator.down_payment_percentage * 100)}%`);
-    const [closingCosts, setClosingCosts] = useState(Object.keys(mortgageCalculator) && `$${mortgageCalculator.closing_costs}`);
-    const [closingCostsPercentage, setClosingCostsPercentage] = useState(Object.keys(mortgageCalculator) && `${(mortgageCalculator.closing_costs_percentage * 100)}%`);
-    const [interestRate, setInterestRate] = useState(Object.keys(mortgageCalculator) && `${Number(mortgageCalculator.interest_rate).toFixed(2)}%`);
-    const [loanTerm, setLoanTerm] = useState(Object.keys(mortgageCalculator) && mortgageCalculator.loan_term);
-    
+    const [downPayment, setDownPayment] = useState('');
+    const [downPaymentPercentage, setDownPaymentPercentage] = useState('');
+    const [interestRate, setInterestRate] = useState('');
+    const [closingCosts, setClosingCosts] = useState('');
+    const [closingCostsPercentage, setClosingCostsPercentage] = useState('');
+    const [loanTerm, setLoanTerm] = useState(30);
+
     const formattedCurrency = (value) => {
         const number = parseFloat(value);
         return `$${number.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
     };
 
+    const propertyId = (Object.keys(propertyOfInterest).length && propertyOfInterest.property[0].id)
+    const purchasePrice = (Object.keys(propertyOfInterest).length && propertyOfInterest.property[0].purchase_price);
     const loanAmount = (Object.keys(propertyOfInterest).length && 
-                        formattedCurrency(Number(propertyOfInterest.property[0].purchase_price)));
+                        formattedCurrency(Number(purchasePrice)));
 
     console.log('mortgage calculator:', mortgageCalculator);
     
@@ -33,6 +36,7 @@ function ModalMortgageCalculator() {
             <div className="mortgageCalculatorDiv">
 
                 <div className="mortgageCalculatorFormDiv">
+                    {Object.keys(mortgageCalculator) && 
                     <form className="mortgageCalculatorForm">
                         <label>Down Payment:</label>
                         <br />
@@ -75,16 +79,17 @@ function ModalMortgageCalculator() {
                             </select>
                         <button className="modal-btn-2">Calculate</button>
                     </form>
+                    }
                 </div>
 
                 <div className="mortgageCalculatorLoan">
                     {Object.keys(mortgageCalculator) && 
                         <>
                         <p className="mortgageCalculatorLoanItems">Loan Amount: {loanAmount}</p>
-                        <p className="mortgageCalculatorLoanItems">Base Loan Amount: {formattedCurrency(Number(mortgageCalculator.base_loan_amount))}</p>
-                        <p className="mortgageCalculatorLoanItems">Loan Interest Rate (Annual): {Number(mortgageCalculator.interest_rate_annual).toFixed(2)}%</p>
-                        <p className="mortgageCalculatorLoanItems">Loan Interest Rate (Monthly): {Number(mortgageCalculator.interest_rate_monthly).toFixed(2)}%</p>
-                        <p className="mortgageCalculatorLoanItems">Interest Payment (Monthly): ${mortgageCalculator.interest_payment_monthly}</p>
+                        <p className="mortgageCalculatorLoanItems">Base Loan Amount: {mortgageCalculator.base_loan_amount}</p>
+                        <p className="mortgageCalculatorLoanItems">Loan Interest Rate (Annual): {mortgageCalculator.interest_rate_annual}</p>
+                        <p className="mortgageCalculatorLoanItems">Loan Interest Rate (Monthly): {mortgageCalculator.interest_rate_monthly}</p>
+                        <p className="mortgageCalculatorLoanItems">Interest Payment (Monthly): {mortgageCalculator.interest_payment_monthly}</p>
                         </>
                     }
                 </div>
