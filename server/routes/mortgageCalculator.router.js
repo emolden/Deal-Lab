@@ -8,9 +8,9 @@ const formattedCurrency = (value) => {
     return `$${number.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
 };
 
-// ===================== INTEREST RATE =====================
+// ===================== INTEREST RATE/CALCULATOR =====================
 /**
- * POST interest rate from API
+ * POST interest rate from API && send data
  */
 router.post('/:id', async (req, res) => {
     const api_key = process.env.MORTGAGE_CALCULATOR_API_KEY;
@@ -19,7 +19,6 @@ router.post('/:id', async (req, res) => {
     let defaultLoanTerm = 30;
     let interestRate;
     let purchasePrice;
-    let propertyTax;
     let downPayment;
     let closingCosts;
     let baseLoanAmount;
@@ -31,14 +30,10 @@ router.post('/:id', async (req, res) => {
     let mortgageCalculationsId;
 
     console.log('propertyId:', propertyId);
-    
-
     let connection;
     try { 
         connection = await pool.connect()
         await connection.query('BEGIN;')
-
-
 
         // ========================== CALLING API && CHECKING DEFAULT CALCULATIONS TIMESTAMP ==========================
         const checkDefaultCalculationsTimeStampSqlText = `
@@ -52,7 +47,7 @@ router.post('/:id', async (req, res) => {
         `
         const checkDefaultCalculationsTimeStampResults = await pool.query(checkDefaultCalculationsTimeStampSqlText, [propertyId]);
         const checkDefaultCalculationsTimeStampData = checkDefaultCalculationsTimeStampResults.rows;
-        console.log('checkDefaultCalculationsTimeStampData is:', checkDefaultCalculationsTimeStampData);
+        // console.log('checkDefaultCalculationsTimeStampData is:', checkDefaultCalculationsTimeStampData);
 
 
 
@@ -63,9 +58,7 @@ router.post('/:id', async (req, res) => {
         `
         const propertyDataResponse = await pool.query(propertyDataSqlText, [propertyId])
         purchasePrice = propertyDataResponse.rows[0].purchase_price;
-        // propertyTax = propertyDataResponse.rows[0].taxes_yearly;
-        console.log('purchasePrice:', purchasePrice);
-        // console.log('propertyTax:', propertyTax);
+        // console.log('purchasePrice:', purchasePrice);
 
 
         if (checkDefaultCalculationsTimeStampData.length === 0) {
@@ -82,10 +75,10 @@ router.post('/:id', async (req, res) => {
             downPayment = purchasePrice * 0.2;
             closingCosts = purchasePrice * 0.03;
             baseLoanAmount = purchasePrice - downPayment;
-            console.log('interestRate:', interestRate);
-            console.log('downPayment:', downPayment);
-            console.log('closingCosts:', closingCosts);
-            console.log('baseLoanAmount:', baseLoanAmount);
+            // console.log('interestRate:', interestRate);
+            // console.log('downPayment:', downPayment);
+            // console.log('closingCosts:', closingCosts);
+            // console.log('baseLoanAmount:', baseLoanAmount);
             
             
 
@@ -102,12 +95,12 @@ router.post('/:id', async (req, res) => {
             // monthlyPayment = mortgageCalculatorResponse.data.monthly_payment;
             // annualPayment = mortgageCalculatorResponse.data.annual_payment;
             totalInterestPaid = mortgageCalculatorResponse.data.total_interest_paid;
-            console.log('mortgageCalculatorResponse:', mortgageCalculatorResponse.data);
-            console.log('totalInterestPaid:', totalInterestPaid);
+            // console.log('mortgageCalculatorResponse:', mortgageCalculatorResponse.data);
+            // console.log('totalInterestPaid:', totalInterestPaid);
             
 
             interestRateAnnual = Number(((((totalInterestPaid / purchasePrice) / (defaultLoanTerm * 365)) * 365) * 100).toFixed(3));
-            console.log('interestRateAnnual', interestRateAnnual);
+            // console.log('interestRateAnnual', interestRateAnnual);
             
 
 
@@ -150,7 +143,7 @@ router.post('/:id', async (req, res) => {
         `
         const checkMortgageCalculationsTimeStampResults = await pool.query(checkMortgageCalculationsTimeStampSqlText, [propertyId]);
         const checkMortgageCalculationsTimeStampData = checkMortgageCalculationsTimeStampResults.rows;
-        console.log('checkMortgageCalculationsTimeStampData is:', checkMortgageCalculationsTimeStampData);
+        // console.log('checkMortgageCalculationsTimeStampData is:', checkMortgageCalculationsTimeStampData);
 
 
         if (checkMortgageCalculationsTimeStampData.length === 0) {
@@ -203,13 +196,201 @@ router.post('/:id', async (req, res) => {
         res.send(finalMortgageCalculationsData);
 
     } catch (error) {
-        console.log('Add property failed: ', error);
+        console.log('Post and get interest rate, calculate and data failed: ', error);
         await connection.query('Rollback;')
         res.sendStatus(500);
     } finally {
         await connection.release()
     }
 })
+
+/**
+ * PUT update calculations
+ */
+router.put('/:id', async (req, res) => {
+    const api_key = process.env.MORTGAGE_CALCULATOR_API_KEY;
+    const userId = req.user.id;
+    const propertyId = req.params.id;
+    
+    let downPayment = req.body.downPayment;
+    let downPaymentPercentage = req.body.downPaymentPercentage;
+    let closingCosts = req.body.closingCosts;
+    let closingCostsPercentage = req.body.closingCostsPercentage;
+    let interestRate = req.body.interestRate;
+    let loanTerm = req.body.loanTerm;
+    let purchasePrice;
+    let baseLoanAmount;
+    let totalInterestPaid;
+    let interestRateAnnual;
+    let interestRateMonthly;
+    let interestDecimalMonthly;
+    let interestPaymentMonthly;
+    let mortgageCalculationsId;
+
+    console.log('req.body data:', req.body);
+    let connection;
+    try {
+        connection = await pool.connect()
+        await connection.query('BEGIN;')
+    
+        // ========================== CALLING API && CHECKING DEFAULT CALCULATIONS TIMESTAMP ==========================
+        // ================ Get PURCHASE PRICE
+        const propertyDataSqlText = `
+        SELECT * FROM "properties"
+            WHERE "id" = $1;
+        `
+        const propertyDataResponse = await pool.query(propertyDataSqlText, [propertyId])
+        purchasePrice = propertyDataResponse.rows[0].purchase_price;
+        // console.log('purchasePrice:', purchasePrice);
+
+
+
+        // ================ Get MORTGAGE CALCULATOR && check data
+        const getMortgageCalculationsSqlText = `
+            SELECT * FROM "mortgage_calculations"
+                WHERE "property_id" = $1;
+        `
+        const getMortgageCalculationsResponse = await pool.query(getMortgageCalculationsSqlText, [propertyId]);
+        const mortgageCalculationsSqlData = getMortgageCalculationsResponse.rows[0]
+        // console.log('mortgageCalculationsSqlData:', mortgageCalculationsSqlData);
+        
+        const mortgageCalculationsDataObject = {
+            interest_rate: interestRate,
+            loan_term: loanTerm,
+            down_payment: downPayment,
+            down_payment_percentage: downPaymentPercentage,
+            base_loan_amount: baseLoanAmount,
+            closing_costs: closingCosts,
+            closing_costs_percentage: closingCostsPercentage,
+        }
+
+        const newMortgageCalculationsDataObject = checkmortgageCalculationsData(mortgageCalculationsDataObject, mortgageCalculationsSqlData, purchasePrice)
+        console.log('newMortgageCalculationsDataObject:', newMortgageCalculationsDataObject);
+
+        interestRate = newMortgageCalculationsDataObject.interestRate;
+        loanTerm = newMortgageCalculationsDataObject.loanTerm;
+        downPayment = newMortgageCalculationsDataObject.downPayment;
+        downPaymentPercentage = newMortgageCalculationsDataObject.downPaymentPercentage;
+        baseLoanAmount = newMortgageCalculationsDataObject.baseLoanAmount;
+        closingCosts = newMortgageCalculationsDataObject.closingCosts;
+        closingCostsPercentage = newMortgageCalculationsDataObject.closingCostsPercentage;
+        
+
+        // ================ Axios for MORTGAGE CALCULATOR API
+        const mortgageCalculatorResponse = await axios({
+            method: 'GET',
+            url: `https://api.api-ninjas.com/v1/mortgagecalculator?loan_amount=${purchasePrice}&interest_rate=${interestRate}&duration_years=${loanTerm}&downpayment=${downPayment}`,
+            headers: {
+                'accept': 'application/json',
+                'X-Api-Key': api_key
+            }
+        })
+        totalInterestPaid = mortgageCalculatorResponse.data.total_interest_paid;
+        interestRateAnnual = Number(((((totalInterestPaid / purchasePrice) / (loanTerm * 365)) * 365) * 100).toFixed(3));
+        interestRateMonthly = interestRateAnnual / 12;
+        interestDecimalMonthly = interestRateMonthly / 100;
+        interestPaymentMonthly = interestDecimalMonthly * baseLoanAmount;
+
+        const mortgageCalculationsData = [
+            interestRate,
+            downPayment,
+            downPaymentPercentage,
+            baseLoanAmount,
+            closingCosts,
+            closingCostsPercentage,
+            interestRateAnnual,
+            interestRateMonthly,
+            interestDecimalMonthly,
+            interestPaymentMonthly,
+            loanTerm,
+            propertyId
+        ]
+
+        const updateMortgageCalculationsSqlText = `
+            UPDATE "mortgage_calculations"
+                SET "interest_rate" = $1, "down_payment" = $2, "down_payment_percentage" = $3,
+                    "base_loan_amount" = $4, "closing_costs" = $5, "closing_costs_percentage" = $6,
+                    "interest_rate_annual" = $7, "interest_rate_monthly" = $8, 
+                    "interest_decimal_monthly" = $9, "interest_payment_monthly" = $10, "loan_term" = $11
+                WHERE "property_id" = $12;
+        `
+        const updateMortgageCalculationsResponse = await pool.query(updateMortgageCalculationsSqlText, mortgageCalculationsData)
+        
+        console.log('Calculations updated!');
+        await connection.query('Commit;')
+        res.sendStatus(200);
+
+    } catch (error) {
+        console.log('Update caculations failed:', error);
+        await connection.query('Rollback;')
+        res.sendStatus(500);
+    } finally {
+        await connection.release()
+    }
+})
+
+function checkmortgageCalculationsData(userData, databaseData, price) {
+    const interestRate = userData.interest_rate === '' ? databaseData.interest_rate : userData.interest_rate;
+    const loanTerm = userData.loan_term === '' ? databaseData.loan_term : userData.loan_term;
+    let downPayment;
+    let downPaymentPercentage;
+    let closingCosts;
+    let closingCostsPercentage;
+
+    if (userData.down_payment === '') {
+        if (userData.down_payment_percentage != '') {
+            console.log('userData.down_payment_percentage:', userData.down_payment_percentage);
+            downPayment = (userData.down_payment_percentage / 100) * price
+        } else {
+            downPayment = databaseData.down_payment;
+        }
+    } else if (userData.down_payment != '') {
+        downPayment = userData.down_payment;
+    }
+
+    if (userData.down_payment_percentage === '') {
+        if (userData.down_payment != '') {
+            console.log('userData.down_payment:', userData.down_payment);
+            downPaymentPercentage = userData.down_payment / price
+        } else {
+            downPaymentPercentage = databaseData.down_payment_percentage;
+        }
+    } else if (userData.down_payment_percentage != '') {
+        downPaymentPercentage = userData.down_payment_percentage / 100
+    }
+
+    if (userData.closing_costs === '') {
+        if (userData.closing_costs_percentage != '') {
+            closingCosts = (userData.closing_costs_percentage / 100) * price
+        } else {
+            closingCosts = databaseData.closing_costs;
+        }
+    } else if (userData.closing_costs != '') {
+        closingCosts = userData.closing_costs;
+    }
+
+    if (userData.closing_costs_percentage === '') {
+        if (userData.closing_costs != '') {
+            closingCostsPercentage = userData.closing_costs / price
+        } else {
+            closingCostsPercentage = databaseData.closing_costs_percentage;
+        }
+    } else if (userData.closing_costs_percentage != '') {
+        closingCostsPercentage = userData.closing_costs_percentage / 100
+    }
+
+    let baseLoanAmount = price - downPayment;
+    return data = {
+        interestRate: interestRate,
+        loanTerm: loanTerm,
+        downPayment: downPayment,
+        downPaymentPercentage: downPaymentPercentage,
+        baseLoanAmount: baseLoanAmount,
+        closingCosts: closingCosts,
+        closingCostsPercentage: closingCostsPercentage,
+    }
+
+}
 
 function getMortgageCalculationsFixData(object, price) {
     const dateObject = new Date(object.interest_rate_inserted_at);
@@ -221,18 +402,18 @@ function getMortgageCalculationsFixData(object, price) {
     const data = {
         id: object.id,
         property_id: object.property_id,
-        interest_rate: Number(object.interest_rate).toFixed(2) + '%',
+        interest_rate: Number(object.interest_rate).toFixed(2),
         interest_rate_inserted_at: formattedDate,
         interest_rate_updated_at: object.interest_rate_updated_at,
         loan_term: object.loan_term,
-        down_payment: '$' + object.down_payment,
-        down_payment_percentage: (object.down_payment_percentage * 100) + '%',
+        down_payment: object.down_payment,
+        down_payment_percentage: (object.down_payment_percentage * 100),
         base_loan_amount: formattedCurrency(Number(object.base_loan_amount)),
-        closing_costs: '$' + object.closing_costs,
-        closing_costs_percentage: (object.closing_costs_percentage * 100) + '%',
+        closing_costs: object.closing_costs,
+        closing_costs_percentage: (object.closing_costs_percentage * 100),
         interest_rate_annual: Number(object.interest_rate_annual).toFixed(2) + '%',
-        interest_rate_monthly: Number(object.interest_rate_monthly).toFixed(2) + '%',
-        interest_decimal_monthly: Number(object.interest_decimal_monthly).toFixed(3) + '%',
+        interest_rate_monthly: Number(object.interest_rate_monthly).toFixed(2)  + '%',
+        interest_decimal_monthly: Number(object.interest_decimal_monthly).toFixed(3)  + '%',
         interest_payment_monthly: '$' + object.interest_payment_monthly
     }
 

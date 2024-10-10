@@ -14,7 +14,6 @@ function* addCalculations(action) {
     try {
         const response = yield axios.post(`/api/mortgageCalculator/${propertyId}`)
         console.log('Mortgage Calculations data:', response.data);
-
         yield put({
             type: 'SET_CALCULATIONS',
             payload: response.data
@@ -28,7 +27,11 @@ function* updateCalculations(action) {
     const propertyId = action.payload.propertyId;
     console.log('Updating calculations payload:', action.payload);
     try {
-        
+        yield axios.put(`/api/mortgageCalculator/${propertyId}`, action.payload)
+        yield put({
+            type: 'GET_PROPERTY_OF_INTEREST',
+            payload: propertyId
+        })
     } catch (error) {
         console.log('Error updating calculations for property:', error);
     }
