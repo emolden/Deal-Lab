@@ -11,6 +11,8 @@ import axios from 'axios';
 
 function* addCalculations(action) {
     const propertyId = action.payload;
+    console.log('Calculator propertyId:', propertyId);
+    
     try {
         const response = yield axios.post(`/api/mortgageCalculator/${propertyId}`)
         console.log('Mortgage Calculations data:', response.data);
