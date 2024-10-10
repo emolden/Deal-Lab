@@ -225,3 +225,8 @@
   .section-totals {
     margin-top: auto;
   }
+
+  .purchase-price {
+    display: flex;
+    flex-direction: row;
+  }

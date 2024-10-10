@@ -35,11 +35,6 @@ function ModalUpfrontCosts() {
     <div className="container">
       {Object.keys(propertyOfInterest).length && 
       <>
-      <p> Purchase Price:</p> 
-      <input placeholder="Purchase Price"
-        value= {formattedCurrency(Number(propertyOfInterest.property[0].purchase_price))}
-        onChange={e => {e.preventDefault; dispatch({type: 'UPDATE_PROPERTY_PURCHASE_PRICE', payload: e.target.value})}}
-      />
       <p>Repair Items:</p>
       <input 
         type='text'
@@ -70,9 +65,17 @@ function ModalUpfrontCosts() {
         </table>
       {/* this should be .total_repair_cost */}
       <p>Total Repair Cost: {formattedCurrency(propertyOfInterest.property[0].total_repair_cost)}</p>
+      <div className = "purchase-price">
+        <p> Purchase Price:</p> 
+        <input placeholder="Purchase Price"
+          value= {formattedCurrency(Number(propertyOfInterest.property[0].purchase_price))}
+          onChange={e => {e.preventDefault; dispatch({type: 'UPDATE_PROPERTY_PURCHASE_PRICE', payload: e.target.value})}}
+        />
+      </div>
         <p className="section-totals">
           <span className="bold-text">Total Upfront Cost: {formattedCurrency(propertyOfInterest.property[0].total_upfront_cost)}</span>
         </p>
+        <p>(Total Repair Cost + Purchase Price)</p>
       </>
       }
 
