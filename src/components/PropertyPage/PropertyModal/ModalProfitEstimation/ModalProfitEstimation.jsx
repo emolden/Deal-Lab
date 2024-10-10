@@ -25,7 +25,7 @@ function ModalProfitEstimation() {
               onChange={e => {e.preventDefault; dispatch({type: 'UPDATE_PROPERTY_AFTER_REPAIR_VALUE', payload: e.target.value})}}
             />
           </p>
-          <p>(based on price of similar houses in the area)</p>
+          <p>(based on the value of similar houses in the area)</p>
           <p>Total Cost: {formattedCurrency(propertyOfInterest.property[0].total_cost)}</p>
           <p>(Total Upfront Cost + Total Holding Cost)</p>
           <p>Profit: {formattedCurrency(propertyOfInterest.property[0].profit)}</p>

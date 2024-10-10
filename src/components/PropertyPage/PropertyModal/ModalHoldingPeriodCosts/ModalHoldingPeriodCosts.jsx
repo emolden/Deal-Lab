@@ -93,7 +93,7 @@ const updateTaxes = (propertyId) => {
         <p>
           <span className="bold-text">Total Holding Cost: {formattedCurrency(propertyOfInterest.property[0].total_holding_cost)}</span>
           </p>
-          <p>(monthly holding cost x holding period)</p>
+          <p>(Monthly Holding Cost x Holding Period)</p>
         </>
       }
     </div>

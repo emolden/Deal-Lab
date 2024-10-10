@@ -75,7 +75,7 @@ function ModalUpfrontCosts() {
         <p className="section-totals">
           <span className="bold-text">Total Upfront Cost: {formattedCurrency(propertyOfInterest.property[0].total_upfront_cost)}</span>
         </p>
-        <p>(repair cost + purchast price)</p>
+        <p>(Total Repair Cost + Purchase Price)</p>
       </>
       }
 
