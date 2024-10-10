@@ -178,7 +178,7 @@ router.post('/', async (req, res) => {
             'X-Api-Key': api_key
         }
       })
-      const recordsResponse = theRecordsResponse;
+      recordsResponse = theRecordsResponse;
       console.log("Data from recordsResponse:", recordsResponse.data);
 
 
@@ -194,7 +194,7 @@ router.post('/', async (req, res) => {
               'X-Api-Key': api_key
           }
         })
-        const listingResponse = theListingResponse;
+        listingResponse = theListingResponse;
         formattedAddress = listingResponse.data[0].formattedAddress;
         purchasePrice = listingResponse.data[0].price
 
@@ -1301,14 +1301,14 @@ router.put('/taxes', async (req, res) => {
 
     const updatePropertiesText = `
     UPDATE "properties"
-       SET "total_repair_cost" = $1,
-           "total_upfront_cost" = $2,
-           "monthly_holding_cost" = $3,
-           "total_holding_cost" = $4,
-           "total_cost" = $5,
-           "profit" = $6,
-           "monthly_profit" = $7
-       WHERE "id" = $8;
+      SET "total_repair_cost" = $1,
+          "total_upfront_cost" = $2,
+          "monthly_holding_cost" = $3,
+          "total_holding_cost" = $4,
+          "total_cost" = $5,
+          "profit" = $6,
+          "monthly_profit" = $7
+      WHERE "id" = $8;
     `;
     const updatePropertiesValues = [totalRepairs, totalUpfrontCost, monthlyHoldingCost, holdingCost, cost, totalProfit, totalMonthlyProfit, propertyId];
     const updatePropertiesResults = await connection.query(updatePropertiesText, updatePropertiesValues);
@@ -1328,6 +1328,8 @@ router.put('/taxes', async (req, res) => {
 
 
 
+// 12505 54th Ave N, 
+// 4008 5th st ne, columbia heights, mn
 
 
 

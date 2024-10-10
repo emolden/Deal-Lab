@@ -16,6 +16,7 @@ router.post('/:id', async (req, res) => {
     const api_key = process.env.MORTGAGE_CALCULATOR_API_KEY;
     const userId = req.user.id;
     const propertyId = req.params.id;
+
     let defaultLoanTerm = 30;
     let interestRate;
     let purchasePrice;
@@ -137,7 +138,7 @@ router.post('/:id', async (req, res) => {
             FROM "mortgage_calculations"
             JOIN "properties"
             ON "properties".id = "mortgage_calculations".property_id
-                WHERE "mortgage_calculations".interest_rate_inserted_at 
+                WHERE "mortgage_calculations".interest_rate_api_inserted_at 
                         >= CURRENT_TIMESTAMP - INTERVAL '24 hours'
                 AND "properties".id = $1;
         `
@@ -166,10 +167,10 @@ router.post('/:id', async (req, res) => {
         ]
         const mortgageCalculationsSqlText = `
             INSERT INTO "mortgage_calculations"
-            ("property_id", "interest_rate", "interest_rate_updated_at", "down_payment", "base_loan_amount",
+            ("property_id", "interest_rate", "interest_rate_api_updated_at", "down_payment", "base_loan_amount",
             "closing_costs", "interest_rate_annual", "interest_rate_monthly", "interest_decimal_monthly", "interest_payment_monthly")
             VALUES
-            ($1, $2, DATE($3), $4, $5, $6, $7, $8, $9, $10)
+            ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
             RETURNING "id";
         `
         const mortgageCalculationsResponse = await pool.query(mortgageCalculationsSqlText, mortgageCalculationsData)

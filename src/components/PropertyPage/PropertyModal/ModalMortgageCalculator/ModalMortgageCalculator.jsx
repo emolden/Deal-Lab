@@ -9,7 +9,7 @@ import Select from '@mui/material/Select';
 
 function ModalMortgageCalculator() {
     const dispatch = useDispatch();
-    // const propertyOfInterest = useSelector((store) => store.propertyOfInterest);
+    const propertyOfInterest = useSelector((store) => store.propertyOfInterest);
     const mortgageCalculator = useSelector(store => store.mortgageCalculator);
     const [downPayment, setDownPayment] = useState('');
     const [downPaymentPercentage, setDownPaymentPercentage] = useState('');
