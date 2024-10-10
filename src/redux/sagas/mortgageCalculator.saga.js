@@ -1,18 +1,18 @@
 import { put, takeLatest } from 'redux-saga/effects';
 import axios from 'axios';
 
-function* getCalculations(action) {
-    try {
+// function* getCalculations(action) {
+//     try {
         
-    } catch (error) {
-        console.log('Error getting calculations:', error);
-    }
-}
+//     } catch (error) {
+//         console.log('Error getting calculations:', error);
+//     }
+// }
 
 function* addCalculations(action) {
     const propertyId = action.payload;
     try {
-        // const response = yield axios.post(`/api/mortgageCalculator/${propertyId}`)
+        const response = yield axios.post(`/api/mortgageCalculator/${propertyId}`)
         console.log('Mortgage Calculations data:', response.data);
         yield put({
             type: 'SET_CALCULATIONS',

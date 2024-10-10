@@ -6,7 +6,6 @@ import InputAdornment from '@mui/material/InputAdornment';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { useState } from 'react';
 
 function ModalMortgageCalculator() {
     const dispatch = useDispatch();
@@ -85,19 +84,18 @@ function ModalMortgageCalculator() {
                                 onChange={e => setClosingCostsPercentage(e.target.value)}
                                 endAdornment={<InputAdornment position="end">%</InputAdornment>}
                                 sx={{width: '60px'}}  />
-
-                        <form size='small' variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                            <label>Loan Term <br /></label>
-                            <select labelId="demo-simple-select-standard-label"
+                        <FormControl size='small' variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                            <InputLabel id="demo-simple-select-standard-label">Loan Term</InputLabel>
+                            <Select labelId="demo-simple-select-standard-label"
                                 id="demo-simple-select-standard"
                                 value={loanTerm}
-                                onChange={e => setLoanTerm(e.target.value)}>
-                                <option value=""></option>
-                                <option value={15}>15 Yr</option>
-                                <option value={20}>20 Yr</option>
-                                <option value={30}>30 Yr</option>
-                            </select>
-                        </form>
+                                onChange={e => setLoanTerm(e.target.value)}
+                            >
+                                <MenuItem value={15}>15 Yr</MenuItem>
+                                <MenuItem value={20}>20 Yr</MenuItem>
+                                <MenuItem value={30}>30 Yr</MenuItem>
+                            </Select>
+                        </FormControl>
                         <Button variant="contained"
                                 sx={{width: '195px'}}
                                 onClick={(e) => {
