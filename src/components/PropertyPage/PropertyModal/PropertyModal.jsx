@@ -98,22 +98,22 @@ const PropertyModal = ({ isOpen, onClose, propertyCard, userId }) => {
         <div className="modal-body">
         <div className="modalRight grid-container">
           <div className='section upfront-costs'>
-            <h3 className='section-header'>Upfront Costs:</h3>
+            <h3 className='section-header'>Upfront Costs</h3>
             <ModalUpfrontCosts />
           </div>
 
-          <div className='section holding-period-costs'>
-            <h3 className='section-header'>Holding Period Costs:</h3>
+          <div className='section'>
+            <h3 className='section-header'>Holding Period Costs</h3>
             <ModalHoldingPeriodCosts />
           </div>
 
           <div className='section mortgage-calculator'>
-            <h3 className='section-header'>Mortgage Calculator:</h3>
+            <h3 className='section-header'>Mortgage Calculator</h3>
             <ModalMortgageCalculator />
           </div>
 
           <div className='section profit-estimation'>
-            <h3 className='section-header'>Profit Estimation:</h3>
+            <h3 className='section-header'>Profit Estimation</h3>
             <ModalProfitEstimation />
           </div>
 
