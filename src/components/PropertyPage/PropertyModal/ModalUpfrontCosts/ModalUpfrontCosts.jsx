@@ -67,7 +67,7 @@ function ModalUpfrontCosts() {
             <div key = {item.id} className="unordered-list">
 
               <tr>
-                <td className="list-items" >{item.repair_name} : </td>
+                <td className="list-items" >{item.repair_name}: </td>
                 <td className="list-cost">{formattedCurrency(item.repair_cost)} </td>
                 <td className="list-delete"><img className="deleteBtn" onClick={() => {deleteRepairItem(item.id)}} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" /></td>
               </tr>
