@@ -35,10 +35,10 @@ function ModalUpfrontCosts() {
     <div className="container">
       {Object.keys(propertyOfInterest).length && 
       <>
-        <div className = "purchase-price">
+        <div className = "property-data">
           <p> Purchase Price:</p> 
           <input
-            className = "purchase-price-input" 
+            className = "property-data-input" 
             placeholder="Purchase Price"
             value= {formattedCurrency(Number(propertyOfInterest.property[0].purchase_price))}
             onChange={e => {e.preventDefault; dispatch({type: 'UPDATE_PROPERTY_PURCHASE_PRICE', payload: e.target.value})}}
