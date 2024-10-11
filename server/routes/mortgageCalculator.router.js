@@ -46,7 +46,7 @@ router.post('/:id', async (req, res) => {
                             >= CURRENT_TIMESTAMP - INTERVAL '24 hours'
                     AND "properties".id = $1;
         `
-        const checkDefaultCalculationsTimeStampResults = await pool.query(checkDefaultCalculationsTimeStampSqlText, [propertyId]);
+        const checkDefaultCalculationsTimeStampResults = await connection.query(checkDefaultCalculationsTimeStampSqlText, [propertyId]);
         const checkDefaultCalculationsTimeStampData = checkDefaultCalculationsTimeStampResults.rows;
         // console.log('checkDefaultCalculationsTimeStampData is:', checkDefaultCalculationsTimeStampData);
 
@@ -57,7 +57,7 @@ router.post('/:id', async (req, res) => {
         SELECT * FROM "properties"
             WHERE "id" = $1;
         `
-        const propertyDataResponse = await pool.query(propertyDataSqlText, [propertyId])
+        const propertyDataResponse = await connection.query(propertyDataSqlText, [propertyId])
         purchasePrice = propertyDataResponse.rows[0].purchase_price;
         // console.log('purchasePrice:', purchasePrice);
 
@@ -118,7 +118,7 @@ router.post('/:id', async (req, res) => {
                 VALUES
                 ($1, $2, $3, $4);
             `
-            const defaultCalculationsResponse = await pool.query(defaultCalculationsSqlText, defaultCalculationsData)
+            const defaultCalculationsResponse = await connection.query(defaultCalculationsSqlText, defaultCalculationsData)
             
         } else if (checkDefaultCalculationsTimeStampData.length > 0) {
             console.log('Data is less than 24 hours, no API call');
@@ -142,7 +142,7 @@ router.post('/:id', async (req, res) => {
                         >= CURRENT_TIMESTAMP - INTERVAL '24 hours'
                 AND "properties".id = $1;
         `
-        const checkMortgageCalculationsTimeStampResults = await pool.query(checkMortgageCalculationsTimeStampSqlText, [propertyId]);
+        const checkMortgageCalculationsTimeStampResults = await connection.query(checkMortgageCalculationsTimeStampSqlText, [propertyId]);
         const checkMortgageCalculationsTimeStampData = checkMortgageCalculationsTimeStampResults.rows;
         // console.log('checkMortgageCalculationsTimeStampData is:', checkMortgageCalculationsTimeStampData);
 
@@ -173,7 +173,7 @@ router.post('/:id', async (req, res) => {
             ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
             RETURNING "id";
         `
-        const mortgageCalculationsResponse = await pool.query(mortgageCalculationsSqlText, mortgageCalculationsData)
+        const mortgageCalculationsResponse = await connection.query(mortgageCalculationsSqlText, mortgageCalculationsData)
         mortgageCalculationsId = mortgageCalculationsResponse.rows[0].id;
 
         } else if (checkMortgageCalculationsTimeStampData.length > 0) {
@@ -187,7 +187,7 @@ router.post('/:id', async (req, res) => {
             SELECT * FROM "mortgage_calculations"
                 WHERE "id" = $1;
         `
-        const getMortgageCalculationsResponse = await pool.query(getMortgageCalculationsSqlText, [mortgageCalculationsId]);
+        const getMortgageCalculationsResponse = await connection.query(getMortgageCalculationsSqlText, [mortgageCalculationsId]);
         const mortgageCalculationsSqlData = getMortgageCalculationsResponse.rows[0]
 
         const finalMortgageCalculationsData = getMortgageCalculationsFixData(mortgageCalculationsSqlData, purchasePrice);
