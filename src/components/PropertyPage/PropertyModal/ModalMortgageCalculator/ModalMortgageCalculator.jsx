@@ -29,7 +29,27 @@ function ModalMortgageCalculator() {
                         formattedCurrency(Number(purchasePrice)));
 
     console.log('mortgage calculator:', mortgageCalculator);
-    
+
+    const handleDownPayment = (e) => {
+        const newPercentage = Number((e.target.value / purchasePrice) * 100).toFixed(2) + '%';
+        setDownPayment(e.target.value)
+        setDownPaymentPercentage(newPercentage)
+    }
+    const handleDownPaymentPercentage = (e) => {
+        const newPercentage = '$' + Number((e.target.value / 100) * purchasePrice).toFixed(2);
+        setDownPaymentPercentage(e.target.value)
+        setDownPayment(newPercentage)
+    }
+    const handleClosingCosts = (e) => {
+        const newPercentage = Number((e.target.value / purchasePrice) * 100).toFixed(2) + '%';
+        setClosingCosts(e.target.value)
+        setClosingCostsPercentage(newPercentage)
+    }
+    const handleClosingCostsPercentage = (e) => {
+        const newPercentage = '$' + Number((e.target.value / 100) * purchasePrice).toFixed(2);
+        setClosingCostsPercentage(e.target.value)
+        setClosingCosts(newPercentage)
+    }
 
     return (
         <div className="container">
@@ -42,17 +62,17 @@ function ModalMortgageCalculator() {
                         <br />
                         <input placeholder="Down Payment"
                                 value={downPayment}
-                                onChange={e => setDownPayment(e.target.value)} />
+                                onChange={handleDownPayment} />
                         <br />
                         <label>Down Payment Percentage:</label>
                         <br />
                         <input placeholder="Down Payment %"
                                 value={downPaymentPercentage}
-                                onChange={e => setDownPaymentPercentage(e.target.value)} />
+                                onChange={handleDownPaymentPercentage} />
                         <br />
                         <label>Interest Rate:</label>
                         <br />
-                        <input placeholder="Interest Rate" 
+                        <input placeholder={(mortgageCalculator.interest_rate) + '%'} 
                                 value={interestRate}
                                 onChange={e => setInterestRate(e.target.value)} />
                         <br />
@@ -60,12 +80,12 @@ function ModalMortgageCalculator() {
                         <br />
                         <input placeholder="Closing Costs" 
                                 value={closingCosts}
-                                onChange={e => setClosingCosts(e.target.value)} />
+                                onChange={handleClosingCosts} />
                         <br />
                         <label> Closing Cost Percentage:</label>
                         <br />
                         <input value={closingCostsPercentage}
-                                onChange={e => setClosingCostsPercentage(e.target.value)} />
+                                onChange={handleClosingCostsPercentage} />
                                 <br />
                             <label>Loan Term </label>
                             <select
