@@ -1327,6 +1327,85 @@ router.put('/taxes', async (req, res) => {
 });
 
 
+router.get('/filtered/:orderBy/:arrange', async (req, res) => {
+  console.log('in get properties/filtered ', req.params);
+  const orderBy = req.params.orderBy;
+  const arrange = req.params.arrange;
+  const userId = req.user.id;
+  let properties;
+
+  let connection;
+  try{
+
+    connection = await pool.connect()
+    await connection.query('BEGIN;')
+
+    if(arrange === 'ASC') {
+      if(orderBy === 'monthly_profit') {
+        // console.log('asc')
+        const propertiesText = `
+            SELECT * FROM "properties"
+                WHERE "user_id" = $1
+                ORDER BY "monthly_profit" ASC;
+        `;
+        const propertiesResult = await connection.query(propertiesText, [userId])
+        properties = propertiesResult.rows
+        // console.log('properties: ', properties)
+      }
+      else if (orderBy === 'total_cost'){
+        const propertiesText = `
+            SELECT * FROM "properties"
+                WHERE "user_id" = $1
+                ORDER BY "total_cost" ASC;
+        `;
+        const propertiesResult = await connection.query(propertiesText, [userId])
+        properties = propertiesResult.rows
+      }
+    }
+    else if(arrange === 'DESC') {
+      if(orderBy === 'monthly_profit') {
+        // console.log('asc')
+        const propertiesText = `
+            SELECT * FROM "properties"
+                WHERE "user_id" = $1
+                ORDER BY "monthly_profit" DESC;
+        `;
+        const propertiesResult = await connection.query(propertiesText, [userId])
+        properties = propertiesResult.rows
+        // console.log('properties: ', properties)
+      }
+      else if (orderBy === 'total_cost'){
+        const propertiesText = `
+            SELECT * FROM "properties"
+                WHERE "user_id" = $1
+                ORDER BY "total_cost" DESC;
+        `;
+        const propertiesResult = await connection.query(propertiesText, [userId])
+        properties = propertiesResult.rows
+      }
+      else if (orderBy === 'inserted_at'){
+        const propertiesText = `
+            SELECT * FROM "properties"
+                WHERE "user_id" = $1
+                ORDER BY "inserted_at" DESC;
+        `;
+        const propertiesResult = await connection.query(propertiesText, [userId])
+        properties = propertiesResult.rows
+      }
+    }
+
+    await connection.query('Commit;')
+    res.send(properties);
+    
+  }catch(err) {
+    console.log('GET properties filtered failed: ', err);
+    await connection.query('Rollback;')
+    res.sendStatus(500);
+  } finally {
+    await connection.release()
+  }
+});
+
 
 // 12505 54th Ave N, 
 // 4008 5th st ne, columbia heights, mn

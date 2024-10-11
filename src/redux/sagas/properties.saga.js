@@ -117,6 +117,19 @@ function* updatePropertyTaxes(action) {
   }
 }
 
+function* getPropertiesFiltered(action) {
+  try {
+    const response = yield axios.get(`/api/properties/filtered/${action.payload.orderBy}/${action.payload.arrange}`)
+    console.log('response from server in get proeprties filtered: ', response.data)
+    yield put({
+      type: 'SET_PROPERTIES_FILTERED',
+      payload: response.data
+    })
+  } catch (error) {
+    console.log('Error updating property taxes:', error);
+  }
+}
+
 function* propertiesSaga() {
     yield takeLatest('GET_PROPERTIES', getProperties);
     yield takeLatest('ADD_PROPERTY', addProperty);
@@ -125,6 +138,7 @@ function* propertiesSaga() {
     yield takeLatest('UPDATE_BACK_TO_DEFAULT', updateBackToDefault);
     yield takeLatest('GET_PROPERTY_OF_INTEREST', getPropertyOfInterest);
     yield takeLatest('UPDATE_PROPERTY_TAXES', updatePropertyTaxes);
+    yield takeLatest('GET_PROPERTIES_FILTERED', getPropertiesFiltered);
   }
   
   export default propertiesSaga;
