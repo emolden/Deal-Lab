@@ -12,7 +12,7 @@
 .defaultSettingsTitle {
     margin: 10px 0px;
     text-align: center;
-    font-size: 45px;
+    font-size: 35px;
     font-weight: bold;
 }
 
@@ -85,15 +85,6 @@
     justify-content: space-between;
     /* align-items: left; */
 }
-
-.deleteDefaultHoldingBtn {
-    font-size: 9px;
-}
-
-.deleteDefaultHoldingBtn:hover {
-    cursor: pointer;
-    font-size: 11px;
-}
 /* ----- END HOLDING PERIOD COSTS ----- */
 
 
@@ -117,6 +108,7 @@
 }
 /* ----- END SECTION BUTTONS ----- */
 
+
 /* ----- REPAIR ITEMS SECTION ----- */
 .defaultRepair {
     margin-bottom: 20px;
@@ -134,11 +126,8 @@
 }
 
 .defaultRepairItem {
-    /* margin: 20px auto; */
-    /* margin-left: 60px; */
     display: flex;
     justify-content: space-between;
-    /* align-items: left; */
 }
 
 .deleteDefaultRepairBtn {
@@ -151,13 +140,6 @@
     cursor: pointer;
     font-size: 11px;
 }
-/* -----END REPAIR ITEMS SECTION ----- */
-
-/* .total {
-    justify-content: space-between;
-    margin-top: auto;
-    
-} */
 
 
 /* ======== Default Save Button ======== */

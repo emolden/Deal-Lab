@@ -221,14 +221,35 @@
     grid-row: 1; /* First row */
   }
 
+  /* MORTGAGE CALCULATOR */
+  .label {
+    grid-column: 1; /* First column */
+    grid-row: 1; /* First row */
+    display: flex;
+    justify-content: flex-start;
+    grid-template-columns: 1fr 1fr; /* Two columns */
+    grid-template-rows: repeat(2, auto); /* Two rows */
+  }
+
+  .mortgage-input {
+    width: 150px;
+  }
+
+  .percentage-input {
+    width: 50px;
+  }
+
 /* DELETE BUTTONS WITHIN SECTIONS */
   .deleteBtn {
     width: 15px;
     height: auto;
     justify-content: space-between;
-    margin: auto;
-    display: flex;
   }
+
+.deleteBtn:hover {
+    cursor: pointer;
+    font-size: 11px;
+}
 
   .months-input {
     width: 30px;

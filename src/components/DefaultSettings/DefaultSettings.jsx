@@ -52,6 +52,7 @@ function DefaultSettings() {
 
   return (
     <div className="defaultSettings">
+      <br />
       <h2 className="defaultSettingsTitle">Default Settings</h2>
       <div>
       <div className='holdingPeriodDefault'>

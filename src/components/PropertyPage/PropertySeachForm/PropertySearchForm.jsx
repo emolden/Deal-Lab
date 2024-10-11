@@ -96,6 +96,7 @@ function PropertySearchForm({userId}) {
 
   return (
     <div className="container">
+
       <p>Search for a property you might fix & flip:</p>
 
       <div className = "search-form">
@@ -123,7 +124,9 @@ function PropertySearchForm({userId}) {
             onMenuOpen: () => menuOpened(), // Triggers textbox to clear when clicking on it
             value: searchBarAddress,
             onChange: handleChange, //is triggered by the user clicking on an address from the dropdown menu
-            placeholder: "Enter an address", // Sets the placeholder for textbox 
+            placeholder: "Enter an address", // Sets the placeholder for textbox
+
+
           }}
         />
       ) : (
