@@ -195,12 +195,20 @@
   .list-items {
     margin: 0; /* Remove margin */
     padding: 0; /* Remove padding */
+    width: 100px;
+  }
+
+  .list-cost {
+    margin: 0; /* Remove margin */
+    padding: 0; /* Remove padding */
+    width: 70px;
   }
 
   .table {
-    border-top:2px solid #d3d3d3;
-    border-bottom: 2px solid #d3d3d3;
+    /* border-top:2px solid #d3d3d3; */
+    /* border-bottom: 2px solid #d3d3d3; */
     width: 100%;
+    font-size: 15px;
   }
 
   /* UPFRONT COSTS SECTION */
@@ -224,9 +232,36 @@
 
   .section-totals {
     margin-top: auto;
+    margin-bottom: 3px;
+    font-size: 20px;
   }
 
   .purchase-price {
     display: flex;
     flex-direction: row;
+  }
+  .purchase-price-input {
+    margin-top: 12px;
+    margin-bottom: 12px;
+  }
+
+  .item-form {
+    display: flex;
+
+  }
+
+  .item-list-total {
+    border-bottom: 2px solid #d3d3d3;
+    font-weight: bold;
+    margin-bottom: 50px;
+  }
+
+  .calculation-explanation {
+    margin-top: 3px;
+    font-size: 12px;
+    font-style: italic;
+  }
+
+  .top-border {
+    border-top:2px solid #d3d3d3;
   }
