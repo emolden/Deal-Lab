@@ -182,6 +182,7 @@
     font-weight: bold; /* Make text bold */
     text-decoration: underline; /* Underline text */
     margin-bottom: 10px; /* Space below the header */
+    text-align: center;
   }
 
   .unordered-list {
