@@ -61,33 +61,34 @@ function PropertySearchForm({userId}) {
 
     const handleFilterChange = (event) => {
       let filter = event.target.value
+      console.log(filter)
       setFilterOption(filter);
       switch (filter) {
         case 'add_order':
-          dispatch ({
+          return dispatch ({
             type: 'GET_PROPERTIES_FILTERED',
             payload: {orderBy: "inserted_at" , arrange: 'DESC' }
-          })
+          });
         case 'total_cost_lowtohigh':
-          dispatch ({
+          return dispatch ({
             type: 'GET_PROPERTIES_FILTERED',
             payload: {orderBy: "total_cost" , arrange: 'ASC' }
-          })
+          });
         case 'total_cost_hightolow':
-          dispatch ({
+          return dispatch ({
             type: 'GET_PROPERTIES_FILTERED',
             payload: {orderBy: "total_cost" , arrange: 'DESC' }
-          })
+          });
         case 'monthly_profit_lowtohigh':
-          dispatch ({
+          return dispatch ({
             type: 'GET_PROPERTIES_FILTERED',
             payload: {orderBy: "monthly_profit" , arrange: 'ASC'}
-          })
+          });
         case 'monthly_profit_hightolow':
-          dispatch ({
+          return dispatch ({
             type: 'GET_PROPERTIES_FILTERED',
             payload: {orderBy: "monthly_profit" , arrange: 'DESC'}
-          })
+          });
       }
     }
 
@@ -130,7 +131,7 @@ function PropertySearchForm({userId}) {
       <div>
         <label htmlFor='filter'>Sort By </label>
         <select name='filter' id='filter' onChange={() => handleFilterChange(event)}>
-          <option value='add_order'>Add Order</option>
+          <option value='add_order'>Order Added</option>
           <option value='total_cost_lowtohigh'>Total Cost: Low to High</option>
           <option value='total_cost_hightolow'>Total Cost: High to Low</option>
           <option value='monthly_profit_lowtohigh'>Monthly Profit: Low to High</option>

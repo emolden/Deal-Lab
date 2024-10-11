@@ -4,6 +4,8 @@ const allPropertiesReducer = (state = {}, action) => {
       return action.payload;
     case 'UNSET_PROPERTIES':
       return {};
+    case 'SET_PROPERTIES_FILTERED':
+      return {...state, properties: action.payload}
     default:
       return state;
   }
