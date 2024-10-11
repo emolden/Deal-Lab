@@ -44,7 +44,17 @@ const updateTaxes = (propertyId) => {
     <div className="container">
       {Object.keys(propertyOfInterest).length && 
         <>
-          <p>Holding Items:</p>
+        <div className = "property-data">
+          <p>Holding Period:</p>
+            <input 
+              className= "property-data-input width-30"
+              value= {Number(propertyOfInterest.property[0].holding_period)}
+              onChange={e => {e.preventDefault; dispatch({type: 'UPDATE_PROPERTY_HOLDING_PERIOD', payload: e.target.value})}}
+            /> 
+            <p>months</p>
+          </div>
+          <p className="top-border">Holding Items:</p>
+          <div className = 'item-form'>
           <input 
             type='text'
             placeholder='Holding Name'
@@ -58,41 +68,39 @@ const updateTaxes = (propertyId) => {
             onChange={e => setHoldingItemCost(e.target.value)}
           />
           <button className="modal-btn-2" onClick={addHoldingItem}>Add</button>
-          {/* <ul> */}
+          </div>
           <table className="table">
             {propertyOfInterest.property[0].taxes_yearly && propertyOfInterest.property[0].taxes_yearly > 0 ? 
             
             <div className="unordered-list">
               {/* <thead></thead> */}
               <tr>
-                <td>Taxes: {formattedCurrency(propertyOfInterest.property[0].taxes_yearly/12)}</td>
-                <td><img onClick={() => {updateTaxes(propertyOfInterest.property[0].id)}} className="deleteBtn" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" /></td>
+                <td className="list-items">Taxes:</td> 
+                <td className="list-cost">{formattedCurrency(propertyOfInterest.property[0].taxes_yearly/12)}</td>
+                <td className="list-delete"><img onClick={() => {updateTaxes(propertyOfInterest.property[0].id)}} className="deleteBtn" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" /></td>
               </tr>
             </div> : ''}
             {propertyOfInterest.holdingItems.map((item) => {
               return (
                 <div className="unordered-list" key = {item.id}>
                   <tr>
-                    <td className="list-items" >{item.holding_name}: {formattedCurrency(item.holding_cost)} </td>
-                    <td><img className="deleteBtn" onClick={() => {deleteHoldingItem(item.id)}}  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" /></td>
+                    <td className="list-items" >{item.holding_name}: </td>
+                    <td className="list-cost">{formattedCurrency(item.holding_cost)} </td>
+                    <td className="list-delete"><img className="deleteBtn" onClick={() => {deleteHoldingItem(item.id)}}  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" /></td>
                   </tr>
                 </div>
                 
               )
             })}
           {/* </ul> */}
-          
+          <p className = "item-list-total">Monthly Holding Cost: {formattedCurrency(propertyOfInterest.property[0].monthly_holding_cost )}</p>
+
           </table>
-          <p>Monthly Total: {formattedCurrency(propertyOfInterest.property[0].monthly_holding_cost )}</p>
-          <p>Holding Period:
-            <input className="months-input"
-              value= {Number(propertyOfInterest.property[0].holding_period)}
-              onChange={e => {e.preventDefault; dispatch({type: 'UPDATE_PROPERTY_HOLDING_PERIOD', payload: e.target.value})}}
-            /> 
-            months</p>
-        <p>
+          
+        <p className="section-totals">
           <span className="bold-text">Total Holding Cost: {formattedCurrency(propertyOfInterest.property[0].total_holding_cost)}</span>
           </p>
+          <p className="calculation-explanation">(Monthly Holding Cost x Holding Period)</p>
         </>
       }
     </div>

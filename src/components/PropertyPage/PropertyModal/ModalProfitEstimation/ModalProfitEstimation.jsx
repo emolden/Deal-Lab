@@ -18,16 +18,22 @@ function ModalProfitEstimation() {
       {/* <p>Profit Estimation:</p> */}
       {Object.keys(propertyOfInterest).length && 
         <>
-          <p>
+          <p className ="bottom-margin-3">
             <span className='bold-text'>After Repair Value: </span>
             <input
               value= {formattedCurrency(Number(propertyOfInterest.property[0].after_repair_value))}
               onChange={e => {e.preventDefault; dispatch({type: 'UPDATE_PROPERTY_AFTER_REPAIR_VALUE', payload: e.target.value})}}
             />
           </p>
-          <p>Total Cost: {formattedCurrency(propertyOfInterest.property[0].total_cost)}</p>
-          <p>Profit: {formattedCurrency(propertyOfInterest.property[0].profit)}</p>
-          <p>Monthly Profit: {formattedCurrency(propertyOfInterest.property[0].monthly_profit)}</p>
+          <p  className="calculation-explanation botttom-margin-30">(based on the value of similar houses in the area)</p>
+          <p className='bold-text bottom-margin-3'>Total Cost: {formattedCurrency(propertyOfInterest.property[0].total_cost)}</p>
+          <p  className="calculation-explanation botttom-margin-30">(Total Upfront Cost + Total Holding Cost)</p>
+          <p  className='bold-text bottom-margin-3'>Profit: {formattedCurrency(propertyOfInterest.property[0].profit)}</p>
+          <p  className="calculation-explanation botttom-margin-30">(After Repair Value - Total Cost)</p>
+          <div className = "main-focus">
+            <p className='bold-text section-totals center' >Monthly Profit: {formattedCurrency(propertyOfInterest.property[0].monthly_profit)}</p>
+            <p  className="calculation-explanation center">(Profit / Holding Period)</p>
+          </div>
         </>
       }
     </div>

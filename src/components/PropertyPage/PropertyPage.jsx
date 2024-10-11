@@ -25,7 +25,7 @@ function PropertyPage({ userId }) {
   
   return (
     <div className="container">
-      <h2>Welcome, {user.username}!</h2>
+      {/* <h2>Welcome, {user.username}!</h2> */}
       <PropertySearchForm userId={userId}/>
       <PropertyList userId={userId} onOpenModal={handleOpenModal}/>
       <PropertyModal 

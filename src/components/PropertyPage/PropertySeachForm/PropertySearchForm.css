@@ -1,0 +1,12 @@
+.search-form {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.property-sort {
+    display: flex;
+    gap: 30px;
+    padding-top:5px;
+    padding-bottom: 5px;
+}

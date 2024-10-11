@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import { geocodeByPlaceId } from "react-google-places-autocomplete";
+import './PropertySearchForm.css';
 
 
 function PropertySearchForm({userId}) {
@@ -10,6 +11,7 @@ function PropertySearchForm({userId}) {
   const [searchBarAddress, setSearchBarAddress] = useState("");
   const [formattedAddress, setFormattedAddress] = useState("");
   const [addressId, setAddressId] = useState("");
+  const [filterOption, setFilterOption] = useState('add_order')
   const dispatch = useDispatch();
 
   //forces GooglePlacesAutocomplete dom render to wait till Google script is loaded
@@ -58,12 +60,46 @@ function PropertySearchForm({userId}) {
         .catch(error => console.error('error getting geocodeByPlaceId', error));
     }
 
+    const handleFilterChange = (event) => {
+      let filter = event.target.value
+      console.log(filter)
+      setFilterOption(filter);
+      switch (filter) {
+        case 'add_order':
+          return dispatch ({
+            type: 'GET_PROPERTIES_FILTERED',
+            payload: {orderBy: "inserted_at" , arrange: 'DESC' }
+          });
+        case 'total_cost_lowtohigh':
+          return dispatch ({
+            type: 'GET_PROPERTIES_FILTERED',
+            payload: {orderBy: "total_cost" , arrange: 'ASC' }
+          });
+        case 'total_cost_hightolow':
+          return dispatch ({
+            type: 'GET_PROPERTIES_FILTERED',
+            payload: {orderBy: "total_cost" , arrange: 'DESC' }
+          });
+        case 'monthly_profit_lowtohigh':
+          return dispatch ({
+            type: 'GET_PROPERTIES_FILTERED',
+            payload: {orderBy: "monthly_profit" , arrange: 'ASC'}
+          });
+        case 'monthly_profit_hightolow':
+          return dispatch ({
+            type: 'GET_PROPERTIES_FILTERED',
+            payload: {orderBy: "monthly_profit" , arrange: 'DESC'}
+          });
+      }
+    }
+
 
   return (
     <div className="container">
-      <p><b>Property Search:</b></p>
 
-{/* **************UNCOMMENT FROM HERE TO 123**************************** */}
+      <p>Search for a property you might fix & flip:</p>
+
+      <div className = "search-form">
       {isLoaded ? (  
       <GooglePlacesAutocomplete
         apiOptions={{ language: 'en'}}
@@ -89,25 +125,25 @@ function PropertySearchForm({userId}) {
             value: searchBarAddress,
             onChange: handleChange, //is triggered by the user clicking on an address from the dropdown menu
             placeholder: "Enter an address", // Sets the placeholder for textbox
+
+
           }}
         />
       ) : (
         <p>Loading...</p>
       )}
-
-      {/* ************** THIS IS DUMMY DATA TO BE DELETED******************************** */}
-      {/* <form>
-          <label for='addressInput'>Property Address:</label>
-          <input className='rentCastInput'
-                  name='addressInput'
-                  type='text'
-                  placeholder='1234 Penny Ln, Liverpool, BL 196700'
-                  value={address}
-                  onChange={e => setAddress(e.target.value)}
-                  />
-      </form> */}
-      {/* ***************DELETE TO HERE **************************************** */}
-          <button className="modal-btn-2" onClick={addAddress}>Add</button>
+      <button className="modal-btn-2" onClick={addAddress}>Add</button>
+      </div>
+      <div className = "property-sort">
+        <label htmlFor='filter'>Sort By </label>
+        <select name='filter' id='filter' onChange={() => handleFilterChange(event)}>
+          <option value='add_order'>Order Added</option>
+          <option value='total_cost_lowtohigh'>Total Cost: Low to High</option>
+          <option value='total_cost_hightolow'>Total Cost: High to Low</option>
+          <option value='monthly_profit_lowtohigh'>Monthly Profit: Low to High</option>
+          <option value='monthly_profit_hightolow'>Monthly Profit: High to Low</option>
+        </select>
+      </div>
     </div>
   );
 }
