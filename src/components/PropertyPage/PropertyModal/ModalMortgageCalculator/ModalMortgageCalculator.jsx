@@ -77,7 +77,7 @@ function ModalMortgageCalculator() {
                         </div>
                         <label>Interest Rate:</label>
                         <br />
-                        <input placeholder={(mortgageCalculator.interest_rate) + '%' 
+                        <input placeholder={(mortgageCalculator.interest_rate) + '%' }
                                 className="percentage-input"
                                 value={interestRate}
                                 onChange={e => setInterestRate(e.target.value)} />
