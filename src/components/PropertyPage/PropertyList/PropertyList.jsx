@@ -21,10 +21,10 @@ function PropertyList({ userId, onOpenModal }) {
   console.log('allProperties data:', allProperties);
   
   return (
-    
+    // HERE IS MY TESTTTTT
     <div className="container">
       
-      <p>Property List:</p>
+      <p>Click on an address for more details.</p>
       <div className='property-cards-container'>
       {Array.isArray(allProperties.properties) && allProperties.properties.length > 0 ? (
         allProperties.properties.map((property) => (

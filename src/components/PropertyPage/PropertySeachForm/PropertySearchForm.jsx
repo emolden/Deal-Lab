@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import { geocodeByPlaceId } from "react-google-places-autocomplete";
+import './PropertySearchForm.css';
 
 
 function PropertySearchForm({userId}) {
@@ -95,8 +96,10 @@ function PropertySearchForm({userId}) {
 
   return (
     <div className="container">
-      <p>Property Search Form:</p>
 
+      <p>Search for a property you might fix & flip:</p>
+
+      <div className = "search-form">
       {isLoaded ? (  
       <GooglePlacesAutocomplete
         apiOptions={{ language: 'en'}}
@@ -121,14 +124,17 @@ function PropertySearchForm({userId}) {
             onMenuOpen: () => menuOpened(), // Triggers textbox to clear when clicking on it
             value: searchBarAddress,
             onChange: handleChange, //is triggered by the user clicking on an address from the dropdown menu
-            placeholder: "Enter an address", // Sets the placeholder for textbox 
+            placeholder: "Enter an address", // Sets the placeholder for textbox
+
+
           }}
         />
       ) : (
         <p>Loading...</p>
       )}
       <button className="modal-btn-2" onClick={addAddress}>Add</button>
-      <div>
+      </div>
+      <div className = "property-sort">
         <label htmlFor='filter'>Sort By </label>
         <select name='filter' id='filter' onChange={() => handleFilterChange(event)}>
           <option value='add_order'>Order Added</option>

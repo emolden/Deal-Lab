@@ -95,6 +95,10 @@ const PropertyModal = ({ isOpen, onClose, propertyCard, userId }) => {
           <button onClick={onClose} className="modal-close">X</button>
           <h2 className="modal-header">{propertyCard.address}</h2>
         </div>
+        <div className = "modal-buttons">
+          <button className="modal-default-btn" onClick={handleBackToDefault}>Set to Default Settings</button>
+          <button className="modal-save-btn" onClick={saveUpdatedPropertyInfo}>Save</button>
+        </div>
         <div className="modal-body">
         <div className="modalRight grid-container">
           <div className='section upfront-costs'>
@@ -116,11 +120,6 @@ const PropertyModal = ({ isOpen, onClose, propertyCard, userId }) => {
             <h3 className='section-header'>Profit Estimation</h3>
             <ModalProfitEstimation />
           </div>
-
-          
-          {/* <div className="grid-container"> */}
-          <button className="modal-default-btn" onClick={handleBackToDefault}>Set to Default Settings</button>
-          <button className="modal-save-btn" onClick={saveUpdatedPropertyInfo}>Save</button>
           </div>
       </div>
     </div>

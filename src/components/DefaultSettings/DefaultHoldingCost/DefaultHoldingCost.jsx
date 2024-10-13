@@ -33,6 +33,7 @@ function DefaultHoldingCost({defaultHoldings}) {
     <div className='defaultHolding'>
       <form className='defaultHoldingForm'>
         <label className='defaultSettingsText'> Holding Period Costs (per month):</label>
+        <br />
         <input className='defaultHoldingNameInput'
                 type='text'
                 placeholder='Expense Name'
@@ -55,7 +56,7 @@ function DefaultHoldingCost({defaultHoldings}) {
               <tr className='defaultHoldingItem' key={item.id}>
                 <td className='defaultHoldingItemName'>{item.holding_name}:</td>
                 <td className='defaultHoldingItemCost'>{formattedCurrency(item.holding_cost)}</td>
-                <td className='deleteDefaultHoldingBtn'
+                <td className='deleteDefaultRepairBtn'
                     onClick={e => {
                       e.preventDefault();
                       dispatch({
