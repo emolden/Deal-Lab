@@ -32,6 +32,16 @@ function ModalUpfrontCosts() {
     return `$${number.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
   };
 
+  const RepairItemsInputOne = () => {
+    setRepairName('Paint');
+    setRepairItemCost('500');
+  }
+
+  const RepairItemsInputTwo = () => {
+    setRepairName('Paint');
+    setRepairItemCost('500');
+  }
+
   return (
     <div className="container">
       {Object.keys(propertyOfInterest).length && 
@@ -45,7 +55,8 @@ function ModalUpfrontCosts() {
             onChange={e => {e.preventDefault; dispatch({type: 'UPDATE_PROPERTY_PURCHASE_PRICE', payload: e.target.value})}}
           />
         </div>
-      <p className="top-border">Repair Items:</p>
+      {/* ***************** REMOVE SPANS AND ONCLICKS*************** */}
+      <p className="top-border"> <span onClick={RepairItemsInputOne}>Repair</span> <span onClick={RepairItemsInputTwo}>Items:</span></p>
       <div className = 'item-form'>
         <input 
           type='text'
