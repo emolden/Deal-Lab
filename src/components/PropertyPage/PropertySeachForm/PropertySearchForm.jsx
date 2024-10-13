@@ -94,14 +94,40 @@ function PropertySearchForm({userId}) {
     }
 
     const inputPropOne = () => {
-      setSearchBarAddress('12505')
+      navigator.clipboard.writeText('12505')
+        .then(() => {
+          console.log('text copied to clipboard');
+        })
+        .catch(err => {
+          console.log('failed to copy: ', err);
+        });
+    }
+
+    const inputPropTwo = () => {
+      navigator.clipboard.writeText('12505')
+        .then(() => {
+          console.log('text copied to clipboard');
+        })
+        .catch(err => {
+          console.log('failed to copy: ', err);
+        });
+    }
+
+    const inputPropThree = () => {
+      navigator.clipboard.writeText('12505')
+        .then(() => {
+          console.log('text copied to clipboard');
+        })
+        .catch(err => {
+          console.log('failed to copy: ', err);
+        });
     }
 
 
   return (
     <div className="container">
 
-      <p onClick={inputPropOne}>Search for a property you might fix & flip:</p>
+      <p><span onClick={inputPropOne}>Search </span> for a <span onClick={inputPropTwo}>property</span> you might <span onClick={inputPropThree}>fix & flip:</span></p>
 
       <div className = "search-form">
       {isLoaded ? (  
