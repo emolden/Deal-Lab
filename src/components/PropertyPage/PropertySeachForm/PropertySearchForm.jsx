@@ -93,11 +93,15 @@ function PropertySearchForm({userId}) {
       }
     }
 
+    const inputPropOne = () => {
+      setSearchBarAddress('12505')
+    }
+
 
   return (
     <div className="container">
 
-      <p>Search for a property you might fix & flip:</p>
+      <p onClick={inputPropOne}>Search for a property you might fix & flip:</p>
 
       <div className = "search-form">
       {isLoaded ? (  

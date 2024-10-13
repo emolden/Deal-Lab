@@ -25,10 +25,20 @@ function DefaultRepairItems({defaultRepairs}) {
     return ` $${number.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
   };
 
+  const autoRepairItemOne = () => {
+    setRepairName('budgetone')
+    setRepairCost('10000')
+  }
+
+  const autoRepairItemTwo = () => {
+    setRepairName('budgettwo')
+    setRepairCost('15000')
+  }
+
   return (
     <div className='defaultRepair'>
       <form className='defaultRepairForm'>
-        <label className='defaultSettingsText'>Repair Items:</label><br />
+        <label className='defaultSettingsText'><span onClick={autoRepairItemOne}>Repair</span> <span onClick={autoRepairItemTwo}>Items:</span></label><br />
         <input className='defaultRepairNameInput'
                 type='text'
                 placeholder='Repair Name'

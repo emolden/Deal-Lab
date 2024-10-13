@@ -40,12 +40,28 @@ const updateTaxes = (propertyId) => {
     return `$${number.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
   };
 
+  const holdingPeriodInput = () => {
+    dispatch({
+      type: 'UPDATE_PROPERTY_HOLDING_PERIOD', 
+      payload: 4
+    })
+  }
+
+  const updateHoldingInputOne = () => {
+    setHoldingName('Yard Work')
+    setHoldingItemCost('150')
+  }
+  const updateHoldingInputTwo = () => {
+    setHoldingName('Utilities')
+    setHoldingItemCost('450')
+  }
+
   return (
     <div className="container">
       {Object.keys(propertyOfInterest).length && 
         <>
         <div className = "property-data">
-          <p>Holding Period:</p>
+          <p onClick={holdingPeriodInput}>Holding Period:</p>
             <input 
               className= "property-data-input width-30"
               value= {Number(propertyOfInterest.property[0].holding_period)}
@@ -53,7 +69,7 @@ const updateTaxes = (propertyId) => {
             /> 
             <p>months</p>
           </div>
-          <p className="top-border">Holding Items:</p>
+          <p className="top-border"><span onClick={updateHoldingInputOne}>Holding</span> <span onClick={updateHoldingInputTwo}>Items:</span></p>
           <div className = 'item-form'>
           <input 
             type='text'
