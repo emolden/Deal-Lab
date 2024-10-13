@@ -8,8 +8,14 @@ function ModalUpfrontCosts() {
   const dispatch = useDispatch();
 
   const propertyOfInterest = useSelector((store) => store.propertyOfInterest);
+  const mortgageCalculator = useSelector(store => store.mortgageCalculator);
+
   const [repairName, setRepairName] = useState("");
   const [repairItemCost, setRepairItemCost] = useState("");
+  const [downPayment, setDownPayment] = useState('');
+  const [downPaymentPercentage, setDownPaymentPercentage] = useState('');
+  const [closingCosts, setClosingCosts] = useState('');
+  const [closingCostsPercentage, setClosingCostsPercentage] = useState('');
 
   const addRepairItem = () => {
       dispatch ({
@@ -49,6 +55,36 @@ function ModalUpfrontCosts() {
     })
   }
 
+  const updateMortgageCalculator = () => {
+    setDownPayment('10000')
+    setDownPaymentPercentage('5')
+    setInterestRate('6.5')
+    setClosingCosts('50000')
+    setClosingCostsPercentage('10')
+}
+
+const handleDownPayment = (e) => {
+  const newPercentage = Number((e.target.value / purchasePrice) * 100).toFixed(2) + '%';
+  setDownPayment(e.target.value)
+  setDownPaymentPercentage(newPercentage)
+}
+const handleDownPaymentPercentage = (e) => {
+  const newPercentage = '$' + Number((e.target.value / 100) * purchasePrice).toFixed(2);
+  setDownPaymentPercentage(e.target.value)
+  setDownPayment(newPercentage)
+}
+
+const handleClosingCosts = (e) => {
+  const newPercentage = Number((e.target.value / purchasePrice) * 100).toFixed(2) + '%';
+  setClosingCosts(e.target.value)
+  setClosingCostsPercentage(newPercentage)
+}
+const handleClosingCostsPercentage = (e) => {
+  const newPercentage = '$' + Number((e.target.value / 100) * purchasePrice).toFixed(2);
+  setClosingCostsPercentage(e.target.value)
+  setClosingCosts(newPercentage)
+}
+
   return (
     <div className="container">
       {Object.keys(propertyOfInterest).length && 
@@ -62,6 +98,45 @@ function ModalUpfrontCosts() {
             onChange={e => {e.preventDefault; dispatch({type: 'UPDATE_PROPERTY_PURCHASE_PRICE', payload: e.target.value})}}
           />
         </div>
+        <div className = "property-data">
+          <label onClick={updateMortgageCalculator}>Down Payment:</label>
+          <div className="label">
+            <input 
+              placeholder="Down Payment"
+              className="mortgage-input"
+              value={downPayment}
+              onChange={handleDownPayment} 
+            />
+            <label className="label">at</label>
+            <input 
+              placeholder="%"
+              className="percentage-input"
+              value={downPaymentPercentage}
+              onChange={handleDownPaymentPercentage} 
+            />
+            <label className="label">%</label>
+          </div>
+        </div>
+        <p className="mortgageCalculatorLoanItems">Base Loan Amount: {mortgageCalculator.base_loan_amount}</p>
+        <div className = "property-data">
+          <label>Closing Costs:</label>
+            <div className="label">
+              <input 
+                placeholder="Closing Costs" 
+                className="mortgage-input"
+                value={closingCosts}
+                onChange={handleClosingCosts}
+              />
+              <label className="label">at</label>
+              <input 
+                placeholder="%"
+                className="percentage-input"
+                value={closingCostsPercentage}
+                onChange={handleClosingCostsPercentage} 
+              />
+              <label> % </label>
+            </div>
+          </div>
       {/* ***************** REMOVE SPANS AND ONCLICKS*************** */}
       <p className="top-border"> <span onClick={RepairItemsInputOne}>Repair</span> <span onClick={RepairItemsInputTwo}>Items:</span></p>
       <div className = 'item-form'>

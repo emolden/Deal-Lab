@@ -99,7 +99,7 @@ router.post('/:id', async (req, res) => {
             // console.log('mortgageCalculatorResponse:', mortgageCalculatorResponse.data);
             // console.log('totalInterestPaid:', totalInterestPaid);
             
-
+            // *************************SHOULD THE PURCHASE PRICE BE THE LOAN AMOUNT????? ******************************
             interestRateAnnual = Number(((((totalInterestPaid / purchasePrice) / (defaultLoanTerm * 365)) * 365) * 100).toFixed(3));
             // console.log('interestRateAnnual', interestRateAnnual);
             
