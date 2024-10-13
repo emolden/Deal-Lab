@@ -75,7 +75,7 @@ const updateTaxes = (propertyId) => {
             <div className="unordered-list">
               {/* <thead></thead> */}
               <tr>
-                <td className="list-items">Taxes :</td> 
+                <td className="list-items">Taxes:</td> 
                 <td className="list-cost">{formattedCurrency(propertyOfInterest.property[0].taxes_yearly/12)}</td>
                 <td className="list-delete"><img onClick={() => {updateTaxes(propertyOfInterest.property[0].id)}} className="deleteBtn" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" /></td>
               </tr>
@@ -84,7 +84,7 @@ const updateTaxes = (propertyId) => {
               return (
                 <div className="unordered-list" key = {item.id}>
                   <tr>
-                    <td className="list-items" >{item.holding_name} : </td>
+                    <td className="list-items" >{item.holding_name}: </td>
                     <td className="list-cost">{formattedCurrency(item.holding_cost)} </td>
                     <td className="list-delete"><img className="deleteBtn" onClick={() => {deleteHoldingItem(item.id)}}  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" /></td>
                   </tr>
