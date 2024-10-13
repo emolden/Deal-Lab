@@ -8,8 +8,12 @@ function ModalHoldingPeriodCosts() {
   const dispatch = useDispatch();
 
   const propertyOfInterest = useSelector((store) => store.propertyOfInterest);
+  const mortgageCalculator = useSelector(store => store.mortgageCalculator);
+
   const [holdingName, setHoldingName] = useState("");
   const [holdingItemCost, setHoldingItemCost] = useState("");
+  const [interestRate, setInterestRate] = useState('');
+  const [loanTerm, setLoanTerm] = useState(30);
 
   const addHoldingItem = () => {
     dispatch ({
@@ -60,6 +64,27 @@ const updateTaxes = (propertyId) => {
     <div className="container">
       {Object.keys(propertyOfInterest).length && 
         <>
+        <label>Loan Term </label>
+          <select
+            id="demo-simple-select-standard"
+            value={loanTerm}
+            onChange={e => setLoanTerm(e.target.value)}
+          >
+            <option value=""></option>
+            <option value={15}>15 Yr</option>
+            <option value={20}>20 Yr</option>
+            <option value={30}>30 Yr</option>
+          </select>
+          <br />
+         <label>Interest Rate:</label>
+          <input 
+            placeholder={(mortgageCalculator.interest_rate) + '%' }
+            className="percentage-input"
+            value={interestRate}
+            onChange={e => setInterestRate(e.target.value)} 
+          />
+        <p className="mortgageCalculatorLoanItems">Loan Interest Rate (Annual): {mortgageCalculator.interest_rate_annual}</p>
+        <p className="mortgageCalculatorLoanItems">Loan Interest Rate (Monthly): {mortgageCalculator.interest_rate_monthly}</p>
         <div className = "property-data">
           <p onClick={holdingPeriodInput}>Holding Period:</p>
             <input 
@@ -94,6 +119,11 @@ const updateTaxes = (propertyId) => {
                 <td className="list-items">Taxes:</td> 
                 <td className="list-cost">{formattedCurrency(propertyOfInterest.property[0].taxes_yearly/12)}</td>
                 <td className="list-delete"><img onClick={() => {updateTaxes(propertyOfInterest.property[0].id)}} className="deleteBtn" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" /></td>
+              </tr>
+              <tr>
+                <td className="list-items">Mortgage Interest:</td> 
+                <td className="list-cost">{mortgageCalculator.interest_payment_monthly}</td>
+                <td className="list-delete"><img className="deleteBtn" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" /></td>
               </tr>
             </div> : ''}
             {propertyOfInterest.holdingItems.map((item) => {

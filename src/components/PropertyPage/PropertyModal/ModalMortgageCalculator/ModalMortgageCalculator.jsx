@@ -68,7 +68,6 @@ function ModalMortgageCalculator() {
                     <form className="mortgageCalculatorForm">
                         
                         <label onClick={updateMortgageCalculator}>Down Payment:</label>
-                        <br />
                         <div className="label">
                         <input placeholder="Down Payment"
                                 className="mortgage-input"
