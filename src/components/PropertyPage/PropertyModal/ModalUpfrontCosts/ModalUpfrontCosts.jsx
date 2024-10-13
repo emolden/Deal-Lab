@@ -42,12 +42,19 @@ function ModalUpfrontCosts() {
     setRepairItemCost('500');
   }
 
+  const updatePurchasePrice = () => {
+    dispatch({
+      type: 'UPDATE_PROPERTY_PURCHASE_PRICE', 
+      payload: '450000'
+    })
+  }
+
   return (
     <div className="container">
       {Object.keys(propertyOfInterest).length && 
       <>
         <div className = "property-data">
-          <p> Purchase Price:</p> 
+          <p onClick={updatePurchasePrice}> Purchase Price:</p> 
           <input
             className = "property-data-input" 
             placeholder="Purchase Price"
