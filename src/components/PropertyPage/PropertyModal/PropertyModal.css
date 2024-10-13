@@ -195,6 +195,14 @@
   .list-items {
     margin: 0; /* Remove margin */
     padding: 0; /* Remove padding */
+    width: 110px;
+  }
+
+  .list-cost {
+    margin: 0; /* Remove margin */
+    padding: 0; /* Remove padding */
+    width: 70px;
+
   }
 
   .table {
