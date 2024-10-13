@@ -51,6 +51,14 @@ function ModalMortgageCalculator() {
         setClosingCosts(newPercentage)
     }
 
+    const updateMortgageCalculator = () => {
+        setDownPayment('10000')
+        setDownPaymentPercentage('5')
+        setInterestRate('6.5')
+        setClosingCosts('50000')
+        setClosingCostsPercentage('10')
+    }
+
     return (
         <div className="container">
             <div className="mortgageCalculatorDiv">
@@ -59,7 +67,7 @@ function ModalMortgageCalculator() {
                     {Object.keys(mortgageCalculator) && 
                     <form className="mortgageCalculatorForm">
                         
-                        <label >Down Payment:</label>
+                        <label onClick={updateMortgageCalculator}>Down Payment:</label>
                         <br />
                         <div className="label">
                         <input placeholder="Down Payment"
