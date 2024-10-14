@@ -14,17 +14,24 @@ const PropertyModal = ({ isOpen, onClose, propertyCard, userId }) => {
   const dispatch = useDispatch();
 
   const propertyOfInterest = useSelector((store) => store.propertyOfInterest);
+
+  const [dataFromDatabase, setDataFromDatabase] = useState({});
+  
   
 
   useEffect(() => {
+    
     if (isOpen) {
       document.body.style.overflow = 'hidden';
+      setDataFromDatabase(propertyOfInterest)
+      console.log("data from database",dataFromDatabase)
     } else {
       document.body.style.overflow = 'unset';
     }
     return () => {
       document.body.style.overflow = 'unset';
     }
+   
   }, [isOpen]);
 
   if (!isOpen) return null;
@@ -88,11 +95,11 @@ const PropertyModal = ({ isOpen, onClose, propertyCard, userId }) => {
 
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div className="modal-overlay">
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
 
         <div>
-          <button onClick={onClose} className="modal-close">X</button>
+          <button onClick={() =>onClose(propertyOfInterest, propertyCard)} className="modal-close">X</button>
           <h2 className="modal-header">{propertyCard.address}</h2>
         </div>
         <div className = "modal-buttons">
