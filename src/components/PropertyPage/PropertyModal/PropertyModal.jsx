@@ -9,14 +9,17 @@ import ModalMortgageCalculator from './ModalMortgageCalculator/ModalMortgageCalc
 import Swal from 'sweetalert2';
 
 
-const PropertyModal = ({ isOpen, onClose, propertyCard, userId }) => {
+const PropertyModal = ({ isOpen, onClose, propertyCard, userId, setSelectedProperty }) => {
 
   const dispatch = useDispatch();
 
   const propertyOfInterest = useSelector((store) => store.propertyOfInterest);
+
+  
   
 
   useEffect(() => {
+    
     if (isOpen) {
       document.body.style.overflow = 'hidden';
     } else {
@@ -25,6 +28,7 @@ const PropertyModal = ({ isOpen, onClose, propertyCard, userId }) => {
     return () => {
       document.body.style.overflow = 'unset';
     }
+   
   }, [isOpen]);
 
   if (!isOpen) return null;
@@ -77,6 +81,7 @@ const PropertyModal = ({ isOpen, onClose, propertyCard, userId }) => {
         userId: userId
     }
   })
+  setSelectedProperty(propertyOfInterest.property[0])
   Swal.fire({
     icon: "success",
     title: "Your work has been saved",
@@ -88,11 +93,11 @@ const PropertyModal = ({ isOpen, onClose, propertyCard, userId }) => {
 
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div className="modal-overlay">
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
 
         <div>
-          <button onClick={onClose} className="modal-close">X</button>
+          <button onClick={() =>onClose(propertyOfInterest, propertyCard)} className="modal-close">X</button>
           <h2 className="modal-header">{propertyCard.address}</h2>
         </div>
         <div className = "modal-buttons">
