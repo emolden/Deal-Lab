@@ -16,6 +16,8 @@ function ModalUpfrontCosts() {
   const [downPaymentPercentage, setDownPaymentPercentage] = useState('');
   const [closingCosts, setClosingCosts] = useState('');
   const [closingCostsPercentage, setClosingCostsPercentage] = useState('');
+  const [showText, setShowText] = useState(false);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
 
   const addRepairItem = () => {
       dispatch ({
@@ -85,11 +87,30 @@ const handleClosingCostsPercentage = (e) => {
   setClosingCosts(newPercentage)
 }
 
+const handleMouseMove = (e) => {
+  setPosition({ x: e.clientX, y: e.clientY });
+  console.log('handlemousemove', e.clientX, e.clientY)
+};
+
   return (
     <div className="container">
       {Object.keys(propertyOfInterest).length && 
       <>
         <div className = "property-data">
+          <div onMouseMove={handleMouseMove}>
+            <img className='info-icon-data' src='info.png'onMouseEnter={() => setShowText(true)} onMouseLeave={() => setShowText(false)}/>
+            {showText && (
+              <div 
+                className='info-text'
+                style={{
+                  position: 'absolute', 
+                  left: position.x - 240, 
+                  top: position.y - 110 
+                }}>
+                  The current listing price for the property selected
+              </div>
+            )}
+          </div>
           <p onClick={updatePurchasePrice}> Purchase Price:</p> 
           <input
             className = "property-data-input" 

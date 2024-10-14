@@ -179,3 +179,9 @@
 .on-mouse-enter {
     position: relative;
 }
+
+.info-text {
+    width: 20%;
+    background-color: rgb(233, 226, 238);
+    border-radius: 5px;
+}

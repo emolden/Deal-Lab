@@ -69,6 +69,7 @@ function DefaultSettings() {
         <img className='info-icon' src='info.png'onMouseEnter={() => setShowText(true)} onMouseLeave={() => setShowText(false)}/>
         {showText && (
           <div 
+            className='info-text'
             style={{
               position: 'absolute', 
               left: position.x - 90, 

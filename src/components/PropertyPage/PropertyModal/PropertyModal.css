@@ -323,3 +323,9 @@
   justify-content: space-between;
   /* align-items: center; */
 }
+
+.info-icon-data {
+    width: 15px;
+    height: 15px;
+    margin-top: 20px;
+}
