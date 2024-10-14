@@ -89,7 +89,7 @@ const handleClosingCostsPercentage = (e) => {
 
 const handleMouseMove = (e) => {
   setPosition({ x: e.clientX, y: e.clientY });
-  console.log('handlemousemove', e.clientX, e.clientY)
+  // console.log('handlemousemove', e.clientX, e.clientY)
 };
 
   return (
