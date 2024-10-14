@@ -16,8 +16,14 @@ function ModalUpfrontCosts() {
   const [downPaymentPercentage, setDownPaymentPercentage] = useState('');
   const [closingCosts, setClosingCosts] = useState('');
   const [closingCostsPercentage, setClosingCostsPercentage] = useState('');
+
+  const [showText, setShowText] = useState(false);
+  const [showLoanText, setShowLoanText] = useState(false);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+
   const purchasePrice = (Object.keys(propertyOfInterest).length && propertyOfInterest.property[0].purchase_price);
   const propertyId = (Object.keys(propertyOfInterest).length && propertyOfInterest.property[0].id)
+
 
   const addRepairItem = () => {
       dispatch ({
@@ -46,8 +52,8 @@ function ModalUpfrontCosts() {
   }
 
   const RepairItemsInputTwo = () => {
-    setRepairName('Paint');
-    setRepairItemCost('500');
+    setRepairName('Clean Carpet');
+    setRepairItemCost('750');
   }
 
   const updatePurchasePrice = () => {
@@ -102,12 +108,31 @@ function ModalUpfrontCosts() {
       })
   }
 
+const handleMouseMove = (e) => {
+  setPosition({ x: e.clientX, y: e.clientY });
+  // console.log('handlemousemove', e.clientX, e.clientY)
+};
+
   return (
     <div className="container">
       {Object.keys(propertyOfInterest).length && 
       <>
 
         <div className = "property-data">
+          <div onMouseMove={handleMouseMove}>
+            <img className='info-icon-data' src='info.png'onMouseEnter={() => setShowText(true)} onMouseLeave={() => setShowText(false)}/>
+            {showText && (
+              <div 
+                className='info-text'
+                style={{
+                  position: 'absolute', 
+                  left: position.x - 240, 
+                  top: position.y - 110 
+                }}>
+                  The current listing price for the property selected
+              </div>
+            )}
+          </div>
           <p onClick={updatePurchasePrice}> Purchase Price:</p> 
           <input
             className = "property-data-input" 
@@ -138,6 +163,26 @@ function ModalUpfrontCosts() {
         </div> */}
 
         {/* <p className="mortgageCalculatorLoanItems">Base Loan Amount: {mortgageCalculator.base_loan_amount}</p>
+
+        </div>
+        <div className = "property-data">
+          <div onMouseMove={handleMouseMove}>
+              <img className='info-icon-data' src='info.png'onMouseEnter={() => setShowLoanText(true)} onMouseLeave={() => setShowLoanText(false)}/>
+              {showLoanText && (
+                <div 
+                  className='info-text'
+                  style={{
+                    position: 'absolute', 
+                    left: position.x - 240, 
+                    top: position.y - 110 
+                  }}>
+                    Purchase Price - Down Payment
+                </div>
+              )}
+            </div>
+          <p className="mortgageCalculatorLoanItems">Loan Amount: {mortgageCalculator.base_loan_amount}</p>
+        </div>
+
         <div className = "property-data">
           <label>Closing Costs:</label>
             <div className="label">

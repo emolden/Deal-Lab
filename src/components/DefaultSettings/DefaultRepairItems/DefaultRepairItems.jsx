@@ -26,13 +26,13 @@ function DefaultRepairItems({defaultRepairs}) {
   };
 
   const autoRepairItemOne = () => {
-    setRepairName('budgetone')
+    setRepairName('Budget')
     setRepairCost('10000')
   }
 
   const autoRepairItemTwo = () => {
-    setRepairName('budgettwo')
-    setRepairCost('15000')
+    // setRepairName('budgettwo')
+    // setRepairCost('15000')
   }
 
   return (

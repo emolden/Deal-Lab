@@ -85,6 +85,7 @@ const updateTaxes = (propertyId) => {
         <p className="mortgageCalculatorLoanItems">Loan Interest Rate (Annual): {mortgageCalculator.interest_rate_annual}</p>
         <p className="mortgageCalculatorLoanItems">Loan Interest Rate (Monthly): {mortgageCalculator.interest_rate_monthly}</p>
          */}
+
         <div className = "property-data">
           <p onClick={holdingPeriodInput}>Holding Period:</p>
             <input 
