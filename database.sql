@@ -7,6 +7,8 @@ DROP TABLE IF EXISTS "repair_items";
 DROP TABLE IF EXISTS "holding_items";
 DROP TABLE IF EXISTS "default_repairs";
 DROP TABLE IF EXISTS "default_holdings";
+DROP TABLE IF EXISTS "mortgage_calculations";
+DROP TABLE IF EXISTS "default_mortgage_calculations";
 DROP TABLE IF EXISTS "properties";
 DROP TABLE IF EXISTS "property_api_data";
 DROP TABLE IF EXISTS "user";
