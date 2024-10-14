@@ -25,7 +25,28 @@ function PropertyPage({ userId }) {
     console.log('datafromdatabase: ', dataFromDatabase)
     const purchasePriceFromDatabase = dataFromDatabase.purchase_price
     const purchasePrice = propertyOfInterest.property[0].purchase_price
-    if(purchasePrice != purchasePriceFromDatabase) {
+    let formattedPurchasePriceFromDatabase = '';
+    let formattedPurchasePrice = '';
+    for(let char of purchasePriceFromDatabase) {
+      let breakCondition = false
+      if(char === ".") {
+        breakCondition = true
+      }
+      else if (!breakCondition) {
+        formattedPurchasePriceFromDatabase += char;
+      }
+    }
+    for(let char of purchasePrice) {
+      let breakCondition = false
+      if(char === ".") {
+        breakCondition = true
+      }
+      else if (!breakCondition) {
+        formattedPurchasePrice += char;
+      }
+    }
+    console.log('formattedpurchasepricefromdatabase: ', formattedPurchasePriceFromDatabase)
+    if(formattedPurchasePrice != formattedPurchasePriceFromDatabase) {
       Swal.fire({
         icon: "error",
         title: "Default Settings have NOT been applied.",
