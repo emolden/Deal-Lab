@@ -15,8 +15,6 @@ const PropertyModal = ({ isOpen, onClose, propertyCard, userId, setSelectedPrope
 
   const propertyOfInterest = useSelector((store) => store.propertyOfInterest);
 
-  
-  
 
   useEffect(() => {
     
@@ -35,11 +33,11 @@ const PropertyModal = ({ isOpen, onClose, propertyCard, userId, setSelectedPrope
 
   const handleBackToDefault = () => {
     Swal.fire({
-      title: "Are you sure you want to apply to Default Settings?",
+      title: "Are you sure you want to apply the Default Settings?",
       text: "You can change the settings manually if you change your mind.",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Yes, delete it",
+      confirmButtonText: "Yes, apply default settings",
       cancelButtonText: "Cancel",
       // reverseButtons: true
     }).then((result) => {
@@ -89,11 +87,18 @@ const PropertyModal = ({ isOpen, onClose, propertyCard, userId, setSelectedPrope
     timer: 1500
   });
 }
+
+const formattedCurrency = (value) => {
+  const number = parseFloat(value);
+  return `$${number.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+};
   
 
 
   return (
-    <div className="modal-overlay">
+
+    <div className="modal-overlay" >
+
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
 
         <div>
@@ -102,6 +107,12 @@ const PropertyModal = ({ isOpen, onClose, propertyCard, userId, setSelectedPrope
         </div>
         <div className = "modal-buttons">
           <button className="modal-default-btn" onClick={handleBackToDefault}>Set to Default Settings</button>
+          {Object.keys(propertyOfInterest).length && 
+          <div className = "main-focus">
+            <p className='bold-text section-totals center' >Monthly Profit: {formattedCurrency(propertyOfInterest.property[0].monthly_profit)}</p>
+            <p  className="calculation-explanation center">(Profit / Holding Period)</p>
+          </div>
+          }
           <button className="modal-save-btn" onClick={saveUpdatedPropertyInfo}>Save</button>
         </div>
         <div className="modal-body">
@@ -116,12 +127,12 @@ const PropertyModal = ({ isOpen, onClose, propertyCard, userId, setSelectedPrope
             <ModalHoldingPeriodCosts />
           </div>
 
-          <div className='section mortgage-calculator'>
+          {/* <div className='section mortgage-calculator'>
             <h3 className='section-header'>Mortgage Calculator</h3>
             <ModalMortgageCalculator />
-          </div>
+          </div> */}
 
-          <div className='section profit-estimation'>
+          <div className='section-profit-estimation' style={{ gridColumn: '1 / -1' }}>
             <h3 className='section-header'>Profit Estimation</h3>
             <ModalProfitEstimation />
           </div>

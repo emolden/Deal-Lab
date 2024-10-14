@@ -142,7 +142,7 @@ const handleMouseMove = (e) => {
           />
         </div>
 
-        <div className = "property-data">
+        {/* <div className = "property-data">
           <label onClick={updateMortgageCalculator}>Down Payment:</label>
           <div className="label">
             <input 
@@ -160,6 +160,10 @@ const handleMouseMove = (e) => {
             />
             <label className="label">%</label>
           </div>
+        </div> */}
+
+        {/* <p className="mortgageCalculatorLoanItems">Base Loan Amount: {mortgageCalculator.base_loan_amount}</p>
+
         </div>
         <div className = "property-data">
           <div onMouseMove={handleMouseMove}>
@@ -178,6 +182,7 @@ const handleMouseMove = (e) => {
             </div>
           <p className="mortgageCalculatorLoanItems">Loan Amount: {mortgageCalculator.base_loan_amount}</p>
         </div>
+
         <div className = "property-data">
           <label>Closing Costs:</label>
             <div className="label">
@@ -198,7 +203,7 @@ const handleMouseMove = (e) => {
             </div>
           </div>
           <button className="modal-btn-2"
-                  onClick={handleUpdateCalculations} >Calculate</button>
+                  onClick={handleUpdateCalculations} >Calculate</button> */}
 
       {/* ***************** REMOVE SPANS AND ONCLICKS*************** */}
       <p className="top-border"> <span onClick={RepairItemsInputOne}>Repair</span> <span onClick={RepairItemsInputTwo}>Items:</span></p>
