@@ -12,7 +12,6 @@ function ModalHoldingPeriodCosts() {
 
   const [holdingName, setHoldingName] = useState("");
   const [holdingItemCost, setHoldingItemCost] = useState("");
-  const [interestRate, setInterestRate] = useState('');
   const [loanTerm, setLoanTerm] = useState(30);
 
   const addHoldingItem = () => {
@@ -64,6 +63,7 @@ const updateTaxes = (propertyId) => {
     <div className="container">
       {Object.keys(propertyOfInterest).length && 
         <>
+
         <label>Loan Term </label>
           <select
             id="demo-simple-select-standard"
@@ -76,15 +76,15 @@ const updateTaxes = (propertyId) => {
             <option value={30}>30 Yr</option>
           </select>
           <br />
-         <label>Interest Rate:</label>
+
+        <label>Interest Rate:</label>
           <input 
-            placeholder={(mortgageCalculator.interest_rate) + '%' }
             className="percentage-input"
-            value={interestRate}
-            onChange={e => setInterestRate(e.target.value)} 
+            value={(mortgageCalculator.interest_rate) + '%' }
           />
         {/* <p className="mortgageCalculatorLoanItems">Loan Interest Rate (Annual): {mortgageCalculator.interest_rate_annual}</p>
         <p className="mortgageCalculatorLoanItems">Loan Interest Rate (Monthly): {mortgageCalculator.interest_rate_monthly}</p> */}
+
         <div className = "property-data">
           <p onClick={holdingPeriodInput}>Holding Period:</p>
             <input 
@@ -92,8 +92,9 @@ const updateTaxes = (propertyId) => {
               value= {Number(propertyOfInterest.property[0].holding_period)}
               onChange={e => {e.preventDefault; dispatch({type: 'UPDATE_PROPERTY_HOLDING_PERIOD', payload: e.target.value})}}
             /> 
-            <p>months</p>
-          </div>
+          <p>months</p>
+        </div>
+
           <p className="top-border"><span onClick={updateHoldingInputOne}>Holding</span> <span onClick={updateHoldingInputTwo}>Items:</span></p>
           <div className = 'item-form'>
           <input 

@@ -16,9 +16,14 @@ function ModalUpfrontCosts() {
   const [downPaymentPercentage, setDownPaymentPercentage] = useState('');
   const [closingCosts, setClosingCosts] = useState('');
   const [closingCostsPercentage, setClosingCostsPercentage] = useState('');
+
   const [showText, setShowText] = useState(false);
   const [showLoanText, setShowLoanText] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
+
+  const purchasePrice = (Object.keys(propertyOfInterest).length && propertyOfInterest.property[0].purchase_price);
+  const propertyId = (Object.keys(propertyOfInterest).length && propertyOfInterest.property[0].id)
+
 
   const addRepairItem = () => {
       dispatch ({
@@ -34,7 +39,7 @@ function ModalUpfrontCosts() {
         type: 'DELETE_PROPERTY_REPAIR_ITEM',
         payload: {itemId: itemId, propertyId: propertyOfInterest.property[0].id}
     })
-}
+  }
 
   const formattedCurrency = (value) => {
     const number = parseFloat(value);
@@ -64,29 +69,44 @@ function ModalUpfrontCosts() {
     setInterestRate('6.5')
     setClosingCosts('50000')
     setClosingCostsPercentage('10')
-}
+  }
 
-const handleDownPayment = (e) => {
-  const newPercentage = Number((e.target.value / purchasePrice) * 100).toFixed(2) + '%';
-  setDownPayment(e.target.value)
-  setDownPaymentPercentage(newPercentage)
-}
-const handleDownPaymentPercentage = (e) => {
-  const newPercentage = '$' + Number((e.target.value / 100) * purchasePrice).toFixed(2);
-  setDownPaymentPercentage(e.target.value)
-  setDownPayment(newPercentage)
-}
+  const handleDownPayment = (e) => {
+    const newPercentage = Number((e.target.value / purchasePrice) * 100).toFixed(2);
+    setDownPayment(e.target.value)
+    setDownPaymentPercentage(newPercentage)
+  }
 
-const handleClosingCosts = (e) => {
-  const newPercentage = Number((e.target.value / purchasePrice) * 100).toFixed(2) + '%';
-  setClosingCosts(e.target.value)
-  setClosingCostsPercentage(newPercentage)
-}
-const handleClosingCostsPercentage = (e) => {
-  const newPercentage = '$' + Number((e.target.value / 100) * purchasePrice).toFixed(2);
-  setClosingCostsPercentage(e.target.value)
-  setClosingCosts(newPercentage)
-}
+  const handleDownPaymentPercentage = (e) => {
+    const newNumber = Number((e.target.value / 100) * purchasePrice).toFixed(2);
+    setDownPaymentPercentage(e.target.value)
+    setDownPayment(newNumber)
+  }
+
+  const handleClosingCosts = (e) => {
+    const newPercentage = Number((e.target.value / purchasePrice) * 100).toFixed(2);
+    setClosingCosts(e.target.value)
+    setClosingCostsPercentage(newPercentage)
+  }
+
+  const handleClosingCostsPercentage = (e) => {
+    const newNumber = Number((e.target.value / 100) * purchasePrice).toFixed(2);
+    setClosingCostsPercentage(e.target.value)
+    setClosingCosts(newNumber)
+  }
+
+  const handleUpdateCalculations = () => {
+      dispatch({
+        type: 'UPDATE_CALCULATIONS',
+        payload: {
+          propertyId: propertyId,
+          downPayment: downPayment,
+          downPaymentPercentage: downPaymentPercentage,
+          closingCosts: closingCosts,
+          closingCostsPercentage: closingCostsPercentage
+        }
+      })
+  }
 
 const handleMouseMove = (e) => {
   setPosition({ x: e.clientX, y: e.clientY });
@@ -97,6 +117,7 @@ const handleMouseMove = (e) => {
     <div className="container">
       {Object.keys(propertyOfInterest).length && 
       <>
+
         <div className = "property-data">
           <div onMouseMove={handleMouseMove}>
             <img className='info-icon-data' src='info.png'onMouseEnter={() => setShowText(true)} onMouseLeave={() => setShowText(false)}/>
@@ -120,6 +141,7 @@ const handleMouseMove = (e) => {
             onChange={e => {e.preventDefault; dispatch({type: 'UPDATE_PROPERTY_PURCHASE_PRICE', payload: e.target.value})}}
           />
         </div>
+
         <div className = "property-data">
           <label onClick={updateMortgageCalculator}>Down Payment:</label>
           <div className="label">
@@ -175,6 +197,9 @@ const handleMouseMove = (e) => {
               <label> % </label>
             </div>
           </div>
+          <button className="modal-btn-2"
+                  onClick={handleUpdateCalculations} >Calculate</button>
+
       {/* ***************** REMOVE SPANS AND ONCLICKS*************** */}
       <p className="top-border"> <span onClick={RepairItemsInputOne}>Repair</span> <span onClick={RepairItemsInputTwo}>Items:</span></p>
       <div className = 'item-form'>
@@ -192,21 +217,21 @@ const handleMouseMove = (e) => {
         />
         <button className="modal-btn-2"onClick={addRepairItem}>Add</button>
       </div>
-        <table className="table">
-        {propertyOfInterest.repairItems.map((item) => {
-          return (
 
-            <div key = {item.id} className="unordered-list">
+      <table className="table">
+      {propertyOfInterest.repairItems.map((item) => {
+        return (
+          <div key = {item.id} className="unordered-list">
+            <tr>
+              <td className="list-items" >{item.repair_name}: </td>
+              <td className="list-cost">{formattedCurrency(item.repair_cost)} </td>
+              <td className="list-delete"><img className="deleteBtn" onClick={() => {deleteRepairItem(item.id)}} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" /></td>
+            </tr>
+          </div>
+        )
+      })}
+      </table>
 
-              <tr>
-                <td className="list-items" >{item.repair_name}: </td>
-                <td className="list-cost">{formattedCurrency(item.repair_cost)} </td>
-                <td className="list-delete"><img className="deleteBtn" onClick={() => {deleteRepairItem(item.id)}} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" /></td>
-              </tr>
-            </div>
-          )
-        })}
-        </table>
       {/* this should be .total_repair_cost */}
       <p className = "item-list-total">Total Repair Cost: {formattedCurrency(propertyOfInterest.property[0].total_repair_cost)}</p>
       

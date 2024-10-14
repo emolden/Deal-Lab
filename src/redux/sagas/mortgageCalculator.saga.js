@@ -1,13 +1,6 @@
 import { put, takeLatest } from 'redux-saga/effects';
 import axios from 'axios';
 
-function* getCalculations(action) {
-    try {
-        
-    } catch (error) {
-        console.log('Error getting calculations:', error);
-    }
-}
 
 function* addCalculations(action) {
     const propertyId = action.payload;
@@ -40,7 +33,6 @@ function* updateCalculations(action) {
 }
 
 function* mortgageCalculatorSaga() {
-    // yield takeLatest('GET_CALCULATIONS', getCalculations);
     yield takeLatest('GET_PROPERTY_OF_INTEREST', addCalculations);
     yield takeLatest('UPDATE_CALCULATIONS', updateCalculations);
 }
