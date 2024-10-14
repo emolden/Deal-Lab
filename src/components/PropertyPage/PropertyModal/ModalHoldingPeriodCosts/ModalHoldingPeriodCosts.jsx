@@ -8,8 +8,11 @@ function ModalHoldingPeriodCosts() {
   const dispatch = useDispatch();
 
   const propertyOfInterest = useSelector((store) => store.propertyOfInterest);
+  const mortgageCalculator = useSelector(store => store.mortgageCalculator);
+
   const [holdingName, setHoldingName] = useState("");
   const [holdingItemCost, setHoldingItemCost] = useState("");
+  const [loanTerm, setLoanTerm] = useState(30);
 
   const addHoldingItem = () => {
     dispatch ({
@@ -40,20 +43,59 @@ const updateTaxes = (propertyId) => {
     return `$${number.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
   };
 
+  const holdingPeriodInput = () => {
+    dispatch({
+      type: 'UPDATE_PROPERTY_HOLDING_PERIOD', 
+      payload: 4
+    })
+  }
+
+  const updateHoldingInputOne = () => {
+    setHoldingName('Yard Work')
+    setHoldingItemCost('150')
+  }
+  const updateHoldingInputTwo = () => {
+    setHoldingName('Utilities')
+    setHoldingItemCost('450')
+  }
+
   return (
     <div className="container">
       {Object.keys(propertyOfInterest).length && 
         <>
+
+        {/* <label>Loan Term </label>
+          <select
+            id="demo-simple-select-standard"
+            value={loanTerm}
+            onChange={e => setLoanTerm(e.target.value)}
+          >
+            <option value=""></option>
+            <option value={15}>15 Yr</option>
+            <option value={20}>20 Yr</option>
+            <option value={30}>30 Yr</option>
+          </select>
+          <br /> */}
+
+        {/* <label>Interest Rate:</label>
+          <input 
+            className="percentage-input"
+            value={(mortgageCalculator.interest_rate) + '%' }
+          />
+        <p className="mortgageCalculatorLoanItems">Loan Interest Rate (Annual): {mortgageCalculator.interest_rate_annual}</p>
+        <p className="mortgageCalculatorLoanItems">Loan Interest Rate (Monthly): {mortgageCalculator.interest_rate_monthly}</p>
+         */}
         <div className = "property-data">
-          <p>Holding Period:</p>
+          <p onClick={holdingPeriodInput}>Holding Period:</p>
             <input 
               className= "property-data-input width-30"
               value= {Number(propertyOfInterest.property[0].holding_period)}
               onChange={e => {e.preventDefault; dispatch({type: 'UPDATE_PROPERTY_HOLDING_PERIOD', payload: e.target.value})}}
             /> 
-            <p>months</p>
-          </div>
-          <p className="top-border">Holding Items:</p>
+          <p>months</p>
+        </div>
+
+          <p className="top-border"><span onClick={updateHoldingInputOne}>Holding</span> <span onClick={updateHoldingInputTwo}>Items:</span></p>
           <div className = 'item-form'>
           <input 
             type='text'
@@ -79,6 +121,11 @@ const updateTaxes = (propertyId) => {
                 <td className="list-cost">{formattedCurrency(propertyOfInterest.property[0].taxes_yearly/12)}</td>
                 <td className="list-delete"><img onClick={() => {updateTaxes(propertyOfInterest.property[0].id)}} className="deleteBtn" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" /></td>
               </tr>
+              {/* <tr>
+                <td className="list-items">Mortgage Interest:</td> 
+                <td className="list-cost">{mortgageCalculator.interest_payment_monthly}</td>
+                <td className="list-delete"><img className="deleteBtn" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" /></td>
+              </tr> */}
             </div> : ''}
             {propertyOfInterest.holdingItems.map((item) => {
               return (

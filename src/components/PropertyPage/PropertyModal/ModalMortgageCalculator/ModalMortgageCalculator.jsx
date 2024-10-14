@@ -7,6 +7,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
+
 function ModalMortgageCalculator() {
     const dispatch = useDispatch();
     const propertyOfInterest = useSelector((store) => store.propertyOfInterest);
@@ -28,7 +29,7 @@ function ModalMortgageCalculator() {
     const loanAmount = (Object.keys(propertyOfInterest).length && 
                         formattedCurrency(Number(purchasePrice)));
 
-    console.log('mortgage calculator:', mortgageCalculator);
+    // console.log('mortgage calculator:', mortgageCalculator);
 
     const handleDownPayment = (e) => {
         const newPercentage = Number((e.target.value / purchasePrice) * 100).toFixed(2) + '%';
@@ -58,23 +59,23 @@ function ModalMortgageCalculator() {
                 <div className="mortgageCalculatorFormDiv">
                     {Object.keys(mortgageCalculator) && 
                     <form className="mortgageCalculatorForm">
-                        
+
                         <label >Down Payment:</label>
                         <br />
-                        <div className="label">
-                        <input placeholder="Down Payment"
-                                className="mortgage-input"
-                                value={downPayment}
+                            <div className="label">
+                                <input placeholder="Down Payment"
+                                        className="mortgage-input"
+                                        value={downPayment}
+                                        onChange={handleDownPayment} />
+                                <label className="label">at</label>
+                                <input placeholder="%"
+                                        className="percentage-input"
+                                        value={downPaymentPercentage}
+                                        onChange={handleDownPaymentPercentage} />
+                                <label className="label">%</label>
+                                <br />
+                            </div>
 
-                                onChange={handleDownPayment} />
-                        <label className="label">at</label>
-                        <input placeholder="%"
-                                className="percentage-input"
-                                value={downPaymentPercentage}
-                                onChange={handleDownPaymentPercentage} />
-                        <label className="label">%</label>
-                        <br />
-                        </div>
                         <label>Interest Rate:</label>
                         <br />
                         <input placeholder={(mortgageCalculator.interest_rate) + '%' }
@@ -82,21 +83,23 @@ function ModalMortgageCalculator() {
                                 value={interestRate}
                                 onChange={e => setInterestRate(e.target.value)} />
                         <br />
+
                         <label>Closing Costs:</label>
                         <br />
-                        <div className="label">
-                        <input placeholder="Closing Costs" 
-                                className="mortgage-input"
-                                value={closingCosts}
-                                onChange={handleClosingCosts} />
-                        <label className="label">at</label>
-                        <input placeholder="%"
-                                className="percentage-input"
-                                value={closingCostsPercentage}
-                                onChange={handleClosingCostsPercentage} />
+                            <div className="label">
+                                <input placeholder="Closing Costs" 
+                                        className="mortgage-input"
+                                        value={closingCosts}
+                                        onChange={handleClosingCosts} />
+                                <label className="label">at</label>
+                                <input placeholder="%"
+                                        className="percentage-input"
+                                        value={closingCostsPercentage}
+                                        onChange={handleClosingCostsPercentage} />
                                 <label> % </label>
                                 <br />
-                                </div>
+                            </div>
+
                             <label>Loan Term </label>
                             <select
                                 id="demo-simple-select-standard"

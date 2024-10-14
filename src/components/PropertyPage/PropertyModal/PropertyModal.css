@@ -1,324 +1,358 @@
 .modal-header {
-    background-color: #008000;
-    color: white;
-    padding: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-radius: 5px 5px 0 0;
-    margin: 0;
+  background-color: #008000;
+  color: white;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 5px 5px 0 0;
+  margin: 0;
 }
 
 .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.7); /* Dark background with some transparency */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000; /* Ensure it sits above other content */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7); /* Dark background with some transparency */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure it sits above other content */
 }
 
 .modal-content {
-    background: rgb(238, 238, 224);
-    position: relative;
-    min-width: 10%;
-    max-width: 80%;
-    height: 90%;
-    padding: 5px;
-    box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.75);
-    border-radius: 8px;
-    display: flex;
-    flex-direction: column; /* Stack header and body vertically */
-    overflow: scroll;
-  }
+  background: rgb(238, 238, 224);
+  position: relative;
+  min-width: 10%;
+  max-width: 80%;
+  height: 90%;
+  padding: 5px;
+  box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.75);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column; /* Stack header and body vertically */
+  overflow: scroll;
+}
 
-  .modal-body {
-    overflow-y: auto; /* Enable vertical scrolling */
-    flex: 1; /* Take remaining space below the header */
-    padding-left: 10px; /* Space inside the body */
-    padding-right: 10px; /* Space inside the body */
-    padding-bottom: 10px; /* Space inside the body */
-    padding-top: 0px; /* Space inside the body */
-  }
-  
-  .modal-close {
-    background: transparent;
-    position: absolute;
-    top: 7px;
-    right: 6px;
-    border: none;
-    background: #343078;
-    color: white;
-    cursor: pointer;
-    border-width: 1px 1px 3px;
-    border-radius: 2px;
-    padding: 3px 7px;
-    margin: 10px;
-  }
+.modal-body {
+  overflow-y: auto; /* Enable vertical scrolling */
+  flex: 1; /* Take remaining space below the header */
+  padding-left: 10px; /* Space inside the body */
+  padding-right: 10px; /* Space inside the body */
+  padding-bottom: 10px; /* Space inside the body */
+  padding-top: 0px; /* Space inside the body */
+}
 
-  .modal-close:hover {
-    background-color: #7974d7; 
-    transform: scale(1.05); 
-  }
-  
-  /* .modalRight {
-    width: 100%;
-  } */
+.modal-close {
+  background: transparent;
+  position: absolute;
+  top: 7px;
+  right: 6px;
+  border: none;
+  background: #343078;
+  color: white;
+  cursor: pointer;
+  border-width: 1px 1px 3px;
+  border-radius: 2px;
+  padding: 3px 7px;
+  margin: 10px;
+}
 
-  .bold-text {
-    font-weight: bold; /* Make text bold */
-  }
+.modal-close:hover {
+  background-color: #7974d7; 
+  transform: scale(1.05); 
+}
+
+/* .modalRight {
+  width: 100%;
+} */
+
+.bold-text {
+  font-weight: bold; /* Make text bold */
+}
 
 
-  /* BUTTONS INSIDE SECTIONS */
-  .modal-btn {
-    display: block;
-    padding: 5px 10px;
-    border-width: 1px 1px 3px;
-    border-radius: 4px;
-    background-color: #343078;
-    color: #f8f8f8;
-    font-size: 12px;
-    outline: 0;
-    cursor: pointer;
-    margin: .5rem;
-    position: relative;
-    right: -550px;
-  }
+/* BUTTONS INSIDE SECTIONS */
+.modal-btn {
+  display: block;
+  padding: 5px 10px;
+  border-width: 1px 1px 3px;
+  border-radius: 4px;
+  background-color: #343078;
+  color: #f8f8f8;
+  font-size: 12px;
+  outline: 0;
+  cursor: pointer;
+  margin: .5rem;
+  position: relative;
+  right: -550px;
+}
 
-  .modal-btn:hover {
-    background-color: #7974d7; 
-    transform: scale(1.05); 
-  }
+.modal-btn:hover {
+  background-color: #7974d7; 
+  transform: scale(1.05); 
+}
 
-  .modal-btn-2 {
-    display: block;
-    padding: 5px 10px;
-    border-width: 1px 1px 3px;
-    border-radius: 4px;
-    background-color: #343078;
-    color: #f8f8f8;
-    font-size: 12px;
-    font-weight: bold;
-    outline: 0;
-    cursor: pointer;
-    margin: .5rem;
-    position: relative;
-    /* right: -550px; */
-  }
+.modal-btn-2 {
+  display: block;
+  padding: 5px 10px;
+  border-width: 1px 1px 3px;
+  border-radius: 4px;
+  background-color: #343078;
+  color: #f8f8f8;
+  font-size: 12px;
+  font-weight: bold;
+  outline: 0;
+  cursor: pointer;
+  margin: .5rem;
+  position: relative;
+  /* right: -550px; */
+}
 
-  .modal-btn-2:hover {
-    background-color: #7974d7; 
-    transform: scale(1.05); 
-  }
+.modal-btn-2:hover {
+  background-color: #7974d7; 
+  transform: scale(1.05); 
+}
 
-  /* BUTTONS AT BOTTOM OF MODAL */
-  .modal-save-btn {
-    /* display: block; */
-    padding: 5px 10px;
-    border-width: 1px 1px 3px;
-    border-radius: 4px;
-    background-color: #343078;
-    color: #f8f8f8;
-    font-size: 12px;
-    font-weight: bold;
-    outline: 0;
-    cursor: pointer;
-    margin: .5rem;
-    /* position: relative; */
-    right: -250px;
-    width: 120px;
-    max-width: auto;
-  }
+/* BUTTONS AT BOTTOM OF MODAL */
+.modal-save-btn {
+  padding: 5px 10px;
+  border-width: 1px 1px 3px;
+  border-radius: 4px;
+  background-color: #343078;
+  color: #f8f8f8;
+  font-size: 15px;
+  font-weight: bold;
+  outline: 0;
+  cursor: pointer;
+  margin: .5rem;
+  right: -250px;
+  width: 120px;
+  max-width: auto;
+  height: 50px;
+  max-height: auto;
+}
 
-  .modal-save-btn:hover {
-    background-color: #7974d7; 
-    transform: scale(1.05); 
-  }
+.modal-save-btn:hover {
+  background-color: #7974d7; 
+  transform: scale(1.05); 
+}
 
-  .modal-default-btn {
-    /* display: block; */
-    padding: 5px 10px;
-    border-width: 1px 1px 3px;
-    border-radius: 4px;
-    background-color: #343078;
-    color: #f8f8f8;
-    font-size: 12px;
-    font-weight: bold;
-    outline: 0;
-    cursor: pointer;
-    margin: .5rem;
-    /* position: relative; */
-    width: 120px;
-    max-width: auto;
-  }
+.modal-default-btn {
+  padding: 5px 0px;
+  border-width: 1px 1px 3px;
+  border-radius: 4px;
+  background-color: #343078;
+  color: #f8f8f8;
+  font-size: 15px;
+  font-weight: bold;
+  outline: 0;
+  cursor: pointer;
+  margin: .5rem;
+  width: 120px;
+  max-width: auto;
+  height: 50px;
+  max-height: auto;
+}
 
-  .modal-default-btn:hover {
-    background-color: #7974d7; 
-    transform: scale(1.05); 
-  }
+.modal-default-btn:hover {
+  background-color: #7974d7; 
+  transform: scale(1.05); 
+}
 
-  /* INSIDE GRID/SECTIONS IN MODAL */
-  .grid-container {
-    display: grid;
+/* INSIDE GRID/SECTIONS IN MODAL */
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two columns */
+  grid-template-rows: auto auto; /* Two rows */
+  gap: 8px; /* Space between items */
+  margin-top: 20px; /* Space from address strip */
+  padding: 0 10px 10px 10px;
+  width: 100%;
+}
+.grid-container-2 {
+    /* display: grid; */
     grid-template-columns: 1fr 1fr; /* Two columns */
-    grid-template-rows: repeat(2, auto); /* Two rows */
-    gap: 8px; /* Space between items */
+    grid-template-rows: auto auto; /* Two rows */
     margin-top: 20px; /* Space from address strip */
     padding: 0 10px 10px 10px;
+    width: 100%;
+    text-align: center;
   }
-  
-  .section {
+
+.container-profit {
+    width: auto;
+}
+
+.section {
+  border: 1px solid #ccc; /* Border color */
+  border-radius: 5px; /* Rounded corners for the sections */
+  padding: 15px; /* Padding inside sections */
+  background: white; /* Background for the sections */
+  box-sizing: border-box;
+  margin-top: -20px;
+}
+.section-profit-estimation{
     border: 1px solid #ccc; /* Border color */
     border-radius: 5px; /* Rounded corners for the sections */
     padding: 15px; /* Padding inside sections */
     background: white; /* Background for the sections */
     box-sizing: border-box;
-    
-  }
-
-  .section-header {
-    font-weight: bold; /* Make text bold */
-    text-decoration: underline; /* Underline text */
-    margin-bottom: 10px; /* Space below the header */
-    text-align: center;
-  }
-
-  .unordered-list {
-    /* margin: 20px 0; */
-    display: flex;
-    justify-content: flex-start; /* Align items to the left */
-    align-items: left;
-
-  }
-
-  .list-items {
-    margin: 0; /* Remove margin */
-    padding: 0; /* Remove padding */
-    width: 130px;
-  }
-
-  .list-cost {
-    margin: 0; /* Remove margin */
-    padding: 0; /* Remove padding */
-    width: 70px;
-  }
-
-  .table {
-    /* border-top:2px solid #d3d3d3; */
-    /* border-bottom: 2px solid #d3d3d3; */
-    width: 100%;
-    font-size: 15px;
-  }
-
-  /* UPFRONT COSTS SECTION */
-  .upfront-costs {
-    grid-column: 1; /* First column */
-    grid-row: 1; /* First row */
-  }
-
-  /* MORTGAGE CALCULATOR */
-  .label {
-    grid-column: 1; /* First column */
-    grid-row: 1; /* First row */
-    display: flex;
-    justify-content: flex-start;
-    grid-template-columns: 1fr 1fr; /* Two columns */
-    grid-template-rows: repeat(2, auto); /* Two rows */
-  }
-
-  .mortgage-input {
-    width: 150px;
-  }
-
-  .percentage-input {
-    width: 50px;
-  }
-
-/* DELETE BUTTONS WITHIN SECTIONS */
-  .deleteBtn {
-    width: 15px;
-    height: auto;
-    justify-content: space-between;
-  }
-
-.deleteBtn:hover {
-    cursor: pointer;
-    font-size: 11px;
+    width: 100%; /* Adjust to consider padding/borders */
+    max-width: none; /* Remove max-width restriction */
 }
 
-  .months-input {
-    width: 30px;
-  }
+.profit-estimation-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two columns */
+    gap: 10px; /* Space between items */
+}
+  
 
-  .section-totals {
-    margin-top: auto;
-    margin-bottom: 3px;
-    font-size: 20px;
-  }
+.section-header {
+  font-weight: bold; /* Make text bold */
+  text-decoration: underline; /* Underline text */
+  margin-bottom: 10px; /* Space below the header */
+  text-align: center;
+}
 
-  .property-data {
-    display: flex;
-    flex-direction: row;
-  }
-  .property-data-input {
-    margin-top: 12px;
-    margin-bottom: 12px;
-  }
+.unordered-list {
+  /* margin: 20px 0; */
+  display: flex;
+  justify-content: flex-start; /* Align items to the left */
+  align-items: left;
+  flex-direction: column;
 
-  .width-30 {
-    width: 30px;
-  }
+}
 
-  .item-form {
-    display: flex;
+.list-items {
+  margin: 0; /* Remove margin */
+  padding: 0; /* Remove padding */
+  width: 130px;
+}
 
-  }
+.list-cost {
+  margin: 0; /* Remove margin */
+  padding: 0; /* Remove padding */
+  width: 70px;
+}
 
-  .item-list-total {
-    border-bottom: 2px solid #d3d3d3;
-    font-weight: bold;
-    margin-bottom: 50px;
-  }
+.table {
+  /* border-top:2px solid #d3d3d3; */
+  /* border-bottom: 2px solid #d3d3d3; */
+  width: 100%;
+  font-size: 15px;
+}
 
-  .calculation-explanation {
-    margin-top: 3px;
-    font-size: 12px;
-    font-style: italic;
-  }
+/* UPFRONT COSTS SECTION */
+.upfront-costs {
+  grid-column: 1; /* First column */
+  grid-row: 1; /* First row */
+}
 
-  .top-border {
-    border-top:2px solid #d3d3d3;
-  }
+/* MORTGAGE CALCULATOR */
+.label {
+  grid-column: 1; /* First column */
+  grid-row: 1; /* First row */
+  display: flex;
+  justify-content: flex-start;
+  grid-template-columns: 1fr 1fr; /* Two columns */
+  grid-template-rows: repeat(2, auto); /* Two rows */
+}
 
-  .bottom-margin-3 {
-    margin-bottom: 3px;
-  }
+.mortgage-input {
+  width: 150px;
+}
 
-  .botttom-margin-30 {
-    margin-bottom: 30px;
-  }
+.percentage-input {
+  width: 50px;
+} /* END MORTGAGE CALCULATOR */
 
-  .main-focus{
-    background-color: rgb(214, 234, 214);
-    border: rgb(85, 84, 84) 2px solid;
-    margin-top: 70px;
-    border-radius: 5px;
-  }
 
-  .center {
-    text-align: center;
-  }
+/* DELETE BUTTONS WITHIN SECTIONS */
+.deleteBtn {
+  width: 15px;
+  height: auto;
+  justify-content: space-between;
+}
 
-  .modal-buttons {
-    margin-top: 10px;
-    margin-bottom: 0px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    /* align-items: center; */
-  }
+.deleteBtn:hover {
+  cursor: pointer;
+  font-size: 11px;
+}
+
+.months-input {
+  width: 30px;
+}
+
+.section-totals {
+  margin-top: auto;
+  margin-bottom: 3px;
+  font-size: 20px;
+}
+
+.property-data {
+  display: flex;
+  flex-direction: row;
+}
+.property-data-input {
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+.width-30 {
+  width: 30px;
+}
+
+.item-form {
+  display: flex;
+
+}
+
+.item-list-total {
+  border-bottom: 2px solid #d3d3d3;
+  font-weight: bold;
+  margin-bottom: 50px;
+}
+
+.calculation-explanation {
+  margin-top: 3px;
+  font-size: 12px;
+  font-style: italic;
+}
+
+.top-border {
+  border-top:2px solid #d3d3d3;
+}
+
+.bottom-margin-3 {
+  margin-bottom: 3px;
+}
+
+.botttom-margin-30 {
+  margin-bottom: 30px;
+}
+
+.main-focus{
+  background-color: rgb(214, 234, 214);
+  border: rgb(85, 84, 84) 2px solid;
+  margin-top: 3px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  padding: 0px 10px;
+}
+
+.center {
+  text-align: center;
+}
+
+.modal-buttons {
+  margin-top: 10px;
+  margin-bottom: 0px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  /* align-items: center; */
+}

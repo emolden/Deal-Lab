@@ -96,12 +96,7 @@ router.post('/:id', async (req, res) => {
             // monthlyPayment = mortgageCalculatorResponse.data.monthly_payment;
             // annualPayment = mortgageCalculatorResponse.data.annual_payment;
             totalInterestPaid = mortgageCalculatorResponse.data.total_interest_paid;
-            // console.log('mortgageCalculatorResponse:', mortgageCalculatorResponse.data);
-            // console.log('totalInterestPaid:', totalInterestPaid);
-            
-
-            interestRateAnnual = Number(((((totalInterestPaid / purchasePrice) / (defaultLoanTerm * 365)) * 365) * 100).toFixed(3));
-            // console.log('interestRateAnnual', interestRateAnnual);
+            interestRateAnnual = Number(((((totalInterestPaid / baseLoanAmount) / (defaultLoanTerm * 365)) * 365) * 100).toFixed(3));
             
 
 
@@ -217,8 +212,8 @@ router.put('/:id', async (req, res) => {
     let downPaymentPercentage = req.body.downPaymentPercentage;
     let closingCosts = req.body.closingCosts;
     let closingCostsPercentage = req.body.closingCostsPercentage;
-    let interestRate = req.body.interestRate;
-    let loanTerm = req.body.loanTerm;
+    let interestRate;
+    let defaultLoanTerm = 30;
     let purchasePrice;
     let baseLoanAmount;
     let totalInterestPaid;
@@ -257,7 +252,6 @@ router.put('/:id', async (req, res) => {
         
         const mortgageCalculationsDataObject = {
             interest_rate: interestRate,
-            loan_term: loanTerm,
             down_payment: downPayment,
             down_payment_percentage: downPaymentPercentage,
             base_loan_amount: baseLoanAmount,
@@ -269,7 +263,7 @@ router.put('/:id', async (req, res) => {
         console.log('newMortgageCalculationsDataObject:', newMortgageCalculationsDataObject);
 
         interestRate = newMortgageCalculationsDataObject.interestRate;
-        loanTerm = newMortgageCalculationsDataObject.loanTerm;
+        // loanTerm = newMortgageCalculationsDataObject.loanTerm;
         downPayment = newMortgageCalculationsDataObject.downPayment;
         downPaymentPercentage = newMortgageCalculationsDataObject.downPaymentPercentage;
         baseLoanAmount = newMortgageCalculationsDataObject.baseLoanAmount;
@@ -280,14 +274,14 @@ router.put('/:id', async (req, res) => {
         // ================ Axios for MORTGAGE CALCULATOR API
         const mortgageCalculatorResponse = await axios({
             method: 'GET',
-            url: `https://api.api-ninjas.com/v1/mortgagecalculator?loan_amount=${purchasePrice}&interest_rate=${interestRate}&duration_years=${loanTerm}&downpayment=${downPayment}`,
+            url: `https://api.api-ninjas.com/v1/mortgagecalculator?loan_amount=${purchasePrice}&interest_rate=${interestRate}&duration_years=${defaultLoanTerm}&downpayment=${downPayment}`,
             headers: {
                 'accept': 'application/json',
                 'X-Api-Key': api_key
             }
         })
         totalInterestPaid = mortgageCalculatorResponse.data.total_interest_paid;
-        interestRateAnnual = Number(((((totalInterestPaid / purchasePrice) / (loanTerm * 365)) * 365) * 100).toFixed(3));
+        interestRateAnnual = Number(((((totalInterestPaid / purchasePrice) / (defaultLoanTerm * 365)) * 365) * 100).toFixed(3));
         interestRateMonthly = interestRateAnnual / 12;
         interestDecimalMonthly = interestRateMonthly / 100;
         interestPaymentMonthly = interestDecimalMonthly * baseLoanAmount;
@@ -303,7 +297,7 @@ router.put('/:id', async (req, res) => {
             interestRateMonthly,
             interestDecimalMonthly,
             interestPaymentMonthly,
-            loanTerm,
+            defaultLoanTerm,
             propertyId
         ]
 
@@ -331,8 +325,7 @@ router.put('/:id', async (req, res) => {
 })
 
 function checkmortgageCalculationsData(userData, databaseData, price) {
-    const interestRate = userData.interest_rate === '' ? databaseData.interest_rate : userData.interest_rate;
-    const loanTerm = userData.loan_term === '' ? databaseData.loan_term : userData.loan_term;
+    const interestRate = databaseData.interest_rate;
     let downPayment;
     let downPaymentPercentage;
     let closingCosts;
@@ -383,7 +376,6 @@ function checkmortgageCalculationsData(userData, databaseData, price) {
     let baseLoanAmount = price - downPayment;
     return data = {
         interestRate: interestRate,
-        loanTerm: loanTerm,
         downPayment: downPayment,
         downPaymentPercentage: downPaymentPercentage,
         baseLoanAmount: baseLoanAmount,

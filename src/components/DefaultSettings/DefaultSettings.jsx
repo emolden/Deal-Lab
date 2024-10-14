@@ -48,7 +48,9 @@ function DefaultSettings() {
 
   console.log('defaultSettings data:', defaultSettings);
   console.log('user data:', user);
-  
+  const updateHoldingPeriodInput = () => {
+    setHoldingPeriod('4')
+  }
 
   return (
     <div className="defaultSettings">
@@ -56,7 +58,7 @@ function DefaultSettings() {
       <h2 className="defaultSettingsTitle">Default Settings</h2>
       <div>
       <div className='holdingPeriodDefault'>
-        <span className='defaultSettingsText'>Holding Period (in months):</span>
+        <span className='defaultSettingsText' onClick={updateHoldingPeriodInput}>Holding Period (in months):</span>
         <input className='holdingPeriodInput'
               type='number'
               value={holdingPeriod}
