@@ -9,13 +9,12 @@ import ModalMortgageCalculator from './ModalMortgageCalculator/ModalMortgageCalc
 import Swal from 'sweetalert2';
 
 
-const PropertyModal = ({ isOpen, onClose, propertyCard, userId }) => {
+const PropertyModal = ({ isOpen, onClose, propertyCard, userId, setSelectedProperty }) => {
 
   const dispatch = useDispatch();
 
   const propertyOfInterest = useSelector((store) => store.propertyOfInterest);
 
-  const [dataFromDatabase, setDataFromDatabase] = useState({});
   
   
 
@@ -23,8 +22,6 @@ const PropertyModal = ({ isOpen, onClose, propertyCard, userId }) => {
     
     if (isOpen) {
       document.body.style.overflow = 'hidden';
-      setDataFromDatabase(propertyOfInterest)
-      console.log("data from database",dataFromDatabase)
     } else {
       document.body.style.overflow = 'unset';
     }
@@ -84,6 +81,7 @@ const PropertyModal = ({ isOpen, onClose, propertyCard, userId }) => {
         userId: userId
     }
   })
+  setSelectedProperty(propertyOfInterest.property[0])
   Swal.fire({
     icon: "success",
     title: "Your work has been saved",
