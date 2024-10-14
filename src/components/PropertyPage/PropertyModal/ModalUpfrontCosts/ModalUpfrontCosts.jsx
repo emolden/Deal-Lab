@@ -52,8 +52,8 @@ function ModalUpfrontCosts() {
   }
 
   const RepairItemsInputTwo = () => {
-    setRepairName('Paint');
-    setRepairItemCost('500');
+    setRepairName('Clean Carpet');
+    setRepairItemCost('750');
   }
 
   const updatePurchasePrice = () => {
