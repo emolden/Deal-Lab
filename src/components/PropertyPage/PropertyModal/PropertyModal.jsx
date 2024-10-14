@@ -14,7 +14,6 @@ const PropertyModal = ({ isOpen, onClose, propertyCard, userId }) => {
   const dispatch = useDispatch();
 
   const propertyOfInterest = useSelector((store) => store.propertyOfInterest);
-  
 
   useEffect(() => {
     if (isOpen) {
@@ -83,8 +82,6 @@ const PropertyModal = ({ isOpen, onClose, propertyCard, userId }) => {
     showConfirmButton: false,
     timer: 1500
   });
-
-  const propertyOfInterest = useSelector((store) => store.propertyOfInterest);
 }
 
 const formattedCurrency = (value) => {
