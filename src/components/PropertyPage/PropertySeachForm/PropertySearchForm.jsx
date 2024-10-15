@@ -94,7 +94,7 @@ function PropertySearchForm({userId}) {
     }
 
     const inputPropOne = () => {
-      navigator.clipboard.writeText('12505')
+      navigator.clipboard.writeText('2115 Burke')
         .then(() => {
           console.log('text copied to clipboard');
         })
@@ -104,7 +104,7 @@ function PropertySearchForm({userId}) {
     }
 
     const inputPropTwo = () => {
-      navigator.clipboard.writeText('2115 Burke')
+      navigator.clipboard.writeText('12505')
         .then(() => {
           console.log('text copied to clipboard');
         })

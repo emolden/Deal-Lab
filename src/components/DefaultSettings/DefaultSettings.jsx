@@ -53,7 +53,7 @@ function DefaultSettings() {
   // console.log('defaultSettings data:', defaultSettings);
   // console.log('user data:', user);
   const updateHoldingPeriodInput = () => {
-    setHoldingPeriod('4')
+    // setHoldingPeriod('4')
   }
 
   const handleMouseMove = (e) => {
