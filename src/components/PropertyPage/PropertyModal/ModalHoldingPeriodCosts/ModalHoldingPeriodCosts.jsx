@@ -51,12 +51,12 @@ const updateTaxes = (propertyId) => {
   }
 
   const updateHoldingInputOne = () => {
-    setHoldingName('Yard Work')
-    setHoldingItemCost('150')
+    // setHoldingName('Yard Work')
+    // setHoldingItemCost('150')
   }
   const updateHoldingInputTwo = () => {
-    setHoldingName('Utilities')
-    setHoldingItemCost('450')
+    // setHoldingName('Utilities')
+    // setHoldingItemCost('450')
   }
 
   return (

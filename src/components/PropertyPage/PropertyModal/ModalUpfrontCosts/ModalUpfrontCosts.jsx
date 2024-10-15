@@ -8,7 +8,7 @@ function ModalUpfrontCosts() {
   const dispatch = useDispatch();
 
   const propertyOfInterest = useSelector((store) => store.propertyOfInterest);
-  const mortgageCalculator = useSelector(store => store.mortgageCalculator);
+  // const mortgageCalculator = useSelector(store => store.mortgageCalculator);
 
   const [repairName, setRepairName] = useState("");
   const [repairItemCost, setRepairItemCost] = useState("");
@@ -18,7 +18,7 @@ function ModalUpfrontCosts() {
   const [closingCostsPercentage, setClosingCostsPercentage] = useState('');
 
   const [showText, setShowText] = useState(false);
-  const [showLoanText, setShowLoanText] = useState(false);
+  // const [showLoanText, setShowLoanText] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
   const purchasePrice = (Object.keys(propertyOfInterest).length && propertyOfInterest.property[0].purchase_price);
@@ -57,56 +57,56 @@ function ModalUpfrontCosts() {
   }
 
   const updatePurchasePrice = () => {
-    dispatch({
-      type: 'UPDATE_PROPERTY_PURCHASE_PRICE', 
-      payload: '450000'
-    })
+    // dispatch({
+    //   type: 'UPDATE_PROPERTY_PURCHASE_PRICE', 
+    //   payload: '462000'
+    // })
   }
 
-  const updateMortgageCalculator = () => {
-    setDownPayment('10000')
-    setDownPaymentPercentage('5')
-    setInterestRate('6.5')
-    setClosingCosts('50000')
-    setClosingCostsPercentage('10')
-  }
+  // const updateMortgageCalculator = () => {
+  //   setDownPayment('10000')
+  //   setDownPaymentPercentage('5')
+  //   setInterestRate('6.5')
+  //   setClosingCosts('50000')
+  //   setClosingCostsPercentage('10')
+  // }
 
-  const handleDownPayment = (e) => {
-    const newPercentage = Number((e.target.value / purchasePrice) * 100).toFixed(2);
-    setDownPayment(e.target.value)
-    setDownPaymentPercentage(newPercentage)
-  }
+  // const handleDownPayment = (e) => {
+  //   const newPercentage = Number((e.target.value / purchasePrice) * 100).toFixed(2);
+  //   setDownPayment(e.target.value)
+  //   setDownPaymentPercentage(newPercentage)
+  // }
 
-  const handleDownPaymentPercentage = (e) => {
-    const newNumber = Number((e.target.value / 100) * purchasePrice).toFixed(2);
-    setDownPaymentPercentage(e.target.value)
-    setDownPayment(newNumber)
-  }
+  // const handleDownPaymentPercentage = (e) => {
+  //   const newNumber = Number((e.target.value / 100) * purchasePrice).toFixed(2);
+  //   setDownPaymentPercentage(e.target.value)
+  //   setDownPayment(newNumber)
+  // }
 
-  const handleClosingCosts = (e) => {
-    const newPercentage = Number((e.target.value / purchasePrice) * 100).toFixed(2);
-    setClosingCosts(e.target.value)
-    setClosingCostsPercentage(newPercentage)
-  }
+  // const handleClosingCosts = (e) => {
+  //   const newPercentage = Number((e.target.value / purchasePrice) * 100).toFixed(2);
+  //   setClosingCosts(e.target.value)
+  //   setClosingCostsPercentage(newPercentage)
+  // }
 
-  const handleClosingCostsPercentage = (e) => {
-    const newNumber = Number((e.target.value / 100) * purchasePrice).toFixed(2);
-    setClosingCostsPercentage(e.target.value)
-    setClosingCosts(newNumber)
-  }
+  // const handleClosingCostsPercentage = (e) => {
+  //   const newNumber = Number((e.target.value / 100) * purchasePrice).toFixed(2);
+  //   setClosingCostsPercentage(e.target.value)
+  //   setClosingCosts(newNumber)
+  // }
 
-  const handleUpdateCalculations = () => {
-      dispatch({
-        type: 'UPDATE_CALCULATIONS',
-        payload: {
-          propertyId: propertyId,
-          downPayment: downPayment,
-          downPaymentPercentage: downPaymentPercentage,
-          closingCosts: closingCosts,
-          closingCostsPercentage: closingCostsPercentage
-        }
-      })
-  }
+  // const handleUpdateCalculations = () => {
+  //     dispatch({
+  //       type: 'UPDATE_CALCULATIONS',
+  //       payload: {
+  //         propertyId: propertyId,
+  //         downPayment: downPayment,
+  //         downPaymentPercentage: downPaymentPercentage,
+  //         closingCosts: closingCosts,
+  //         closingCostsPercentage: closingCostsPercentage
+  //       }
+  //     })
+  // }
 
 const handleMouseMove = (e) => {
   setPosition({ x: e.clientX, y: e.clientY });
