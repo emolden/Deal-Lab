@@ -27,7 +27,7 @@ function DefaultRepairItems({defaultRepairs}) {
 
   const autoRepairItemOne = () => {
     setRepairName('Budget')
-    setRepairCost('10000')
+    setRepairCost('15000')
   }
 
   const autoRepairItemTwo = () => {
