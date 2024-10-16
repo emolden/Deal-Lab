@@ -5,17 +5,18 @@ import { useSelector, useDispatch } from 'react-redux';
 import ModalUpfrontCosts from './ModalUpfrontCosts/ModalUpfrontCosts'; // Import your specific components
 import ModalHoldingPeriodCosts from './ModalHoldingPeriodCosts/ModalHoldingPeriodCosts';
 import ModalProfitEstimation from './ModalProfitEstimation/ModalProfitEstimation';
-import ModalMortgageCalculator from './ModalMortgageCalculator/ModalMortgageCalculator';
 import Swal from 'sweetalert2';
 
 
-const PropertyModal = ({ isOpen, onClose, propertyCard, userId }) => {
+const PropertyModal = ({ isOpen, onClose, propertyCard, userId, setSelectedProperty }) => {
 
   const dispatch = useDispatch();
 
   const propertyOfInterest = useSelector((store) => store.propertyOfInterest);
 
+//Checks if the mdoal is open
   useEffect(() => {
+    
     if (isOpen) {
       document.body.style.overflow = 'hidden';
     } else {
@@ -24,10 +25,12 @@ const PropertyModal = ({ isOpen, onClose, propertyCard, userId }) => {
     return () => {
       document.body.style.overflow = 'unset';
     }
+   
   }, [isOpen]);
 
   if (!isOpen) return null;
 
+  //runs when the user clicks "set back to default"
   const handleBackToDefault = () => {
     Swal.fire({
       title: "Are you sure you want to apply the Default Settings?",
@@ -36,9 +39,10 @@ const PropertyModal = ({ isOpen, onClose, propertyCard, userId }) => {
       showCancelButton: true,
       confirmButtonText: "Yes, apply default settings",
       cancelButtonText: "Cancel",
-      // reverseButtons: true
     }).then((result) => {
     if (result.isConfirmed) {
+      //user confirms they want to set back to default
+      //dispatch sent to properties saga
     dispatch({
       type: 'UPDATE_BACK_TO_DEFAULT',
       payload: propertyOfInterest.property[0].id
@@ -51,7 +55,7 @@ const PropertyModal = ({ isOpen, onClose, propertyCard, userId }) => {
     });
   }
   else if (
-    /* Read more about handling dismissals below */
+    //if the user cancels request
     result.dismiss === Swal.DismissReason.cancel
   ) {
     Swal.fire({
@@ -63,7 +67,8 @@ const PropertyModal = ({ isOpen, onClose, propertyCard, userId }) => {
   }
 });
   }
-
+  
+  //runs when the user clicks the "save" button
   //sends a dispatch to the properties saga
   const saveUpdatedPropertyInfo = () => {
     dispatch({
@@ -76,6 +81,7 @@ const PropertyModal = ({ isOpen, onClose, propertyCard, userId }) => {
         userId: userId
     }
   })
+  setSelectedProperty(propertyOfInterest.property[0])
   Swal.fire({
     icon: "success",
     title: "Your work has been saved",
@@ -92,19 +98,23 @@ const formattedCurrency = (value) => {
 
 
   return (
+
     <div className="modal-overlay" >
+
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
 
         <div>
-          <button onClick={onClose} className="modal-close">X</button>
+          <button onClick={() =>onClose(propertyOfInterest, propertyCard)} className="modal-close">X</button>
           <h2 className="modal-header">{propertyCard.address}</h2>
         </div>
         <div className = "modal-buttons">
           <button className="modal-default-btn" onClick={handleBackToDefault}>Set to Default Settings</button>
+          {Object.keys(propertyOfInterest).length && 
           <div className = "main-focus">
             <p className='bold-text section-totals center' >Monthly Profit: {formattedCurrency(propertyOfInterest.property[0].monthly_profit)}</p>
             <p  className="calculation-explanation center">(Profit / Holding Period)</p>
           </div>
+          }
           <button className="modal-save-btn" onClick={saveUpdatedPropertyInfo}>Save</button>
         </div>
         <div className="modal-body">
@@ -118,11 +128,6 @@ const formattedCurrency = (value) => {
             <h3 className='section-header'>Holding Period Costs</h3>
             <ModalHoldingPeriodCosts />
           </div>
-
-          {/* <div className='section mortgage-calculator'>
-            <h3 className='section-header'>Mortgage Calculator</h3>
-            <ModalMortgageCalculator />
-          </div> */}
 
           <div className='section-profit-estimation' style={{ gridColumn: '1 / -1' }}>
             <h3 className='section-header'>Profit Estimation</h3>
