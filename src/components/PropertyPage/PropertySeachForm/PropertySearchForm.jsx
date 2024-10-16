@@ -28,7 +28,7 @@ function PropertySearchForm({userId}) {
     loadScript();
   }, []);
   
-  
+  //runs when the user clicks "add"
   //sends the formattedAddress to the properties.saga
   const addAddress = (e) => {
     e.preventDefault();
