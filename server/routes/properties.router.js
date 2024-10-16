@@ -54,7 +54,8 @@ router.get('/', async (req, res) => {
 
     connection = await pool.connect()
     await connection.query('BEGIN;')
-
+    
+    //select the properties associated with the user
     const propertiesText = `
         SELECT * FROM "properties"
             WHERE "user_id" = $1
@@ -63,6 +64,7 @@ router.get('/', async (req, res) => {
     const propertiesResult = await connection.query(propertiesText, [userId])
     const properties = propertiesResult.rows
 
+    //select the repair items associated with the properties
     const repairText = `
       SELECT 
         "properties"."id" AS "id",
@@ -78,6 +80,7 @@ router.get('/', async (req, res) => {
     const repairResult = await connection.query(repairText, [userId])
     const repairItems = repairResult.rows
 
+    //select the holding items associated with the properties
     const holdingText = `
       SELECT
         "properties"."id" AS "id",
@@ -128,10 +131,7 @@ router.post('/', async (req, res) => {
   let listingResponse = {};
   let recordsResponse = {};
   let valueEstimateResponse = {};
-
   let taxYear;
-  
-  console.log('ADDRESS:', address, userId);
   
   let connection;
   try {
@@ -146,10 +146,9 @@ router.post('/', async (req, res) => {
     `
     const checkTimeStampResults = await connection.query(checkTimeStampSqlText, [addressId]);
     const checkTimeStampData = checkTimeStampResults.rows;
-    console.log('checkTimeStampData is:', checkTimeStampData);
       
   
-  
+  //if there is no property_api_data from the last 24 hours
     if (checkTimeStampData.length === 0) {
       // ================ Axios for VALUE ESTIMATE (afterRepairValue)
       const theValueEstimateResponse = await axios({
@@ -164,8 +163,6 @@ router.post('/', async (req, res) => {
       valueEstimateResponse = theValueEstimateResponse;
       purchasePrice = valueEstimateResponse.data.price;
       afterRepairValue = valueEstimateResponse.data.priceRangeHigh;
-      console.log("Data from valueEstimateResponse:", valueEstimateResponse.data);
-
 
 
       // ================ Axios for RECORDS (taxesYearly)
@@ -178,7 +175,6 @@ router.post('/', async (req, res) => {
         }
       })
       recordsResponse = theRecordsResponse;
-      console.log("Data from recordsResponse:", recordsResponse.data);
 
 
       // ================ Axios for LISTING
@@ -199,7 +195,7 @@ router.post('/', async (req, res) => {
 
       } catch(error) {
         console.log('Address cannot be found in listing.');
-
+        //use other data for purchase price
         listingResponse = {data: [{
           formattedAddress: formattedAddress,
           price: purchasePrice,
@@ -209,7 +205,6 @@ router.post('/', async (req, res) => {
           squareFootage: (recordsResponse.data[0].squareFootage ? recordsResponse.data[0].squareFootage : 1500)
         }]}
       }
-      console.log("Data from listingResponse:", listingResponse.data);
 
 
 
@@ -217,6 +212,7 @@ router.post('/', async (req, res) => {
       const lastYear = new Date().getFullYear() - 1;
       taxYear = recordsResponse.data[0].propertyTaxes;
       
+      //check if taxes exist in the records response
       if (!taxYear) {
           taxYear = null;
       } else if (taxYear) {
@@ -235,6 +231,7 @@ router.post('/', async (req, res) => {
           listingResponse.data[0].squareFootage
       ]
 
+      //insert new row in property api data table with all data from APIs
       const propertyApiDataSqlText = `
           INSERT INTO "property_api_data"
           ("google_address_id", "address", "purchase_price", "taxes_yearly", "after_repair_value", 
@@ -245,28 +242,13 @@ router.post('/', async (req, res) => {
       `
       const propertyApiDataResults = await connection.query(propertyApiDataSqlText, propertyApiData);
       propertyApiId = propertyApiDataResults.rows[0].id;
-      console.log('propertyApiId: ', propertyApiId)
 
-    } else if (checkTimeStampData.length > 0) {
-      console.log('Property already exists in database!');
+    } 
+    //If a property already exists in the api data table with data within 24 hours
+    //use the details from this row to save property info
+    else if (checkTimeStampData.length > 0) {
 
-      // propertyApiId = checkTimeStampData[0].id;
-
-      // //get property details from the properties api data table
-      // const getPropertyInfoText = `
-      //   SELECT
-      //     "address",
-      //     "purchase_price",
-      //     "taxes_yearly",
-      //     "after_repair_value"
-      //     FROM "property_api_data"
-      //     WHERE "id" = $1;
-      //   `;
-      // const getPropertyInfoResponse = await connection.query(getPropertyInfoText, [propertyApiId]);
-      // formattedAddress = getPropertyInfoResponse.rows[0].address;
-      // purchasePrice = getPropertyInfoResponse.rows[0].purchase_price;
-      // taxYear = getPropertyInfoResponse.rows[0].taxes_yearly;
-      // afterRepairValue = getPropertyInfoResponse.rows[0].after_repair_value;
+      afterRepairValue = getPropertyInfoResponse.rows[0].after_repair_value;
 
       const mostRecentCheck = checkTimeStampData.length - 1;
 
@@ -299,9 +281,7 @@ router.post('/', async (req, res) => {
         ($1, $2, $3, $4, $5, $6) RETURNING id;
     `;
     const propertiesResults = await connection.query(propertiesSqlText, propertiesData);
-    propertyId = propertiesResults.rows[0].id;
-    console.log('This is propertyId:', propertyId);
-    
+    propertyId = propertiesResults.rows[0].id;    
 
 
     // ================ SQL insert into table: HOLDING
@@ -310,8 +290,8 @@ router.post('/', async (req, res) => {
         WHERE "user_id" = $1;
     `;
     const getDefaultHoldingsResults = await connection.query(getDefaultHoldingsText, [userId]);
-    console.log('getDefaultHoldingsResult: ', getDefaultHoldingsResults.rows)
 
+    //insert all default holding items in to holding items table
     for(let holdingItem of getDefaultHoldingsResults.rows) {
       const addHoldingItemText = `
         INSERT INTO "holding_items"
@@ -332,7 +312,6 @@ router.post('/', async (req, res) => {
     `;
     const totalHoldingCostValues = [propertyId];
     const totalHoldingCostResults = await connection.query(totalHoldingCostText, totalHoldingCostValues);
-    console.log('sum of holding items. expected: 200', totalHoldingCostResults.rows);
     const monthlyHoldingCost = Number(totalHoldingCostResults.rows[0].monthly_holding_total) + (taxYear / 12);
 
 
@@ -343,8 +322,8 @@ router.post('/', async (req, res) => {
       WHERE "user_id" = $1;
     `;
     const getDefaultRepairsResults = await connection.query(getDefaultRepairsText, [userId]);
-    console.log('getDefaultRepairsResult: ', getDefaultRepairsResults.rows)
 
+    //insert all repair holding items in to repair items table
     for(let repairItem of getDefaultRepairsResults.rows) {
       const addRepairItemText = `
         INSERT INTO "repair_items"
@@ -365,7 +344,6 @@ router.post('/', async (req, res) => {
     `;
     const totalRepairCostValues = [propertyId];
     const totalRepairCostResults = await connection.query(totalRepairCostText, totalRepairCostValues);
-    console.log('sum of repair items. expected: 200', totalRepairCostResults.rows[0].total_repair_cost)
     const totalRepairs = totalRepairCostResults.rows[0].total_repair_cost
 
     // ================ SQL select default holding period: USER
@@ -376,10 +354,10 @@ router.post('/', async (req, res) => {
       WHERE "id" = $1;
     `;
     const getDefaultHoldingPeriodResults = await connection.query(getDefaultHoldingPeriodText, [userId]);
-    console.log('getDefaultHoldingPeriodResult: ', getDefaultHoldingPeriodResults.rows)
     const defaultHoldingPeriod = getDefaultHoldingPeriodResults.rows[0].defaultHoldingPeriod
 
     // ================ SQL update table: PROPERTIES
+    //All the calculations for the property
     const totalUpfrontCost = upfrontCost(totalRepairs, purchasePrice);
     const cost = totalCost(totalRepairs, purchasePrice, defaultHoldingPeriod, monthlyHoldingCost);
     const holdingCost = totalHoldingCost(defaultHoldingPeriod, monthlyHoldingCost);
@@ -399,10 +377,7 @@ router.post('/', async (req, res) => {
     `;
 
     const updatePropertiesValues = [totalRepairs, totalUpfrontCost, monthlyHoldingCost, holdingCost, cost, totalProfit, totalMonthlyProfit, propertyId];
-
     const updatePropertiesResults = await connection.query(updatePropertiesText, updatePropertiesValues);
-
-    console.log('Property posted/updated in database!');
     
     await connection.query('Commit;');
     res.sendStatus(201);
@@ -421,7 +396,6 @@ router.post('/', async (req, res) => {
  * ----- DELETE property: deleteProperty
  */
 router.delete('/:id', (req, res) => {
-    // console.log('/api/properties/id delete route received a request! ', req.params.id)
     const propertyId = req.params.id;
 
     const sqlText = `
@@ -445,7 +419,6 @@ router.delete('/:id', (req, res) => {
 //put route updates the holding period, purchase price, and after repair 
 //value for a specific property in the database
 router.put('/', async (req, res) => {
-  console.log('/api/properties put route received a request! ', req.body)
   const propertyId = Number(req.body.propertyId);
   const holdingPeriod = Number(req.body.holdingPeriod);
   const purchasePrice = Number(req.body.purchasePrice);
@@ -522,7 +495,6 @@ router.put('/', async (req, res) => {
  * ----- GET property of interest: getPropertyOfInterest
  */
 router.get('/propertyOfInterest/:id', rejectUnauthenticated, async (req, res) => {
-  // console.log('in the /api/properties/propertyOfInterest/id route: ', req.params.id);  
   
   let connection;
   try {
@@ -540,7 +512,6 @@ router.get('/propertyOfInterest/:id', rejectUnauthenticated, async (req, res) =>
     `;
     const propertyValue = [propertyId]
     const propertyResult = await connection.query(propertyText, propertyValue);
-    // console.log('database reponse to property: ', propertyResult.rows)
 
 
     //request repair items for specific property
@@ -557,7 +528,6 @@ router.get('/propertyOfInterest/:id', rejectUnauthenticated, async (req, res) =>
     `;
     const repairItemValue = [propertyId]
     const repairItemResult = await connection.query(repairItemText, repairItemValue);
-    // console.log('database reponse to repairItem: ', repairItemResult.rows)
 
   
       //request holding items for specific property
@@ -574,7 +544,6 @@ router.get('/propertyOfInterest/:id', rejectUnauthenticated, async (req, res) =>
     `;
     const holdingItemValue = [propertyId]
     const holdingItemResult = await connection.query(holdingItemText, holdingItemValue);
-    // console.log('database reponse to holdingItem: ', holdingItemResult.rows)
 
 
     await connection.query('COMMIT;')
@@ -601,7 +570,6 @@ router.get('/propertyOfInterest/:id', rejectUnauthenticated, async (req, res) =>
  * ----- PUT back to default: updateBackToDefault
  */
 router.put('/backToDefault/:id', async (req, res) => {
-  console.log('params.id:', req.params.id);
   const propertyId = req.params.id;
   const userId = req.user.id;
   const connection = await pool.connect()
@@ -643,7 +611,6 @@ router.put('/backToDefault/:id', async (req, res) => {
         WHERE "id" = $1;
     `
     const getAddressResponse = await pool.query(getAddressSqlText, [propertyId])
-    console.log('get address response: ', getAddressResponse.rows)
     propertyApiId = getAddressResponse.rows[0].property_api_id;
 
 
@@ -656,7 +623,6 @@ router.put('/backToDefault/:id', async (req, res) => {
     `
     const checkTimeStampResults = await pool.query(checkTimeStampSqlText, [propertyApiId]);
     const checkTimeStampData = checkTimeStampResults.rows;
-    console.log('checkTimeStampData is:', checkTimeStampData);
       
   
   
@@ -673,7 +639,6 @@ router.put('/backToDefault/:id', async (req, res) => {
       valueEstimateResponse = theValueEstimateResponse;
       purchasePrice = Number(valueEstimateResponse.data.price);
       afterRepairValue = Number(valueEstimateResponse.data.priceRangeHigh);
-      console.log("Data from valueEstimateResponse:", valueEstimateResponse.data);
 
 
 
@@ -687,7 +652,6 @@ router.put('/backToDefault/:id', async (req, res) => {
         }
       })
       recordsResponse = theRecordsResponse;
-      console.log("Data from recordsResponse:", recordsResponse.data);
 
 
       // ================ Axios for LISTING
@@ -716,7 +680,6 @@ router.put('/backToDefault/:id', async (req, res) => {
           squareFootage: (recordsResponse.data[0].squareFootage ? recordsResponse.data[0].squareFootage : 1500)
         }]}
       }
-      console.log("Data from listingResponse:", listingResponse.data);
 
 
 
@@ -753,7 +716,6 @@ router.put('/backToDefault/:id', async (req, res) => {
       propertyApiId = propertyApiDataResults.rows[0].id;
 
     } else if (checkTimeStampData.length > 0) {
-      console.log('Property already exists in database!');
       const mostRecentCheck = checkTimeStampData.length - 1;
 
       propertyApiId = checkTimeStampData[mostRecentCheck].id;
@@ -771,7 +733,6 @@ router.put('/backToDefault/:id', async (req, res) => {
         WHERE "user_id" = $1;
     `;
     const getDefaultHoldingsResults = await pool.query(getDefaultHoldingsText, [userId]);
-    console.log('getDefaultHoldingsResult: ', getDefaultHoldingsResults.rows)
 
     for(let holdingItem of getDefaultHoldingsResults.rows) {
       const addHoldingItemText = `
@@ -794,10 +755,7 @@ router.put('/backToDefault/:id', async (req, res) => {
     `;
     const totalHoldingCostValues = [userId];
     const totalHoldingCostResults = await connection.query(totalHoldingCostText, totalHoldingCostValues);
-    console.log('sum of holding items. expected: 200', totalHoldingCostResults.rows);
-    console.log('tax Year: ', taxYear)
     const monthlyHoldingCost = Number(totalHoldingCostResults.rows[0].monthly_holding_total) + (Number(taxYear) / 12);
-    console.log('monthly holding cost: ', monthlyHoldingCost)
 
 
     // ================ SQL insert into table: REPAIR
@@ -806,7 +764,6 @@ router.put('/backToDefault/:id', async (req, res) => {
       WHERE "user_id" = $1;
     `;
     const getDefaultRepairsResults = await pool.query(getDefaultRepairsText, [userId]);
-    console.log('getDefaultRepairsResult: ', getDefaultRepairsResults.rows)
 
     for(let repairItem of getDefaultRepairsResults.rows) {
       const addRepairItemText = `
@@ -828,7 +785,6 @@ router.put('/backToDefault/:id', async (req, res) => {
      `;
      const totalRepairCostValues = [userId];
      const totalRepairCostResults = await connection.query(totalRepairCostText, totalRepairCostValues);
-     console.log('sum of repair items. expected: 200', totalRepairCostResults.rows[0].total_repair_cost)
      const totalRepairs = Number(totalRepairCostResults.rows[0].total_repair_cost)
  
      // ================ SQL select default holding period: USER
@@ -839,7 +795,6 @@ router.put('/backToDefault/:id', async (req, res) => {
        WHERE "id" = $1;
      `;
      const getDefaultHoldingPeriodResults = await connection.query(getDefaultHoldingPeriodText, [userId]);
-     console.log('getDefaultHoldingPeriodResult: ', getDefaultHoldingPeriodResults.rows)
      const defaultHoldingPeriod = Number(getDefaultHoldingPeriodResults.rows[0].defaultHoldingPeriod)
 
       // ================ SQL update table: PROPERTIES
@@ -872,11 +827,9 @@ router.put('/backToDefault/:id', async (req, res) => {
   
       const updatePropertiesResults = await connection.query(updatePropertiesText, updatePropertiesValues);
   
-      console.log('Property updated in database!');
 
     
     await connection.query('Commit;');
-    console.log('Back to default done and API calls updated');
     res.sendStatus(200)
 
 
@@ -900,7 +853,6 @@ router.put('/backToDefault/:id', async (req, res) => {
  */
 router.delete('/repairItem/:id', async (req, res) => {
   const itemId = req.params.id;
-  console.log('item id: ', itemId)
 
   let connection;
   try {
@@ -913,7 +865,6 @@ router.delete('/repairItem/:id', async (req, res) => {
       WHERE "id" = $1;
     `; 
     const selectRepairItemResponse = await connection.query(selectRepairItemText, [itemId])
-    console.log('repair item: ', selectRepairItemResponse)
     const repairItemCost = selectRepairItemResponse.rows[0].cost;
     const propertyId = selectRepairItemResponse.rows[0].property_id
 
@@ -940,7 +891,6 @@ router.delete('/repairItem/:id', async (req, res) => {
     `;
     const propertyInfoValues = [propertyId];
     const propertyInfoResults = await connection.query(propertyInfoText, propertyInfoValues);
-    console.log('propertyInfoResults: ', propertyInfoResults.rows[0])
     const totalRepairs = Number(propertyInfoResults.rows[0].total_repair_cost) - Number(repairItemCost);
     const monthlyHoldingCost = Number(propertyInfoResults.rows[0].monthly_holding_cost);
     const purchasePrice = Number(propertyInfoResults.rows[0].purchase_price);
@@ -1022,7 +972,6 @@ router.post('/repairItem/', async (req, res) => {
     `;
     const propertyInfoValues = [propertyId];
     const propertyInfoResults = await connection.query(propertyInfoText, propertyInfoValues);
-    console.log('propertyInfoResults: ', propertyInfoResults.rows[0])
     const totalRepairs = Number(propertyInfoResults.rows[0].total_repair_cost) + Number(repairCost);
     const monthlyHoldingCost = Number(propertyInfoResults.rows[0].monthly_holding_cost);
     const purchasePrice = Number(propertyInfoResults.rows[0].purchase_price);
@@ -1086,7 +1035,6 @@ router.delete('/holdingItem/:id', async (req, res) => {
          WHERE "id" = $1;
      `; 
      const selectHoldingItemResponse = await connection.query(selectHoldingItemText, [itemId])
-     console.log('repair item: ', selectHoldingItemResponse)
      const holdingItemCost = selectHoldingItemResponse.rows[0].cost;
      const propertyId = selectHoldingItemResponse.rows[0].property_id
 
@@ -1096,7 +1044,7 @@ router.delete('/holdingItem/:id', async (req, res) => {
     `; 
    const removeHoldingItemResult = connection.query(removeHoldingItemText, [itemId])
 
-    //update all the calculations based on this update to the reparir item table
+    //update all the calculations based on this update to the repair item table
 
     //get the values needed for the calculation functions
     const propertyInfoText = `
@@ -1112,7 +1060,6 @@ router.delete('/holdingItem/:id', async (req, res) => {
     `;
     const propertyInfoValues = [propertyId];
     const propertyInfoResults = await connection.query(propertyInfoText, propertyInfoValues);
-    console.log('propertyInfoResults: ', propertyInfoResults.rows[0])
     const totalRepairs = Number(propertyInfoResults.rows[0].total_repair_cost);
     const monthlyHoldingCost = Number(propertyInfoResults.rows[0].monthly_holding_cost) - Number(holdingItemCost);
     const purchasePrice = Number(propertyInfoResults.rows[0].purchase_price);
@@ -1236,9 +1183,11 @@ router.post('/holdingItem', async (req, res) => {
     }
 });
 
+/**
+ * PUT taxes
+ */
 //changes the taxes value to 0 in the properties table
 router.put('/taxes', async (req, res) => {
-  console.log('/api/properties/taxes RECEIVED A REQUEST!!!!!!!!!!!!!!!!!!!!')
   const propertyId = req.body.propertyId;
 
   let connection;
@@ -1255,7 +1204,6 @@ router.put('/taxes', async (req, res) => {
     `;
     const getTaxesResult = await connection.query(getTaxesText, [propertyId]);
     const taxes = getTaxesResult.rows[0].taxes_yearly
-    console.log('taxes: ', getTaxesResult.rows[0]);
 
     //update the taxes value to zero
     const updateTaxesText = `
@@ -1284,7 +1232,6 @@ router.put('/taxes', async (req, res) => {
 
     const totalRepairs = Number(propertyInfoResults.rows[0].total_repair_cost);
     const monthlyHoldingCost = Number(propertyInfoResults.rows[0].monthly_holding_cost) - (Number(taxes) / 12);
-    console.log('monthly holding cost: ', monthlyHoldingCost)
     const purchasePrice = Number(propertyInfoResults.rows[0].purchase_price);
     const holdingPeriod = Number(propertyInfoResults.rows[0].holding_period);
     const monthlyTaxes = Number(propertyInfoResults.rows[0].taxes_yearly) / 12;
@@ -1325,9 +1272,10 @@ router.put('/taxes', async (req, res) => {
     }
 });
 
-
+/**
+ * GET properties by filter options
+ */
 router.get('/filtered/:orderBy/:arrange', async (req, res) => {
-  console.log('in get properties/filtered ', req.params);
   const orderBy = req.params.orderBy;
   const arrange = req.params.arrange;
   const userId = req.user.id;
@@ -1341,7 +1289,6 @@ router.get('/filtered/:orderBy/:arrange', async (req, res) => {
 
     if(arrange === 'ASC') {
       if(orderBy === 'monthly_profit') {
-        // console.log('asc')
         const propertiesText = `
             SELECT * FROM "properties"
                 WHERE "user_id" = $1
@@ -1349,7 +1296,6 @@ router.get('/filtered/:orderBy/:arrange', async (req, res) => {
         `;
         const propertiesResult = await connection.query(propertiesText, [userId])
         properties = propertiesResult.rows
-        // console.log('properties: ', properties)
       }
       else if (orderBy === 'total_cost'){
         const propertiesText = `
@@ -1363,7 +1309,6 @@ router.get('/filtered/:orderBy/:arrange', async (req, res) => {
     }
     else if(arrange === 'DESC') {
       if(orderBy === 'monthly_profit') {
-        // console.log('asc')
         const propertiesText = `
             SELECT * FROM "properties"
                 WHERE "user_id" = $1
@@ -1371,7 +1316,6 @@ router.get('/filtered/:orderBy/:arrange', async (req, res) => {
         `;
         const propertiesResult = await connection.query(propertiesText, [userId])
         properties = propertiesResult.rows
-        // console.log('properties: ', properties)
       }
       else if (orderBy === 'total_cost'){
         const propertiesText = `
@@ -1404,11 +1348,6 @@ router.get('/filtered/:orderBy/:arrange', async (req, res) => {
     await connection.release()
   }
 });
-
-
-// 12505 54th Ave N, 
-// 4008 5th st ne, columbia heights, mn
-
 
 
 module.exports = router;
