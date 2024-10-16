@@ -24,7 +24,6 @@ function* addProperty(action) {
   const addressId = action.payload.addressId
   try {
     const response = yield axios.post(`api/properties`, {address:address, addressId: addressId})
-    console.log('addProperty data:', response.data);
     
     yield put({
         type: 'GET_PROPERTIES',
