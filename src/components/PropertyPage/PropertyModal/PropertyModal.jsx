@@ -106,12 +106,12 @@ const formattedCurrency = (value) => {
         </div>
         <div className = "modal-buttons">
           <button className="modal-default-btn" onClick={handleBackToDefault}>Set to Default Settings</button>
-          {/* {Object.keys(propertyOfInterest).length && 
+          {Object.keys(propertyOfInterest).length && 
           <div className = "main-focus">
             <p className='bold-text section-totals center' >Monthly Profit: {formattedCurrency(propertyOfInterest.property[0].monthly_profit)}</p>
             <p  className="calculation-explanation center">(Profit / Holding Period)</p>
           </div>
-          } */}
+          }
           <button className="modal-save-btn" onClick={saveUpdatedPropertyInfo}>Save</button>
         </div>
         <div className="modal-body">
