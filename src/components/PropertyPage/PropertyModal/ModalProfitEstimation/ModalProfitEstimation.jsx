@@ -13,19 +13,12 @@ function ModalProfitEstimation() {
     return `$${number.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
   };
 
-  const updateAfterRepairValue = () => {
-    dispatch({
-      type: 'UPDATE_PROPERTY_AFTER_REPAIR_VALUE', 
-      payload: '527000'
-    })
-  }
-
   return (
     <div className="grid-container-2">
       {Object.keys(propertyOfInterest).length && 
         <>
           <p className ="bottom-margin-3">
-            <span className='bold-text' onClick={updateAfterRepairValue}>After Repair Value: </span>
+            <span className='bold-text' >After Repair Value: </span>
             <input
               value= {formattedCurrency(Number(propertyOfInterest.property[0].after_repair_value))}
               onChange={e => {e.preventDefault; dispatch({type: 'UPDATE_PROPERTY_AFTER_REPAIR_VALUE', payload: e.target.value})}}

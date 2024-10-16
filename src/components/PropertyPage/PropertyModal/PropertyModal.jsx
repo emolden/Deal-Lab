@@ -14,7 +14,7 @@ const PropertyModal = ({ isOpen, onClose, propertyCard, userId, setSelectedPrope
 
   const propertyOfInterest = useSelector((store) => store.propertyOfInterest);
 
-
+//Checks if the mdoal is open
   useEffect(() => {
     
     if (isOpen) {
@@ -30,6 +30,7 @@ const PropertyModal = ({ isOpen, onClose, propertyCard, userId, setSelectedPrope
 
   if (!isOpen) return null;
 
+  //runs when the user clicks "set back to default"
   const handleBackToDefault = () => {
     Swal.fire({
       title: "Are you sure you want to apply the Default Settings?",
@@ -38,9 +39,10 @@ const PropertyModal = ({ isOpen, onClose, propertyCard, userId, setSelectedPrope
       showCancelButton: true,
       confirmButtonText: "Yes, apply default settings",
       cancelButtonText: "Cancel",
-      // reverseButtons: true
     }).then((result) => {
     if (result.isConfirmed) {
+      //user confirms they want to set back to default
+      //dispatch sent to properties saga
     dispatch({
       type: 'UPDATE_BACK_TO_DEFAULT',
       payload: propertyOfInterest.property[0].id
@@ -53,7 +55,7 @@ const PropertyModal = ({ isOpen, onClose, propertyCard, userId, setSelectedPrope
     });
   }
   else if (
-    /* Read more about handling dismissals below */
+    //if the user cancels request
     result.dismiss === Swal.DismissReason.cancel
   ) {
     Swal.fire({
@@ -65,7 +67,8 @@ const PropertyModal = ({ isOpen, onClose, propertyCard, userId, setSelectedPrope
   }
 });
   }
-
+  
+  //runs when the user clicks the "save" button
   //sends a dispatch to the properties saga
   const saveUpdatedPropertyInfo = () => {
     dispatch({
