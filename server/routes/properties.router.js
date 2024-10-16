@@ -46,8 +46,7 @@ function monthlyProfit (afterRepairValue, totalRepairCost, purchasePrice, holdin
 /**
  * ----- GET properties: getProperties
  */
-router.get('/:id', async (req, res) => {
-  console.log('in get properties/id: ', req.params.id);
+router.get('/', async (req, res) => {
   const userId = req.user.id;
 
   let connection;
