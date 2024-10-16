@@ -5,7 +5,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import ModalUpfrontCosts from './ModalUpfrontCosts/ModalUpfrontCosts'; // Import your specific components
 import ModalHoldingPeriodCosts from './ModalHoldingPeriodCosts/ModalHoldingPeriodCosts';
 import ModalProfitEstimation from './ModalProfitEstimation/ModalProfitEstimation';
-import ModalMortgageCalculator from './ModalMortgageCalculator/ModalMortgageCalculator';
 import Swal from 'sweetalert2';
 
 
@@ -126,11 +125,6 @@ const formattedCurrency = (value) => {
             <h3 className='section-header'>Holding Period Costs</h3>
             <ModalHoldingPeriodCosts />
           </div>
-
-          {/* <div className='section mortgage-calculator'>
-            <h3 className='section-header'>Mortgage Calculator</h3>
-            <ModalMortgageCalculator />
-          </div> */}
 
           <div className='section-profit-estimation' style={{ gridColumn: '1 / -1' }}>
             <h3 className='section-header'>Profit Estimation</h3>
