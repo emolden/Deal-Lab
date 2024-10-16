@@ -1,4 +1,7 @@
 const express = require('express');
+const {
+  rejectUnauthenticated,
+} = require('../modules/authentication-middleware');
 const pool = require('../modules/pool');
 const router = express.Router();
 
@@ -6,7 +9,7 @@ const router = express.Router();
 /**
  * GET defaults
  */
-router.get('/', async (req, res) => {
+router.get('/', rejectUnauthenticated, async (req, res) => {
   const userId = req.user.id;
 
   try {
@@ -37,7 +40,7 @@ router.get('/', async (req, res) => {
 /**
  * PUT default holding period
  */
-router.put('/', (req, res) => {
+router.put('/',rejectUnauthenticated, (req, res) => {
   const userId = req.user.id;
   const holdingPeriod = req.body.holdingPeriod;
 
@@ -59,7 +62,7 @@ router.put('/', (req, res) => {
 /**
  * POST default holding item: addDefaultHoldingItem
  */
-router.post('/holdingItem', (req, res) => {
+router.post('/holdingItem',rejectUnauthenticated, (req, res) => {
   const holdingName = req.body.holdingName;
   const holdingCost = req.body.holdingCost;
   const userId = req.user.id;
@@ -84,7 +87,7 @@ router.post('/holdingItem', (req, res) => {
 /**
  * DELETE default holding item
  */
-router.delete('/holdingItem/:id', (req, res) => {
+router.delete('/holdingItem/:id',rejectUnauthenticated, (req, res) => {
   const holdingId = req.params.id;
   const userId = req.user.id;
 
@@ -106,7 +109,7 @@ router.delete('/holdingItem/:id', (req, res) => {
 /**
  * POST default repair item: addDefaultRepairItem
  */
-router.post('/repairItem', (req, res) => {
+router.post('/repairItem',rejectUnauthenticated, (req, res) => {
   const repairName = req.body.repairName;
   const repairCost = req.body.repairCost;
   const userId = req.user.id;
@@ -130,7 +133,7 @@ router.post('/repairItem', (req, res) => {
 /**
  * DELETE default repair item
  */
-router.delete('/repairItem/:id', (req, res) => {
+router.delete('/repairItem/:id',rejectUnauthenticated, (req, res) => {
     const repairId = req.params.id;
     const userId = req.user.id;
 

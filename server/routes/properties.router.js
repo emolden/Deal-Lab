@@ -1,10 +1,4 @@
 const express = require('express');
-// const monthlyProfit = require('../helpers/monthlyProfit')
-// const profit = require('../helpers/profit');
-// const totalCost = require('../helpers/totalCost');
-// const totalHoldingCost = require('../helpers/totalHoldingCost');
-// const upfrontCost = require('../helpers/upfrontCost');
-// const monthlyProfit = require('../helpers/monthlyProfit')
 const {
   rejectUnauthenticated,
 } = require('../modules/authentication-middleware');
@@ -46,7 +40,7 @@ function monthlyProfit (afterRepairValue, totalRepairCost, purchasePrice, holdin
 /**
  * ----- GET properties: getProperties
  */
-router.get('/', async (req, res) => {
+router.get('/',rejectUnauthenticated, async (req, res) => {
   const userId = req.user.id;
 
   let connection;
@@ -118,7 +112,7 @@ router.get('/', async (req, res) => {
 /**
  * ----- POST property: addProperty
  */
-router.post('/', async (req, res) => {
+router.post('/', rejectUnauthenticated, async (req, res) => {
   const api_key = process.env.RENTCAST_API_KEY;
   const address = req.body.address;
   const addressId = req.body.addressId
@@ -247,8 +241,6 @@ router.post('/', async (req, res) => {
     //If a property already exists in the api data table with data within 24 hours
     //use the details from this row to save property info
     else if (checkTimeStampData.length > 0) {
-
-      afterRepairValue = getPropertyInfoResponse.rows[0].after_repair_value;
 
       const mostRecentCheck = checkTimeStampData.length - 1;
 
@@ -395,7 +387,7 @@ router.post('/', async (req, res) => {
 /**
  * ----- DELETE property: deleteProperty
  */
-router.delete('/:id', (req, res) => {
+router.delete('/:id',rejectUnauthenticated, (req, res) => {
     const propertyId = req.params.id;
 
     const sqlText = `
@@ -418,7 +410,7 @@ router.delete('/:id', (req, res) => {
  */
 //put route updates the holding period, purchase price, and after repair 
 //value for a specific property in the database
-router.put('/', async (req, res) => {
+router.put('/',rejectUnauthenticated, async (req, res) => {
   const propertyId = Number(req.body.propertyId);
   const holdingPeriod = Number(req.body.holdingPeriod);
   const purchasePrice = Number(req.body.purchasePrice);
@@ -569,7 +561,7 @@ router.get('/propertyOfInterest/:id', rejectUnauthenticated, async (req, res) =>
   /**
  * ----- PUT back to default: updateBackToDefault
  */
-router.put('/backToDefault/:id', async (req, res) => {
+router.put('/backToDefault/:id',rejectUnauthenticated, async (req, res) => {
   const propertyId = req.params.id;
   const userId = req.user.id;
   const connection = await pool.connect()
@@ -851,7 +843,7 @@ router.put('/backToDefault/:id', async (req, res) => {
 /**
  * DELETE property repair item
  */
-router.delete('/repairItem/:id', async (req, res) => {
+router.delete('/repairItem/:id',rejectUnauthenticated, async (req, res) => {
   const itemId = req.params.id;
 
   let connection;
@@ -937,7 +929,7 @@ router.delete('/repairItem/:id', async (req, res) => {
 /**
  * POST property repair item
  */
-router.post('/repairItem/', async (req, res) => {
+router.post('/repairItem/', rejectUnauthenticated, async (req, res) => {
   const propertyId = req.body.propertyId;
   const repairName = req.body.repairName;
   const repairCost = req.body.repairCost;
@@ -1021,7 +1013,7 @@ router.post('/repairItem/', async (req, res) => {
 /**
  * DELETE property holding item
  */
-router.delete('/holdingItem/:id', async (req, res) => {
+router.delete('/holdingItem/:id',rejectUnauthenticated, async (req, res) => {
   const itemId = req.params.id;
 
   let connection;
@@ -1107,7 +1099,7 @@ router.delete('/holdingItem/:id', async (req, res) => {
 /**
  * POST property holding item
  */
-router.post('/holdingItem', async (req, res) => {
+router.post('/holdingItem',rejectUnauthenticated, async (req, res) => {
   const propertyId = req.body.propertyId;
   const holdingName = req.body.holdingName;
   const itemHoldingCost = req.body.holdingCost;
@@ -1187,7 +1179,7 @@ router.post('/holdingItem', async (req, res) => {
  * PUT taxes
  */
 //changes the taxes value to 0 in the properties table
-router.put('/taxes', async (req, res) => {
+router.put('/taxes',rejectUnauthenticated, async (req, res) => {
   const propertyId = req.body.propertyId;
 
   let connection;
@@ -1275,7 +1267,7 @@ router.put('/taxes', async (req, res) => {
 /**
  * GET properties by filter options
  */
-router.get('/filtered/:orderBy/:arrange', async (req, res) => {
+router.get('/filtered/:orderBy/:arrange',rejectUnauthenticated, async (req, res) => {
   const orderBy = req.params.orderBy;
   const arrange = req.params.arrange;
   const userId = req.user.id;
