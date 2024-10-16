@@ -7,7 +7,7 @@ import './PropertyCard.css';
 function PropertyCard({ property, userId, onOpenModal, allRepairItems, allHoldingItems}) {
   const dispatch = useDispatch();
 
-  //getPropertyOfInterest function runs when the user clicks "edit" or
+  //getPropertyOfInterest function runs when the user clicks 
   //on the address card. This function sends a a dispatch to the properties.saga.js
   //with the property id as the payload.
   const getPropertyOfInterest = (propId) => {
@@ -70,9 +70,6 @@ function PropertyCard({ property, userId, onOpenModal, allRepairItems, allHoldin
   return (
     <div className="property-card">
       <h3 className='address' onClick={() => {getPropertyOfInterest(property.id); onOpenModal(property); }}>{property.address}</h3>
-
-      {/* <div className="more-details">More details</div> */}
-
       <table className='detailsTable'>
         <thead>
           <tr>

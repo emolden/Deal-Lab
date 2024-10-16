@@ -1,6 +1,7 @@
 import { put, takeLatest } from 'redux-saga/effects';
 import axios from 'axios';
 
+//runs when "add" is clicked in modal next to holding item
 function* addPropertyHoldingItem(action) {
   try {
     yield axios.post(`api/properties/holdingItem`, action.payload)
@@ -13,6 +14,7 @@ function* addPropertyHoldingItem(action) {
   }
 }
 
+//runs when trash can next to holding item in modal is clicked
 function* deletePropertyHoldingItem(action) {
   try {
     yield axios.delete(`api/properties/holdingItem/${action.payload.itemId}`)
