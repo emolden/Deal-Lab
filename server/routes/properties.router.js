@@ -1133,7 +1133,6 @@ router.post('/holdingItem',rejectUnauthenticated, async (req, res) => {
     `;
     const propertyInfoValues = [propertyId];
     const propertyInfoResults = await connection.query(propertyInfoText, propertyInfoValues);
-    console.log('propertyInfoResults: ', propertyInfoResults.rows[0])
     const totalRepairs = Number(propertyInfoResults.rows[0].total_repair_cost);
     const monthlyHoldingCost = Number(propertyInfoResults.rows[0].monthly_holding_cost) + Number(itemHoldingCost);
     const purchasePrice = Number(propertyInfoResults.rows[0].purchase_price);
