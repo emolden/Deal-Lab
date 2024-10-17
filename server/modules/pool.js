@@ -1,8 +1,8 @@
 /* the only line you likely need to change is
 
-    database: 'prime_app',
+    database: 'deal_lab_proto',
 
-    change `prime_app` to the name of your database, and you should be all set!
+    change `deal_lab_proto` to the name of your database, and you should be all set!
     */
 
 const pg = require('pg');
@@ -13,9 +13,9 @@ let pool;
 // to set the connection info: web address, username/password, db name
 // eg: 
 //  DATABASE_URL=postgresql://jDoe354:secretPw123@some.db.com/prime_app
-if (process.env.DATABASE_URL) {
+if (process.env.POSTGRES_URL) {
     pool = new pg.Pool({
-        connectionString: process.env.DATABASE_URL,
+        connectionString: process.env.POSTGRES_URL,
         ssl: {
             rejectUnauthorized: false
         }

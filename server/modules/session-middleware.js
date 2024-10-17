@@ -3,7 +3,7 @@
 const expressSession = require('express-session');
 const PgSession = require('connect-pg-simple')(expressSession);
 const pool = require('./pool.js');
-const warnings = require('../constants/warnings');
+const warnings = require('../constants/warnings.js');
 
 /*
   The session makes it so a user can enters their username and password one time,
