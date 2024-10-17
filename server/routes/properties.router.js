@@ -364,11 +364,12 @@ router.post('/', rejectUnauthenticated, async (req, res) => {
               "total_holding_cost" = $4,
               "total_cost" = $5,
               "profit" = $6,
-              "monthly_profit" = $7
-          WHERE "id" = $8;
+              "monthly_profit" = $7,
+              "holding_period" = $8
+          WHERE "id" = $9;
     `;
 
-    const updatePropertiesValues = [totalRepairs, totalUpfrontCost, monthlyHoldingCost, holdingCost, cost, totalProfit, totalMonthlyProfit, propertyId];
+    const updatePropertiesValues = [totalRepairs, totalUpfrontCost, monthlyHoldingCost, holdingCost, cost, totalProfit, totalMonthlyProfit, defaultHoldingPeriod, propertyId];
     const updatePropertiesResults = await connection.query(updatePropertiesText, updatePropertiesValues);
     
     await connection.query('Commit;');
